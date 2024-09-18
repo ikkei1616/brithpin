@@ -3,6 +3,7 @@ import { useAuth } from "@/context/auth";
 import { login, logout } from "@/lib/auth";
 import { useState } from "react";
 import Notification from "@/components/Notification";
+import Footer from "../components/Footer";
 
 export default function Home() {
   
@@ -25,6 +26,7 @@ export default function Home() {
       {user === null && !waiting && <button onClick={signIn}>ログイン</button>}
       {user && <button onClick={logout}>ログアウト</button>}
       <Notification />
+      <Footer />
     </div>
   );
 }
