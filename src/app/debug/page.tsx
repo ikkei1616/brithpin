@@ -4,6 +4,7 @@ import { login, logout } from "@/lib/auth";
 import { useState } from "react";
 
 export default function Home() {
+  
   const user = useAuth();
   const [waiting, setWaiting] = useState<boolean>(false);
 
