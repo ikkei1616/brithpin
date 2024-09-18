@@ -1,6 +1,7 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { getMessaging, getToken } from "firebase/messaging";
 
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,6 +15,29 @@ export const firebaseConfig = {
 
 if (!getApps()?.length) {
   initializeApp(firebaseConfig);
+}
+
+export function requestPermission() {
+  Notification.requestPermission().then((permission) => {
+    if (permission === "granted") {
+      const app = initializeApp(firebaseConfig);
+
+      const messaging = getMessaging(app);
+      getToken(messaging, {
+        vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
+      }).then((currentToken) => {
+        if (currentToken) {
+          console.log("current token for client: ", currentToken);
+        } else {
+          console.error(
+            "No registration token available. Request permission to generate one."
+          );
+        }
+      });
+    } else {
+      console.error("Unable to get permission to notify.");
+    }
+  });
 }
 
 export const auth = getAuth();
