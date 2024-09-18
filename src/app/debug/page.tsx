@@ -2,6 +2,7 @@
 import { useAuth } from "@/context/auth";
 import { login, logout } from "@/lib/auth";
 import { useState } from "react";
+import Notification from "@/components/Notification";
 
 export default function Home() {
   
@@ -23,6 +24,7 @@ export default function Home() {
     <div>
       {user === null && !waiting && <button onClick={signIn}>ログイン</button>}
       {user && <button onClick={logout}>ログアウト</button>}
+      <Notification />
     </div>
   );
 }

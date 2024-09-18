@@ -17,11 +17,9 @@ if (!getApps()?.length) {
   initializeApp(firebaseConfig);
 }
 
-function requestPermission() {
-  console.log("Requesting permission...");
+export function requestPermission() {
   Notification.requestPermission().then((permission) => {
     if (permission === "granted") {
-      console.log("Notification permission granted.");
       const app = initializeApp(firebaseConfig);
 
       const messaging = getMessaging(app);
@@ -31,18 +29,16 @@ function requestPermission() {
         if (currentToken) {
           console.log("current token for client: ", currentToken);
         } else {
-          console.log(
+          console.error(
             "No registration token available. Request permission to generate one."
           );
         }
       });
     } else {
-      console.log("Unable to get permission to notify.");
+      console.error("Unable to get permission to notify.");
     }
   });
 }
-
-requestPermission();
 
 export const auth = getAuth();
 export const db = getFirestore();
