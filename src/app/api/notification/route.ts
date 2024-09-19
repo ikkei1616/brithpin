@@ -9,6 +9,7 @@ interface User {
   friends?: string[]; // フレンドのIDの配列
   birthMonth?: number;
   birthDay?: number;
+  token?: string[];
   friendsDetails?: FriendDetail[]; // フレンドの詳細情報の配列
 }
 
@@ -38,6 +39,7 @@ export async function GET(req: NextRequest) {
       friends: doc.data().friends || [],
       birthMonth: doc.data().birthMonth,
       birthDay: doc.data().birthDay,
+      token: doc.data().token || [],
     }));
 
     // 各ユーザーのフレンド情報を取得
@@ -54,6 +56,7 @@ export async function GET(req: NextRequest) {
           nickname: friendDoc.data().nickname,
           birthDay: friendDoc.data().birthDay,
           birthMonth: friendDoc.data().birthMonth,
+          token: friendDoc.data().token,
         }));
       } else {
         user.friendsDetails = [];
