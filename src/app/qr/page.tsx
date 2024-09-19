@@ -16,7 +16,7 @@ const QrPage = () => {
 
   const getSearch=()=>{
     if(userId.trim() !== ""){
-      router.push(`add-friend/${userId}`);
+      router.push('add-friend/${userId}');
     }else{
       console.log('Please enter a valid user ID.');
     }
