@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { initializeApp, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
+import { getMessaging } from "firebase-admin/messaging";
 
 // User型の定義
 interface User {
   id: string;
   nickname: string;
-  friends?: string[]; // フレンドのIDの配列
+  friends?: string[];
   birthMonth?: number;
   birthDay?: number;
   friendsDetails?: FriendDetail[]; // フレンドの詳細情報の配列
@@ -32,7 +33,7 @@ const db = getFirestore();
 export async function GET(req: NextRequest) {
   try {
     // トークンの配列（友人がいるユーザーのトークンを保持）
-    let token: string[] = [];
+    let registrationTokens: string[] = [];
 
     // Firestoreから全ユーザー情報を取得
     const usersSnapshot = await db.collection("users").get();
@@ -65,13 +66,30 @@ export async function GET(req: NextRequest) {
 
       // 友人がいるユーザーのトークンをtoken配列に追加
       if (user.token) {
-        token.push(user.token);
+        registrationTokens.push(user.token);
       }
     }
+    console.log(registrationTokens);
+    // フラットにして重複を排除
+    registrationTokens = [...new Set(registrationTokens.flat())];
 
-    console.log(token)
+    if (registrationTokens.length > 0) {
+      const messaging = getMessaging();
+      const message = {
+        notification: {
+          title: 'お知らせ',
+          body: 'あなたの友人の誕生日が近づいています！',
+        },
+        tokens: registrationTokens,
+      };
+
+      // メッセージの送信
+      const response = await messaging.sendEachForMulticast(message);
+      console.log(response.successCount + ' messages were sent successfully');
+    }
+
     // データをレスポンスとして返す
-    return NextResponse.json({ users: usersData, tokens: token });
+    return NextResponse.json({ users: usersData, tokens: registrationTokens });
   } catch (error) {
     console.error("Error fetching user data:", error);
     return NextResponse.json({ error: "Error fetching user data" }, { status: 500 });
