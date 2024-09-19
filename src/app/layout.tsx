@@ -32,7 +32,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#FFFEFA" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-backgroundcolor`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-backgroundcolor bg-custom-special bg-no-repeat`}
       >
         <AuthProvider>
           {children}

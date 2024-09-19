@@ -10,12 +10,12 @@ const Footer = () => {
   return (
     <div className='flex justify-around py-4 border-t border-b border-mainpink mb-2'>
       <button
-        onClick={() => router.push('/profile')}
+        onClick={() => router.push('/account')}
         className="flex flex-col items-center focus:outline-none"
       >
         <div className="w-20 h-20 flex items-center justify-center">
           <Image
-            src={pathname === '/profile' ? "/getuphiyoko.svg" : "/sleephiyoko.svg"}
+            src={pathname === '/account' ? "/getuphiyoko.svg" : "/sleephiyoko.svg"}
             width={76}
             height={70}
             alt="user_img"
