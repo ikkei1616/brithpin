@@ -43,7 +43,7 @@ body {
     width: 100vw;
     height: 100vh;
   }
-
+  
   .wapper {
     width: 393px;
     height: 600px;
@@ -51,6 +51,15 @@ body {
     position: absolute;
     position: bottom center;
     bottom: 0;
+  }
+
+  .friendIcon {
+    position: absolute;
+    border-radius: 50%;
+    object-fit: cover;
+  }  
+  .friendIcon:hover .hidden-element {
+    display: block;
   }
   
   .bg-custom-special {
