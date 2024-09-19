@@ -46,7 +46,6 @@ export default function BirthTree() {
     })()
   }, [authValue]);
 
-  console.log(`friendsだよー→`, friends)
   const sortFriendsByBirthday = (friendList: FriendSchema[]): FriendSchema[] => {
     const today = new Date();
 
@@ -117,7 +116,7 @@ export default function BirthTree() {
                 src={friend.photoURL}
                 alt={`${friend.name}のアイコン`}
                 width={50} height={50}
-                className="styles.friendIcon hiyoko-active"
+                className="hiyoko-active"
                 style={
                   {
 
