@@ -1,6 +1,6 @@
 "use client";
-import {doc,getDoc} from "firebase/firestore";
-import { db,} from '../../../lib/firebase';
+import {doc,getDoc,updateDoc,arrayUnion} from "firebase/firestore";
+import { db,auth} from '../../../lib/firebase';
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -43,7 +43,15 @@ const IdSearch = ({params}:{params:{id:string}})=>{
     getDocData(userId)
   }, [userId]);
 
-  const handleClickButton = () => {
+  const handleClickButton = async() => {
+    
+    if(auth.currentUser === null) {
+      return;
+    }
+    const docRef = doc(db,"users",auth.currentUser.uid);
+    await updateDoc(docRef,{
+      friends: arrayUnion(userId)
+    });
     router.push(`/birth-tree`);
   };
   
