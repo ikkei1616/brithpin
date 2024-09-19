@@ -3,7 +3,7 @@ import Footer from '../components/Footer';
 
 const AccountPage = () => {
   return (
-    <div className='h-screen flex items-center justify-center mt-6'>
+    <div className='h-screen flex items-center justify-center pt-6'>
       <div>
         {/* <ProfileForm /> */}
       </div>

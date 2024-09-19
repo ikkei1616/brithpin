@@ -32,12 +32,12 @@ export default function Home() {
   }, [user, router]);
 
   return (
-    <div className="h-screen flex items-center justify-center mt-6">
+    <div className="h-screen flex items-center justify-center pt-6">
       {user === null && !waiting && (
         <CardContainer>
           <CardTitle title="LOGIN" />
           <div className="text-center">
-            <div className="text-xl my-4 text-writingText font-serif">BirthPINでお誕生日を祝おう</div>
+            <div className="text-xl my-4 text-textbrawnlight font-serif">BirthPINでお誕生日を祝おう</div>
             <div className="mb-6">
               <Image src="/usericonshadow.svg" width={140} height={140} alt="user_img" className="mx-auto" />
             </div>
