@@ -10,7 +10,7 @@ const withPWA = nextPWA({
 const nextConfig = withPWA({
   reactStrictMode: true,
   images: {
-    domains: ['lh3.googleusercontent.com'],
+    domains: ['lh3.googleusercontent.com', "firebasestorage.googleapis.com"],
   },
 });
 
