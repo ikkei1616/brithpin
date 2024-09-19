@@ -27,7 +27,9 @@ export default function Home() {
 
   useEffect(() => {
     if (user) {
-      router.push('/profile');
+      router.push('/birth-tree');
+    } else{
+      router.push('/');
     }
   }, [user, router]);
 

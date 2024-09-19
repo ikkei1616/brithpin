@@ -15,42 +15,44 @@ interface User {
 }
 
 const AccountPage = () => {
+  const [userData, setUserData] = useState<User | undefined>(undefined);
 
-  const [userData,setUserData] = useState<User | undefined>(undefined);
-
-  const getDocData = async() => {
-    if (auth.currentUser === null) {
-      console.log("あいあい居合")
-      return;
-    }
-    const docRef = doc(db, "users",auth.currentUser.uid);
-    const docSnap =  await getDoc(docRef);
-    console.log(docSnap)
-    if (docSnap.exists()){
+  const getDocData = async (uid: string) => {
+    const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
       const docSnapData = docSnap.data();
-      const formatUserData :User ={
-        nickname:docSnapData.nickname,
-        birthDay:docSnapData.birthDay,
-        birthMonth:docSnapData.birthMonth,
-        birthYear:docSnapData.birthYear,
-        gender:docSnapData.gender,
-        photoURL:docSnapData.photoURL,
+      const formatUserData: User = {
+        nickname: docSnapData.nickname,
+        birthDay: docSnapData.birthDay,
+        birthMonth: docSnapData.birthMonth,
+        birthYear: docSnapData.birthYear,
+        gender: docSnapData.gender,
+        photoURL: docSnapData.photoURL,
       };
       setUserData(formatUserData);
-    }else{
+    } else {
       console.log("No such document!");
     }
   };
 
   useEffect(() => {
-    getDocData();
-  }, []);
+    // Firebase認証状態を監視
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // ユーザーが認証されている場合にデータを取得
+        getDocData(user.uid);
+      } else {
+        console.log("あいあい居合: ユーザーが認証されていません");
+      }
+    });
 
+    return () => unsubscribe(); // クリーンアップのために監視を解除
+  }, []);
 
   return (
     <div className="h-screen flex items-center justify-center pt-6">
       <div>
-        {/* <ProfileForm /> */}
         <p>{userData?.nickname}</p>
         <p>{userData?.birthYear}</p>
         <p>{userData?.birthMonth}</p>
