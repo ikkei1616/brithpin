@@ -45,7 +45,7 @@ export const ProfileForm = () => {
           </div>
           <div className=' w-1/4'>
             <input
-            onClick={() => router.push('/add-friend')}
+              onClick={() => router.push('/qr')}
               value={'登録'}
               type='submit'
               className="text-white rounded-lg text-lg"
