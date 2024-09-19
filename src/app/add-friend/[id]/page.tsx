@@ -4,6 +4,9 @@ import { db, auth } from "../../../lib/firebase";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Footer from "@/app/components/Footer";
+import CardContainer from "@/app/components/CardContainer";
+import CardTitle from "@/app/components/CardTitle";
 
 interface User {
   nickname: string;
@@ -55,25 +58,41 @@ const IdSearch = ({ params }: { params: { id: string } }) => {
   };
 
   return (
-    <div className="h-screen flex flex-col">
-      <div className="flex-grow">
-        <p>{userData?.nickname}</p>
-        <p>{userData?.birthYear}</p>
-        <p>{userData?.birthMonth}</p>
-        <p>{userData?.birthDay}</p>
-        {userData?.photoURL && (
-          <Image src={userData.photoURL} alt="img" width={100} height={100} />
-        )}
-        <div>
+    <div className="h-screen flex flex-col justify-around pt-4">
+      <CardContainer>
+        <CardTitle title="FRIEND" />
+        <div className="mt-3">
+          {userData?.nickname && (
+            <div className="text-base font-serif text-textbrawnlight text-center mb-3">
+              {userData.nickname}
+            </div>
+          )}
+          {userData?.birthYear && userData.birthMonth && userData.birthDay && (
+            <div className="text-base font-serif text-textbrawnlight text-center mb-3">
+              {userData.birthYear}/{userData.birthMonth}/{userData.birthDay}
+            </div>
+          )}
+        </div>
+        <div className="flex justify-center items-center my-4">
+          {userData?.photoURL && (
+            <div className="flex flex-col items-center justify-center p-4 bg-white rounded-md">
+              <Image src={userData.photoURL} alt="Profile Image" width={120} height={120} className="rounded-full" />
+            </div>
+          )}
+        </div>
+        <div className="flex justify-center items-center bg-mainpink radius-lg rounded-lg p-2">
           <button
-            className="mt-4 px-4 py-2 bg-pin text-white rounded-lg"
+            className="text-color text-sm "
             onClick={handleClickButton}
           >
             友達追加
           </button>
         </div>
-      </div>
-    </div>
+      </CardContainer>
+      <div className="w-full absolute bottom-0" >
+        <Footer />
+      </div >
+    </div >
   );
 };
 
