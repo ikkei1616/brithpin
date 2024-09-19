@@ -1,11 +1,11 @@
 'use client'
 import React from 'react';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { updateDoc,doc} from 'firebase/firestore';
+import { db,auth} from '../../lib/firebase';
 
 export const ProfileForm = () => {
 
-  const DataSend = async (event: React.FormEvent<HTMLFormElement>) => {
+  const DataUpdata = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();   
     const formData = new FormData(event.currentTarget);  
     
@@ -15,22 +15,26 @@ export const ProfileForm = () => {
     const birthDay = Number(formData.get("birthDay"));
     const gender = Number(formData.get("gender"));
 
-    try {        
-      const docRef = await addDoc(collection(db, "users"), {
-        nickname,
-        birthYear,
-        birthMonth,
-        birthDay,
-        gender,
+    try {
+      if(auth.currentUser?.uid == null){
+
+        return
+      }
+      const docRef = doc(db,"users",auth.currentUser.uid);
+      await updateDoc(docRef,{
+        nickname:nickname,
+        birthYear:birthYear,
+        birthMonth:birthMonth,
+        birthDay:birthDay,
+        gender:gender,
       });
-      console.log('Document written with ID: ', docRef.id);
-    } catch (e) {    
-      console.error('Error adding document: ', e);
+    } catch(error){
+      console.log("エラーが発生しました",error);
     }
-  }
+    }
 
   return (
-    <form className="bg-yellow p-6" onSubmit={DataSend}>
+    <form className="bg-yellow p-6" onSubmit={DataUpdata}>
       <div>
         <input className="border" aria-label="nickname" name='nickname' type="text" />
       </div>
@@ -50,3 +54,4 @@ export const ProfileForm = () => {
     </form>
   );
 }
+
