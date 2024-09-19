@@ -4,6 +4,9 @@ import { db, auth } from "../../lib/firebase";
 import React from "react";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
+import CardContainer from "../components/CardContainer";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface User {
   nickname: string;
@@ -15,6 +18,7 @@ interface User {
 }
 
 const AccountPage = () => {
+  const router = useRouter();
   const [userData, setUserData] = useState<User | undefined>(undefined);
 
   const getDocData = async (uid: string) => {
@@ -52,14 +56,47 @@ const AccountPage = () => {
 
   return (
     <div className="h-screen flex items-center justify-center pt-6">
-      <div>
-        <p>{userData?.nickname}</p>
-        <p>{userData?.birthYear}</p>
-        <p>{userData?.birthMonth}</p>
-        <p>{userData?.birthDay}</p>
-        <p>{userData?.gender}</p>
-        <p>{userData?.photoURL}</p>
-      </div>
+      <CardContainer>
+        <div className="flex justify-between items-center text-2xl text-textbrawnlight font-bold mb-0 font-serif border-b border-mainpinklight border-dashed pb-4 w-full">
+          <div className='w-2/5'></div>
+          <div className='flex justify-center w-full'>
+            PROFILE
+          </div>
+          <div className='w-2/5 flex justify-between items-center'>
+            <button onClick={() => router.push('/profile')} className="h-full rounded-lg text-base">
+              編集
+            </button>
+            <div className="bg-mainpink h-fullbg-mainpink h-7 flex items-center w-7 justify-center rounded-2xl">
+              <img src='/editicon.png' alt='edit icon' className='' />
+            </div>
+          </div>
+        </div>
+        <div className="text-center">
+          {userData?.nickname && (
+            <p className="text-lg font-serif text-textbrawnlight mb-1 w-72">
+              {userData.nickname}
+            </p>
+          )}
+          {userData?.birthYear && userData.birthMonth && userData.birthDay && (
+            <p className="text-md font-serif text-textbrawnlight mb-4">
+              {userData.birthYear}/{userData.birthMonth}/{userData.birthDay}
+            </p>
+          )}
+          {userData?.photoURL ? (
+            <div className="flex justify-center">
+              <Image
+                src={userData.photoURL}
+                alt="Profile Image"
+                width={180}
+                height={180}
+                className="rounded-lg object-cover bg-gray-100"
+              />
+            </div>
+          ) : (
+            <div className="w-36 h-36 bg-gray-200 rounded-lg mx-auto"></div>
+          )}
+        </div>
+      </CardContainer>
       <div className="fixed bottom-0 w-full">
         <Footer />
       </div>
