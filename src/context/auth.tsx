@@ -11,7 +11,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { FriendSchema } from "@/app/birth-tree/page"; 
 
 type UserContextType = User | null | undefined;
 
@@ -53,7 +53,6 @@ export const fetchFriendsID = async () => {
   try {
     // 特定のuidドキュメントを取得
     if (auth.currentUser?.uid == null) {
-      console.log("おーい")
       return
     }
 
@@ -77,8 +76,7 @@ export const fetchFriendsID = async () => {
 
 
 // friendListの各IDに対してFirestoreからユーザーの全データを取得
-export const fetchFriends = async (friendList: string[]): Promise<any[]> => {
-  console.log("わーい");
+export const fetchFriends = async (friendList: string[]): Promise<FriendSchema[]> => {
   try {
     // friendListの各IDに対してFirestoreからユーザーのドキュメントを取得
     const friendsData = await Promise.all(
@@ -89,17 +87,15 @@ export const fetchFriends = async (friendList: string[]): Promise<any[]> => {
         if (docSnap.exists()) {
           // ドキュメントのデータを取得して返す
           const friendData = docSnap.data();
-          console.log(friendData); // 取得したデータをログに出力
           return friendData; // 取得したユーザーデータを返す
         } else {
-          console.log(`ユーザー ${friendId} のドキュメントが存在しません`);
           return null; // ドキュメントが存在しない場合はnullを返す
         }
       })
     );
 
     // nullを除外して有効なデータのみを返す
-    return friendsData.filter((friend) => friend !== null);
+    return friendsData.filter((friend) => friend !== null) as FriendSchema[];
   } catch (error) {
     console.error("フレンドのデータ取得中にエラーが発生しました:", error);
     return [];

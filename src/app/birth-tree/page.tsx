@@ -2,14 +2,20 @@
 import AuthContext, { fetchFriendsID, fetchFriends } from "@/context/auth";
 import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
-import styles from './BirthTree.module.css';
+
+export type FriendSchema = {
+  id: string;
+  birthMonth: number;
+  birthDay: number;
+  nickname: string;
+  name: string;
+  photoURL: string;
+}
 
 export default function BirthTree() {
   const authValue = useContext(AuthContext);
 
-  const [age, setAge] = useState(0);
-  const [age2, setAge2] = useState(0);
-  const [friends, setFriends] = useState<any[]>([]);
+  const [friends, setFriends] = useState<FriendSchema[]>([]);
 
   const maxLeftValue = 100;
   const maxTopValue = 100;
@@ -27,10 +33,8 @@ export default function BirthTree() {
 
   useEffect(() => {
     (async () => {
-      setAge2(age * 2)
 
-      const friendIDList = await fetchFriendsID();
-      console.log(friendIDList)
+      const friendIDList:string[] = await fetchFriendsID();
 
       fetchFriends(friendIDList);
 
@@ -42,8 +46,8 @@ export default function BirthTree() {
     })()
   }, [authValue]);
 
-  console.log(`base: `, friends)
-  const sortFriendsByBirthday = (friendList: any[]): any[] => {
+  console.log(`friendsだよー→`, friends)
+  const sortFriendsByBirthday = (friendList: FriendSchema[]): FriendSchema[] => {
     const today = new Date();
 
     return friendList.sort((a, b) => {
@@ -69,14 +73,8 @@ export default function BirthTree() {
     }
   })
   // 実行
-  console.log(`sorted: `, sortedFriendsWithBirthDayFlag)
   return (
     <div className="wapper">
-      <button onClick={() => { fetchFriendsID() }}> test1</button>
-      <button onClick={() => { fetchFriends(["iI1M2RZi59VmQN4QNfXxYP6TMgD2"]) }}> test2</button>
-      <button onClick={() => { setAge(age + 1) }}> test3</button>
-      <h2>{age}</h2>
-      <h2>{age2}</h2>
       <div className="background">
         {sortedFriendsWithBirthDayFlag.map((friend, index) => {
 
