@@ -38,17 +38,17 @@ export const ProfileForm = () => {
   return (
     <CardContainer>
       <form onSubmit={DataUpdata}>
-        <div className="flex justify-between items-center text-2xl text-textbrawn font-bold mb-0 font-aboreto border-b border-mainpinklight border-dashed pb-4 w-full">
+        <div className="flex justify-between items-center text-2xl text-textbrawnlight font-bold mb-0 font-serif border-b border-mainpinklight border-dashed pb-4 w-full">
           <div className='w-1/4'></div>
           <div className='flex justify-center w-full'>
             PROFILE
           </div>
-          <div className=' w-1/4'>
+          <div className='w-1/4 flex justify-end'>
             <input
               onClick={() => router.push('/qr')}
               value={'登録'}
               type='submit'
-              className="text-white rounded-lg text-lg"
+              className="h-full rounded-lg text-base"
             />
           </div>
         </div>
