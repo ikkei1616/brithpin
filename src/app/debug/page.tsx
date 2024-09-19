@@ -3,9 +3,12 @@ import CardContainer from '../components/CardContainer'
 import React, { useState  } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { useAuth } from '@/context/auth';
+import { logout } from '@/lib/auth';
 
 const Page = () => {
   const [userId, setUserId] = useState<string>(''); // ユーザーIDのステート
+  const user = useAuth();
 
   // Firestoreからドキュメントを取得する関数
   const getDocData = async (id: string) => {
@@ -52,6 +55,16 @@ const Page = () => {
           </button>
         </CardContainer>
       </div>
+      {user && (
+        <button
+          onClick={() => {
+            logout();
+          }}
+          className="px-8 py-3 bg-pin text-defaultBackGround rounded-lg transition-colors text-lg shadow-md font-serif"
+        >
+          ログアウト
+        </button>
+      )}
     </div>
   );
 };
