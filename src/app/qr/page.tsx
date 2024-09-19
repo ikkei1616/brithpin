@@ -102,7 +102,7 @@ const QrPage = () => {
 
           {/* ID検索の横幅をCardContainerに合わせる */}
           <div className="relative w-full">
-            <label className="block text-textbrawnlight text-lg mt-1">ID検索</label>
+            <label className="block text-textbrawnlight text-lg mt-1 font-serif">ID検索</label>
             <div className=''>
               <input
                 type="text"
