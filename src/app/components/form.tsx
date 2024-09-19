@@ -3,9 +3,10 @@ import React from 'react';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db, auth } from '../../lib/firebase';
 import CardContainer from './CardContainer';
+import { useRouter } from 'next/navigation';
 
 export const ProfileForm = () => {
-
+  const router = useRouter();
   const DataUpdata = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -44,6 +45,7 @@ export const ProfileForm = () => {
           </div>
           <div className=' w-1/4'>
             <input
+            onClick={() => router.push('/add-friend')}
               value={'登録'}
               type='submit'
               className="text-white rounded-lg text-lg"
