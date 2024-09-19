@@ -34,7 +34,7 @@ export default function BirthTree() {
   useEffect(() => {
     (async () => {
 
-      const friendIDList:string[] = await fetchFriendsID();
+      const friendIDList: string[] = await fetchFriendsID();
 
       fetchFriends(friendIDList);
 
@@ -76,36 +76,48 @@ export default function BirthTree() {
     <div className="wapper">
       <div className="background">
         {sortedFriendsWithBirthDayFlag.map((friend, index) => {
-
-          // locate配列の範囲外アクセスを防ぐ
           if (index >= locate.length) return null;
 
           return (
-            <div key={friend.id} style={{
-              position: "absolute",
-              left: `${(locate[index].left / maxLeftValue) * 100}%`,
-              top: `${(locate[index].top / maxTopValue) * 100}%`,
-            }}>
-
-              <img src="/fukidashi.png"
-              
+            <div
+              key={friend.id}
+              style={{
+                position: "absolute",
+                left: `${(locate[index].left / maxLeftValue) * 100}%`,
+                top: `${(locate[index].top / maxTopValue) * 100}%`,
+              }}
+            >
+              <img
+                src="/fukidashi.png"
                 className="hidden-element"
                 style={{
                   position: "absolute",
                   top: -50,
                   minWidth: 70,
-                  // display: friend.isBirthDayToday ? `block` : `none`,
                 }}
               />
+              {/* 誕生日の場合にだけ hiyoko.svg を表示 */}
+              {friend.isBirthDayToday && (
+                <img
+                  src="/hiyoko.svg"
+                  alt="ひよこ"
+                  style={{
+                    position: "absolute",
+                    top: -85, // fukidashi.png の上に配置する
+                    left: 10, // 位置調整は必要に応じて変更
+                    width: 50, // 必要に応じてサイズを調整
+                  }}
+                />
+              )}
               <div
-              className="font-serif text-textbrawnlight"
+                className="font-serif text-textbrawnlight"
                 style={{
                   position: "absolute",
                   top: -43,
                   left: 9,
                   width: "100%",
                   textAlign: "center",
-                  fontSize: "10px", // 必要に応じてフォントサイズを調整
+                  fontSize: "10px",
                 }}
               >
                 {`${friend.birthMonth} / ${friend.birthDay}`}
@@ -115,23 +127,16 @@ export default function BirthTree() {
               <Image
                 src={friend.photoURL}
                 alt={`${friend.name}のアイコン`}
-                width={50} height={50}
-                className="hiyoko-active"
-                style={
-                  {
-
-                    // boxShadow: `0 0 0 2px pink`, /* ピンク色の輪郭を追加 */
-
-                    // backgroundColor: `white`,
-                    // borderRadius: "50%", 
-                    clipPath: `circle(50% at 50% 50%)`, /* 円形にクリッピング */
-                    objectFit: "cover",
-
-                  }
-                }
+                width={50}
+                height={50}
+                className="styles.friendIcon hiyoko-active"
+                style={{
+                  clipPath: `circle(50% at 50% 50%)`,
+                  objectFit: "cover",
+                }}
               />
             </div>
-          )
+          );
         })}
       </div>
     </div>
