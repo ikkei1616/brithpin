@@ -61,4 +61,11 @@ body {
   .friendIcon:hover .hidden-element {
     display: block;
   }
+  
+  .bg-custom-special {
+    @apply bg-customSpecial;
+    background-position: left top, right top; /* それぞれの画像の位置 */
+    background-repeat: no-repeat; /* 背景画像の繰り返しを無効にする */
+    background-size: auto; /* サイズを調整したい場合はここで指定 */
+  }
 }

@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const appUser: User = {
             id: firebaseUser.uid,
             name: firebaseUser.displayName!,
+            photoURL: firebaseUser.photoURL!,
           };
           setDoc(ref, appUser).then(() => {
             setUser(appUser);
