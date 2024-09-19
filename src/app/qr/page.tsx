@@ -8,7 +8,7 @@ const QrPage = () => {
   return (
     <div className='h-screen flex flex-col'>
       <div>
-        <div className="h-screen flex items-center justify-center mt-6">
+        <div className="h-screen flex items-center justify-center pt-6">
           <CardContainer>
             <CardTitle title="FRIEND" />
             <div className="text-center">
