@@ -14,6 +14,7 @@ const config: Config = {
         foreground: "var(--foreground)",
       },
       backgroundImage: {
+        customSpecial: "url('/birthpin.svg'), url('/textspecialday.svg')",
         customBackGround: "url('/tree.svg')",
       },
     },
