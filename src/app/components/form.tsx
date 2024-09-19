@@ -3,7 +3,6 @@ import React from 'react';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db, auth } from '../../lib/firebase';
 import CardContainer from './CardContainer';
-import CardTitle from './CardTitle';
 
 export const ProfileForm = () => {
 
