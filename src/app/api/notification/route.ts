@@ -9,8 +9,8 @@ interface User {
   friends?: string[]; // フレンドのIDの配列
   birthMonth?: number;
   birthDay?: number;
-  token?: string[];
   friendsDetails?: FriendDetail[]; // フレンドの詳細情報の配列
+  token?: string; // ユーザーのトークン
 }
 
 // FriendDetail型の定義
@@ -31,6 +31,9 @@ const db = getFirestore();
 
 export async function GET(req: NextRequest) {
   try {
+    // トークンの配列（友人がいるユーザーのトークンを保持）
+    let token: string[] = [];
+
     // Firestoreから全ユーザー情報を取得
     const usersSnapshot = await db.collection("users").get();
     let usersData: User[] = usersSnapshot.docs.map((doc) => ({
@@ -39,35 +42,36 @@ export async function GET(req: NextRequest) {
       friends: doc.data().friends || [],
       birthMonth: doc.data().birthMonth,
       birthDay: doc.data().birthDay,
-      token: doc.data().token || [],
+      token: doc.data().token, // ユーザーのトークンを取得
     }));
+
+    // friendsが存在するユーザーのみをフィルタリング
+    usersData = usersData.filter(user => user.friends && user.friends.length > 0);
 
     // 各ユーザーのフレンド情報を取得
     for (const user of usersData) {
-      if (user.friends && user.friends.length > 0) {
-        // フレンドのIDからフレンド情報を取得
-        const friendsSnapshot = await db.collection("users")
-          .where('__name__', 'in', user.friends)
-          .get();
+      // フレンドのIDからフレンド情報を取得
+      const friendsSnapshot = await db.collection("users")
+        .where('__name__', 'in', user.friends)
+        .get();
 
-        // フレンド情報の抽出
-        user.friendsDetails = friendsSnapshot.docs.map(friendDoc => ({
-          id: friendDoc.id,
-          nickname: friendDoc.data().nickname,
-          birthDay: friendDoc.data().birthDay,
-          birthMonth: friendDoc.data().birthMonth,
-          token: friendDoc.data().token,
-        }));
-      } else {
-        user.friendsDetails = [];
+      // フレンド情報の抽出
+      user.friendsDetails = friendsSnapshot.docs.map(friendDoc => ({
+        id: friendDoc.id,
+        nickname: friendDoc.data().nickname,
+        birthDay: friendDoc.data().birthDay,
+        birthMonth: friendDoc.data().birthMonth,
+      }));
+
+      // 友人がいるユーザーのトークンをtoken配列に追加
+      if (user.token) {
+        token.push(user.token);
       }
     }
 
-    // friendsDetailsが空でないユーザーのみをフィルタリング
-    usersData = usersData.filter(user => user.friendsDetails && user.friendsDetails.length > 0);
-
+    console.log(token)
     // データをレスポンスとして返す
-    return NextResponse.json({ users: usersData });
+    return NextResponse.json({ users: usersData, tokens: token });
   } catch (error) {
     console.error("Error fetching user data:", error);
     return NextResponse.json({ error: "Error fetching user data" }, { status: 500 });
