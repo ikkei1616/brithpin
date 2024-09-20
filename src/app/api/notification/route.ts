@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-import { initializeApp, cert, getApp } from "firebase-admin/app";
+import { NextResponse } from "next/server";
+import { initializeApp, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { getMessaging } from "firebase-admin/messaging";
 import { getApps } from "firebase-admin/app";
@@ -52,7 +52,7 @@ if (!firebaseApp) {
 
 const db = getFirestore(firebaseApp);
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     // トークンの配列（友人がいるユーザーのトークンを保持）
     let registrationTokens: string[] = [];
