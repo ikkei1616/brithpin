@@ -90,7 +90,7 @@ const QrPage = () => {
             </div>
             <div className="flex justify-center items-center my-4">
               <div className="flex flex-col items-center justify-center px-3 pb-3 bg-white rounded-md">
-                <QRCodeSVG value={`http://localhost:3000/add-friend/${uid || "default"}`} size={120} />
+                <QRCodeSVG value={`https://brithpin.vercel.app/add-friend/${uid || "default"}`} size={120} />
                 {uid && (
                   <div className="text-xs font-serif text-textbrawnlight mt-2">
                     ID : {uid}
