@@ -4,7 +4,7 @@ import { updateDoc, doc } from 'firebase/firestore';
 import { db, auth } from '../lib/firebase';
 import CardContainer from '../../src/app/components/CardContainer';
 import { useRouter } from 'next/navigation';
-import FileUploader from './FileUploader'; // FileUploaderをインポート
+import FileUploader from './FileUploader';
 
 export const ProfileForm = () => {
   const [photoURL, setphotoURL] = useState<string[]>([]); // 画像URLを保存するstate
