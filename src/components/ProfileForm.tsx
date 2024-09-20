@@ -1,4 +1,6 @@
 'use client';
+import { useAuth } from "@/context/auth";
+import { logout } from "@/lib/auth";
 import React, { useState } from 'react';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db, auth } from '../lib/firebase';
@@ -9,6 +11,7 @@ import FileUploader from './FileUploader';
 export const ProfileForm = () => {
   const [photoURL, setphotoURL] = useState<string[]>([]); // 画像URLを保存するstate
   const router = useRouter();
+  const user = useAuth();
 
   // 画像URLを取得する関数
   const handleSetImage = (urls: string[]) => {
@@ -53,7 +56,24 @@ export const ProfileForm = () => {
     <CardContainer>
       <form onSubmit={DataUpdate}>
         <div className="flex justify-between items-center text-2xl text-textbrawnlight font-bold mb-0 font-serif border-b border-mainpinklight border-dashed pb-4 w-full">
-          <div className='w-2/5'></div>
+          <div className='w-2/5 flex justify-around'>
+            
+              {user && (
+            <button
+            style={{height:40,width:60,fontSize:20}}
+              onClick={() => {
+                logout();
+                router.push("/")
+              }
+              
+            }
+
+              className="text-defaultBackGround rounded-lg transition-colors shadow-md font-serif"
+            >
+              戻る
+            </button>
+          )}
+          </div>
           <div className='flex justify-center w-full'>
             PROFILE
           </div>
