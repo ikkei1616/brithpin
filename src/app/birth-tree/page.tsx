@@ -80,14 +80,14 @@ export default function BirthTree() {
   // 実行
   return (
     <div>
-      <button onClick={onClickRoute}>
-        <img src="/top-button.svg" alt="Button Image" 
+      <button onClick={onClickRoute}
         style={{
           position: "absolute",
-          left:20,
+          left: 20,
           top: 200,
           minWidth: 70,
-        }}
+        }}>
+        <img src="/top-button.svg" alt="Button Image"
         />
       </button>
 
