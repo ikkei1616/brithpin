@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { initializeApp, cert } from "firebase-admin/app";
+import { initializeApp, cert, getApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { getMessaging } from "firebase-admin/messaging";
+import { getApps } from "firebase-admin/app";
+require('dotenv').config();
+
 
 // User型の定義
 interface User {
@@ -23,12 +26,31 @@ interface FriendDetail {
 }
 
 // Firebase Admin SDKの初期化
-const serviceAccount = require("/firebaseSecretKey.json");
-initializeApp({
-  credential: cert(serviceAccount),
-});
+// const serviceAccount = require("/firebaseSecretKey.json");
+// console.log(serviceAccount);
+let firebaseApp = getApps().find(app => app.name === 'notification')
 
-const db = getFirestore();
+const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+console.log('NEXT_PUBLIC_FIREBASE_PROJECT_ID',projectId);
+const clientEmail = process.env.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL;
+console.log('NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL',clientEmail);
+const privateKey = process.env.NEXT_PUBLIC_PRIVATE_KEY;
+console.log('NEXT_PUBLIC_PRIVATE_KEY',privateKey);
+
+
+if (!firebaseApp) {
+  console.log('initializeApp');
+  firebaseApp = initializeApp({
+    // credential: cert(serviceAccount),
+    credential: cert({
+      projectId,
+      clientEmail,
+      privateKey,
+    }),
+  }, 'notification'); // 新しいアプリを初期化
+}
+
+const db = getFirestore(firebaseApp);
 
 export async function GET(req: NextRequest) {
   try {
@@ -74,7 +96,7 @@ export async function GET(req: NextRequest) {
     registrationTokens = [...new Set(registrationTokens.flat())];
 
     if (registrationTokens.length > 0) {
-      const messaging = getMessaging();
+      const messaging = getMessaging(firebaseApp);
       const message = {
         notification: {
           title: 'お知らせ',

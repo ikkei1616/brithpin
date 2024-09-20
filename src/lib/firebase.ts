@@ -1,4 +1,4 @@
-import { initializeApp, getApps } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getMessaging, getToken } from "firebase/messaging";
@@ -14,8 +14,11 @@ export const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-if (!getApps()?.length) {
-  initializeApp(firebaseConfig);
+
+let firebaseApp = getApps().find(app => app.name === 'default')
+
+if (!firebaseApp) {
+  firebaseApp = initializeApp(firebaseConfig, 'default');
 }
 
 export function requestPermission() {
@@ -41,6 +44,6 @@ export function requestPermission() {
   });
 }
 
-export const auth = getAuth();
-export const db = getFirestore();
-export const storage = getStorage();
+export const auth = getAuth(firebaseApp);
+export const db = getFirestore(firebaseApp);
+export const storage = getStorage(firebaseApp);

@@ -11,30 +11,33 @@ const firebaseConfig = {
   measurementId: 'G-42QLDS1Y2H',
 };
 
+let firebaseApp = firebase.initializeApp(firebaseConfig);
 
-
+// if (!getApps()?.length) {
+//   firebaseApp = firebase.initializeApp(firebaseConfig, 'sw');
+// }
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+
 
 const messaging = firebase.messaging();
 
 // 通知を受けとると push イベントが呼び出される。
 self.addEventListener('push', function (event) {
   const notificationPromise = self.registration.showNotification(
-    messageTitle,
+    event.messageTitle,
     {
-      body: messageBody,
-      tag: messageTag
+      body: event.messageBody,
+      tag: event.messageTag
     });
   event.waitUntil(notificationPromise);
 }, false)
 
 // WEBアプリがバックグラウンドの場合にはsetBackGroundMessageHandlerが呼び出される。
-messaging.setBackgroundMessageHandler(function () {
+messaging.setBackgroundMessageHandler(function (event) {
   return self.registration.showNotification(
-    messageTitle,
+    event.messageTitle,
     {
-      body: messageBody,
-      tag: messageTag
+      body: event.messageBody,
+      tag: event.messageTag
     });
 });
