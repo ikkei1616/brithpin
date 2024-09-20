@@ -2,14 +2,16 @@ importScripts("https://www.gstatic.com/firebasejs/7.3.0/firebase-app.js");
 importScripts("https://www.gstatic.com/firebasejs/7.3.0/firebase-messaging.js");
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  apiKey: `AIzaSyAfWbDntObUe3B5-nzsWmqYvFncIVc-rhI`,
+  authDomain: 'birthpin.firebaseapp.com',
+  projectId: 'birthpin',
+  storageBucket: 'birthpin.appspot.com',
+  messagingSenderId: '64232598136',
+  appId: '1:64232598136:web:0c6f5c5d2bc726729e9b8d',
+  measurementId: 'G-42QLDS1Y2H',
 };
+
+
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);

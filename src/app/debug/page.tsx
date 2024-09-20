@@ -6,6 +6,7 @@ import CardContainer from "../components/CardContainer";
 import CardTitle from "../components/CardTitle";
 import Image from "next/image";
 import WideDecisionButton from "../components/WideDecisionButton";
+import Notification from "@/components/Notification";
 
 export default function DebugPage() {
   
@@ -47,6 +48,7 @@ export default function DebugPage() {
           ログアウト
         </button>
       )}
+      <Notification />
     </div>
   );
 }
