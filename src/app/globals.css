@@ -1,3 +1,9 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Noto+Serif+JP:wght@200..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Aboreto&display=swap');
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,5 +29,43 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .background {
+    background-image: url('/tree.svg'); /* 外部画像のURL */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    max-width: 393px;
+    max-height: 600px;
+    position: relative;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  .wapper {
+    width: 393px;
+    height: 600px;
+    margin: 0 auto;
+    position: absolute;
+    position: bottom center;
+    bottom: 0;
+  }
+
+  .friendIcon {
+    position: absolute;
+    border-radius: 50%;
+    object-fit: cover;
+  }  
+  .friendIcon:hover .hidden-element {
+    display: block;
+  }
+  
+  .bg-custom-special {
+    @apply bg-customSpecial;
+    background-position: left top, right top; /* それぞれの画像の位置 */
+    background-repeat: no-repeat; /* 背景画像の繰り返しを無効にする */
+    background-size: auto; /* サイズを調整したい場合はここで指定 */
   }
 }
