@@ -1,43 +1,62 @@
 "use client";
-import { useAuth } from "@/context/auth";
-import { login, logout } from "@/lib/auth";
-import { useState } from "react";
-import CardContainer from "../components/CardContainer";
-import CardTitle from "../components/CardTitle";
-import Image from "next/image";
-import WideDecisionButton from "../components/WideDecisionButton";
+import CardContainer from '../components/CardContainer'
+import React, { useState  } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { useAuth } from '@/context/auth';
+import { logout } from '@/lib/auth';
 import Notification from "@/components/Notification";
 
-export default function DebugPage() {
-  
+
+const Page = () => {
+  const [userId, setUserId] = useState<string>(''); // ユーザーIDのステート
   const user = useAuth();
-  const [waiting, setWaiting] = useState<boolean>(false);
 
-  const signIn = () => {
-    setWaiting(true);
-
-    login()
-      .catch((error) => {
-        console.error(error?.code);
-      })
-      .finally(() => {
-        setWaiting(false);
-      });
+  // Firestoreからドキュメントを取得する関数
+  const getDocData = async (id: string) => {
+    const docRef = doc(db, 'users', id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log('Document data:', docSnap.data());
+    } else {
+      console.log('No such document!');
+    }
   };
+
+  // 入力が変更されたときに呼び出される関数
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newId = event.target.value;
+    setUserId(newId);
+  };
+
+  // ユーザーIDが変更されたときにデータを取得
+  const handleSearch = () => {
+    if (userId.trim() !== '') {
+      getDocData(userId);
+    } else {
+      console.log('Please enter a valid user ID.');
+    }
+  };
+
   return (
-    <div className="h-screen flex items-center justify-center mt-6">
-      {user === null && !waiting && (
+    <div className='h-screen flex flex-col'>
+      <div className='flex-grow'>
         <CardContainer>
-          <CardTitle title="LOGIN" />
-          <div className="text-center">
-            <div className="text-xl my-4 text-writingText font-serif">BirthPINでお誕生日を祝おう</div>
-            <div className="mb-6">
-              <Image src="/usericonshadow.svg" width={140} height={140} alt="user_img" className="mx-auto" />
-            </div>
-            <WideDecisionButton onClick={signIn} />
-          </div>
+          <input
+            type="text"
+            className="w-full p-2 border border-pin rounded-lg"
+            placeholder="HtPHOggYTBVWOf0nNqBQSbqR4Yf1"
+            value={userId}
+            onChange={handleInputChange}
+          />
+          <button
+            className="mt-4 px-4 py-2 bg-pin text-white rounded-lg"
+            onClick={handleSearch}
+          >
+            検索
+          </button>
         </CardContainer>
-      )}
+      </div>
       {user && (
         <button
           onClick={() => {
@@ -51,4 +70,6 @@ export default function DebugPage() {
       <Notification />
     </div>
   );
-}
+};
+
+export default Page;
