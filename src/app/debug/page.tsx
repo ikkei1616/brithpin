@@ -5,6 +5,8 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/auth';
 import { logout } from '@/lib/auth';
+import Notification from "@/components/Notification";
+
 
 const Page = () => {
   const [userId, setUserId] = useState<string>(''); // ユーザーIDのステート
@@ -65,6 +67,7 @@ const Page = () => {
           ログアウト
         </button>
       )}
+      <Notification />
     </div>
   );
 };
