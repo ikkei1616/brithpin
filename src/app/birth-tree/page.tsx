@@ -1,6 +1,7 @@
 'use client';
 import AuthContext, { fetchFriendsID, fetchFriends } from "@/context/auth";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 export type FriendSchema = {
@@ -14,8 +15,13 @@ export type FriendSchema = {
 
 export default function BirthTree() {
   const authValue = useContext(AuthContext);
+  const router = useRouter()
 
   const [friends, setFriends] = useState<FriendSchema[]>([]);
+
+  const onClickRoute = () => {
+    router.push('/account')
+  }
 
   const maxLeftValue = 100;
   const maxTopValue = 100;
@@ -73,71 +79,84 @@ export default function BirthTree() {
   })
   // 実行
   return (
-    <div className="wapper">
-      <div className="background">
-        {sortedFriendsWithBirthDayFlag.map((friend, index) => {
-          if (index >= locate.length) return null;
+    <div>
+      <button onClick={onClickRoute}>
+        <img src="/top-button.svg" alt="Button Image" 
+        style={{
+          position: "absolute",
+          left:20,
+          top: 200,
+          minWidth: 70,
+        }}
+        />
+      </button>
 
-          return (
-            <div
-              key={friend.id}
-              style={{
-                position: "absolute",
-                left: `${(locate[index].left / maxLeftValue) * 100}%`,
-                top: `${(locate[index].top / maxTopValue) * 100}%`,
-              }}
-            >
-              <img
-                src="/fukidashi.png"
-                className="hidden-element"
-                style={{
-                  position: "absolute",
-                  top: -50,
-                  minWidth: 70,
-                }}
-              />
-              {/* 誕生日の場合にだけ hiyoko.svg を表示 */}
-              {friend.isBirthDayToday && (
-                <img
-                  src="/hiyoko.svg"
-                  alt="ひよこ"
-                  style={{
-                    position: "absolute",
-                    top: -85, // fukidashi.png の上に配置する
-                    left: 10, // 位置調整は必要に応じて変更
-                    width: 50, // 必要に応じてサイズを調整
-                  }}
-                />
-              )}
+      <div className="wapper">
+        <div className="background">
+          {sortedFriendsWithBirthDayFlag.map((friend, index) => {
+            if (index >= locate.length) return null;
+
+            return (
               <div
-                className="font-serif text-textbrawnlight"
+                key={friend.id}
                 style={{
                   position: "absolute",
-                  top: -43,
-                  left: 9,
-                  width: "100%",
-                  textAlign: "center",
-                  fontSize: "10px",
+                  left: `${(locate[index].left / maxLeftValue) * 100}%`,
+                  top: `${(locate[index].top / maxTopValue) * 100}%`,
                 }}
               >
-                {`${friend.birthMonth} / ${friend.birthDay}`}
-                <br />
-                {friend.nickname}
+                <img
+                  src="/fukidashi.png"
+                  className="hidden-element"
+                  style={{
+                    position: "absolute",
+                    top: -50,
+                    minWidth: 70,
+                  }}
+                />
+                {/* 誕生日の場合にだけ hiyoko.svg を表示 */}
+                {friend.isBirthDayToday && (
+                  <img
+                    src="/hiyoko.svg"
+                    alt="ひよこ"
+                    style={{
+                      position: "absolute",
+                      top: -85, // fukidashi.png の上に配置する
+                      left: 10, // 位置調整は必要に応じて変更
+                      width: 50, // 必要に応じてサイズを調整
+                    }}
+                  />
+                )}
+                <div
+                  className="font-serif text-textbrawnlight"
+                  style={{
+                    position: "absolute",
+                    top: -43,
+                    left: 9,
+                    width: "100%",
+                    textAlign: "center",
+                    fontSize: "10px",
+                  }}
+                >
+                  {`${friend.birthMonth} / ${friend.birthDay}`}
+                  <br />
+                  {friend.nickname}
+                </div>
+                <Image
+                  src={friend.photoURL}
+                  alt={`${friend.name}のアイコン`}
+                  width={50}
+                  height={50}
+                  className="styles.friendIcon hiyoko-active"
+                  style={{
+                    clipPath: `circle(50% at 50% 50%)`,
+                    objectFit: "cover",
+                  }}
+                />
               </div>
-              <Image
-                src={friend.photoURL}
-                alt={`${friend.name}のアイコン`}
-                width={50}
-                height={50}
-                className="styles.friendIcon hiyoko-active"
-                style={{
-                  clipPath: `circle(50% at 50% 50%)`,
-                  objectFit: "cover",
-                }}
-              />
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
