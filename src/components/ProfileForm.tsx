@@ -1,14 +1,22 @@
-'use client'
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import { updateDoc, doc } from 'firebase/firestore';
-import { db, auth } from '../../lib/firebase';
-import CardContainer from './CardContainer';
+import { db, auth } from '../lib/firebase';
+import CardContainer from '../../src/app/components/CardContainer';
 import { useRouter } from 'next/navigation';
-import ParentComponent from '@/components/ParentCompontnt';
+import FileUploader from './FileUploader'; // FileUploaderをインポート
 
 export const ProfileForm = () => {
+  const [photoURL, setphotoURL] = useState<string[]>([]); // 画像URLを保存するstate
   const router = useRouter();
-  const DataUpdata = async (event: React.FormEvent<HTMLFormElement>) => {
+
+  // 画像URLを取得する関数
+  const handleSetImage = (urls: string[]) => {
+    console.log("Saved URLs: ", urls);
+    setphotoURL(urls); // アップロードされた画像URLを保存
+  };
+
+  const DataUpdate = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -20,43 +28,58 @@ export const ProfileForm = () => {
 
     try {
       if (auth.currentUser?.uid == null) {
-
-        return
+        return;
       }
       const docRef = doc(db, "users", auth.currentUser.uid);
+
+      // Firestoreにユーザー情報と画像URLを保存
       await updateDoc(docRef, {
         nickname: nickname,
         birthYear: birthYear,
         birthMonth: birthMonth,
         birthDay: birthDay,
         gender: gender,
+        photoURL: photoURL.length > 0 ? photoURL[0] : null, // 画像URLがある場合保存
       });
+
+      console.log("Data and Images saved successfully");
+      router.push('/qr'); // 保存後にページ遷移
     } catch (error) {
       console.log("エラーが発生しました", error);
     }
-  }
+  };
 
   return (
     <CardContainer>
-      <form onSubmit={DataUpdata}>
+      <form onSubmit={DataUpdate}>
         <div className="flex justify-between items-center text-2xl text-textbrawnlight font-bold mb-0 font-serif border-b border-mainpinklight border-dashed pb-4 w-full">
-          <div className='w-1/4'></div>
+          <div className='w-2/5'></div>
           <div className='flex justify-center w-full'>
             PROFILE
           </div>
-          <div className='w-1/4 flex justify-end'>
+          <div className='w-2/5 flex justify-around'>
             <input
-              onClick={() => router.push('/qr')}
               value={'登録'}
               type='submit'
               className="h-full rounded-lg text-base"
             />
+            <div
+              className="transform bg-pin text-color rounded-full bg-mainpink h-6 w-6 flex items-center"
+            >
+              ✓
+            </div>
           </div>
         </div>
         <div className='text-center'>
-          <div className="text-base my-4 text-textbrawnlight font-serif w-32">
-            <ParentComponent />
+          <div className="text-base my-4 text-textbrawnlight font-serif">
+            あなたの情報を入力してください
           </div>
+
+          {/* 画像アップロード機能 */}
+          <div className="my-4">
+            <FileUploader setImage={handleSetImage} /> {/* 画像アップロードコンポーネント */}
+          </div>
+
           <div className="space-y-3">
             <div className=''>
               <div className='flex'>
@@ -146,4 +169,3 @@ export const ProfileForm = () => {
     </CardContainer>
   );
 }
-
