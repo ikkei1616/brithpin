@@ -50,6 +50,8 @@ export const ProfileForm = () => {
   };
 
   return (
+
+    
     <CardContainer>
       <form onSubmit={DataUpdate}>
         <div className="flex justify-between items-center text-2xl text-textbrawnlight font-bold mb-0 font-serif border-b border-mainpinklight border-dashed pb-4 w-full">
