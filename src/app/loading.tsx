@@ -1,10 +1,10 @@
-import Stac from '@mui/material/Stack';
+import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const Loading = () => {
   return(
     <>
-      <Stac
+      <Stack
         sx={{ 
           justifyContent: 'center',
           alignItems: 'center',        
@@ -21,7 +21,7 @@ const Loading = () => {
           color: '#FEB69F',
           }} 
         />
-      </Stac>  
+      </Stack>  
     </>
   )
 }
