@@ -79,7 +79,7 @@ export default function BirthTree() {
   })
   // 実行
   return (
-    <div>
+    <div className="w-screen h-screen flex justify-center">
       <button onClick={onClickRoute}
         style={{
           position: "absolute",
