@@ -79,20 +79,19 @@ export default function BirthTree() {
   })
   // 実行
   return (
-    <div>
-      <button onClick={onClickRoute}
-        style={{
-          position: "absolute",
-          left: 20,
-          top: 200,
-          minWidth: 70,
-        }}>
-        <img src="/top-button.svg" alt="Button Image"
-        />
-      </button>
-
+    <div className="flex w-screen h-screen  justify-center ">
       <div className="wapper">
         <div className="background">
+          <button onClick={onClickRoute}
+            style={{
+              position: "absolute",
+              left: 20,
+              minWidth: 70,
+            }}>
+            <img src="/top-button.svg" alt="Button Image"
+            />
+          </button>
+
           {sortedFriendsWithBirthDayFlag.map((friend, index) => {
             if (index >= locate.length) return null;
 
