@@ -211,6 +211,7 @@ export default function BirthTree() {
                         </textarea>
                       </form>
                       <Button onClick={handleClose}>閉じる</Button>
+                      <Button >提出</Button>
                     </Box>
                   </Modal>
               </>
