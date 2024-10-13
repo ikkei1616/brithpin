@@ -105,14 +105,17 @@ export default function BirthTree() {
     <div className="flex w-screen h-screen  justify-center ">
       <div className="wapper">
         <div className="background">
-          <button onClick={onClickRoute}
+          <Button onClick={onClickRoute}
             style={{
               position: "absolute",
               left: 20,
               minWidth: 70,
             }}>
-            <img src="/top-button.svg" alt="Button Image"/>
-          </button>
+            <Image src="/top-button.svg" alt="Button Image"
+              width={100}
+              height={50}
+            />
+          </Button>
 
           {sortedFriendsWithBirthDayFlag.map((friend, index) => {
             if (index >= locate.length) return null;
@@ -132,9 +135,10 @@ export default function BirthTree() {
                 
                 
                   <div>
-                    <img
+                    <Image
                       src="/fukidashi.png"
                       className="hidden-element"
+                      alt="吹き出し"
                       style={{
                         position: "absolute",
                         top: -50,
@@ -144,7 +148,7 @@ export default function BirthTree() {
                     />
                     {/* 誕生日の場合にだけ hiyoko.svg を表示 */}
                     {friend.isBirthDayToday && (
-                      <img
+                      <Image
                         src="/hiyoko.svg"
                         alt="ひよこ"
                         style={{
