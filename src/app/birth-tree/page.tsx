@@ -145,6 +145,8 @@ export default function BirthTree() {
                         minWidth: 70,
                         pointerEvents:"none"
                       }}
+                      height={100}
+                      width={100}
                     />
                     {/* 誕生日の場合にだけ hiyoko.svg を表示 */}
                     {friend.isBirthDayToday && (
