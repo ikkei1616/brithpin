@@ -131,9 +131,7 @@ export default function BirthTree() {
                     left: `${(locate[index].left / maxLeftValue) * 100}%`,
                     top: `${(locate[index].top / maxTopValue) * 100}%`,
                   }}
-                >
-                
-                
+                > 
                   <div>
                     <Image
                       src="/fukidashi.png"
