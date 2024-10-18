@@ -64,8 +64,21 @@ body {
   
   .bg-custom-special {
     @apply bg-customSpecial;
-    background-position: left top, right top; /* それぞれの画像の位置 */
-    background-repeat: no-repeat; /* 背景画像の繰り返しを無効にする */
-    background-size: auto; /* サイズを調整したい場合はここで指定 */
+    background-position: left top, right top;
+    background-repeat: no-repeat;
+    background-size: 50vw auto, 25vw auto; /* デフォルトサイズ */
   }
+  
+  @media (min-width: 768px) { /* md ブレイクポイント */
+    .bg-custom-special {
+      background-size: 40vw auto, 20vw auto;
+    }
+  }
+  
+  @media (min-width: 1024px) { /* lg ブレイクポイント */
+    .bg-custom-special {
+      background-size: 30vw auto, 15vw auto;
+    }
+  }
+  
 }
