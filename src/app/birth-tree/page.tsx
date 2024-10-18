@@ -79,83 +79,21 @@ export default function BirthTree() {
   })
   // 実行
   return (
-    <div className="flex w-screen h-screen  justify-center ">
-      <div className="wapper">
-        <div className="background">
-          <button onClick={onClickRoute}
-            style={{
-              position: "absolute",
-              left: 20,
-              minWidth: 70,
-            }}>
-            <img src="/top-button.svg" alt="Button Image"
-            />
-          </button>
-
-          {sortedFriendsWithBirthDayFlag.map((friend, index) => {
-            if (index >= locate.length) return null;
-
-            return (
-              <div
-                key={friend.id}
-                style={{
-                  position: "absolute",
-                  left: `${(locate[index].left / maxLeftValue) * 100}%`,
-                  top: `${(locate[index].top / maxTopValue) * 100}%`,
-                }}
-              >
-                <img
-                  src="/fukidashi.png"
-                  className="hidden-element"
-                  style={{
-                    position: "absolute",
-                    top: -50,
-                    minWidth: 70,
-                  }}
-                />
-                {/* 誕生日の場合にだけ hiyoko.svg を表示 */}
-                {friend.isBirthDayToday && (
-                  <img
-                    src="/hiyoko.svg"
-                    alt="ひよこ"
-                    style={{
-                      position: "absolute",
-                      top: -85, // fukidashi.png の上に配置する
-                      left: 10, // 位置調整は必要に応じて変更
-                      width: 50, // 必要に応じてサイズを調整
-                    }}
-                  />
-                )}
-                <div
-                  className="font-serif text-textbrawnlight"
-                  style={{
-                    position: "absolute",
-                    top: -43,
-                    left: 9,
-                    width: "100%",
-                    textAlign: "center",
-                    fontSize: "10px",
-                  }}
-                >
-                  {`${friend.birthMonth} / ${friend.birthDay}`}
-                  <br />
-                  {friend.nickname}
-                </div>
-                <Image
-                  src={friend.photoURL}
-                  alt={`${friend.name}のアイコン`}
-                  width={50}
-                  height={50}
-                  className="styles.friendIcon hiyoko-active"
-                  style={{
-                    clipPath: `circle(50% at 50% 50%)`,
-                    objectFit: "cover",
-                  }}
-                />
-              </div>
-            );
-          })}
-        </div>
+    <div className="flex w-screen h-screen justify-center items-end">
+      <div 
+        className="
+        bg-no-repeat 
+        bg-contain
+        max-w-[70vw] 
+        max-h-[70vh] 
+        w-[100vw] 
+        h-[100vh] 
+        relative
+        lg:max-w-[70vw] 
+        lg:max-h-[70vh]
+      "
+        style={{ backgroundImage: "url('/tree.svg')",backgroundPosition: "bottom center", }}
+      >
       </div>
     </div>
   );
