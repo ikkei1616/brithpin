@@ -8,16 +8,6 @@ const ProfilePage = () => {
       <div>
         <ProfileForm />
       </div>
-      {/* {user && (
-        <button
-          onClick={() => {
-            logout();
-          }}
-          className="px-8 py-3 bg-pin text-defaultBackGround rounded-lg transition-colors text-lg shadow-md font-serif"
-        >
-          ログアウト
-        </button>
-      )} */}
     </div>
   )
 }
