@@ -1,3 +1,4 @@
+import { tree } from "next/dist/build/templates/app-page";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -42,14 +43,14 @@ const config: Config = {
     },
 
     backgroundImage:{
+      tree:"url('/tree.svg')",
       birthpin:"url('/birthpin.svg')",
       birthtree:"url('/birthtree.svg')",
       getuphiyoko:"url('/getuphiyoko.svg')",
       sleephiyoko:"url('/sleephiyoko.svg')",
       textspecialday:"url('/textspecialday.svg')",
-      usericonshadow:"url('/usericonshadow.svg')",     
+      usericonshadow:"url('/usericonshadow.svg')", 
     }
-
   },
   plugins: [],
 };

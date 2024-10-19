@@ -80,20 +80,50 @@ export default function BirthTree() {
   // 実行
   return (
     <div className="flex w-screen h-screen justify-center items-end">
-      <div 
+      <div
         className="
-        bg-no-repeat 
-        bg-contain
-        max-w-[70vw] 
-        max-h-[70vh] 
-        w-[100vw] 
-        h-[100vh] 
-        relative
-        lg:max-w-[70vw] 
-        lg:max-h-[70vh]
-      "
-        style={{ backgroundImage: "url('/tree.svg')",backgroundPosition: "bottom center", }}
+      bg-center
+      bottom-0
+      bg-no-repeat 
+      bg-contain
+      max-w-[50vw] 
+      max-h-[70vh]
+      w-[100vw] 
+      h-[100vh] 
+      relative
+      lg:max-w-[70vh]
+      bg-tree
+    "
       >
+        <button onClick={onClickRoute} className="absolute left-5 min-w-[70px]">
+          <img src="/top-button.svg" alt="Button Image" />
+        </button>
+
+        {sortedFriendsWithBirthDayFlag.map((friend, index) => {
+          if (index >= locate.length) return null;
+
+          return (
+            <div
+              key={friend.id}
+              className="absolute"
+              style={{
+                left: `${(locate[index].left / maxLeftValue) * 100}%`,
+                top: `${(locate[index].top / maxTopValue) * 100}%`,
+              }}
+            >
+              <img
+                src="/fukidashi.png"
+                className="
+              absolute 
+              min-w-[40px] 
+              sm:min-w-[50px] 
+              md:min-w-[60px] 
+              lg:min-w-[70px]
+            "
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
