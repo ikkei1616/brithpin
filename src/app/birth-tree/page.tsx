@@ -7,6 +7,11 @@ import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
+import { addDoc, collection, } from 'firebase/firestore';
+import { db,auth } from '../../lib/firebase';
+import { Timestamp } from "firebase/firestore";
+import Snackbar from '@mui/material/Snackbar';
+
 
 export type FriendSchema = {
   id: string;
@@ -22,6 +27,7 @@ export default function BirthTree() {
   const router = useRouter();
   const [friends, setFriends] = useState<FriendSchema[]>([]);
   const [openModalId, setOpenModalId] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   const handleOpen = (id: string) => {
     setOpenModalId(id);
@@ -32,6 +38,14 @@ export default function BirthTree() {
   const onClickRoute = () => {
     router.push("/account");
   };
+  const handleOpen2 = () =>{
+    setOpen(true);
+  };
+
+  const handleClose2 = () =>{
+    setOpen(false);
+  }
+
 
   const maxLeftValue = 100;
   const maxTopValue = 100;
@@ -60,6 +74,9 @@ export default function BirthTree() {
     px: 4,
     pb: 3,
   };
+
+  
+  
 
   useEffect(() => {
     (async () => {
@@ -116,6 +133,34 @@ export default function BirthTree() {
       isBirthDayToday,
     };
   });
+
+
+
+  const saveMessage = async (event: React.FormEvent<HTMLFormElement>,friendId:string) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    const message = formData.get("message")?.toString();
+
+    const time = Timestamp.now();
+
+    if (auth.currentUser?.uid == null) {
+      return;
+    }
+    const docRef = collection(db,"cards")
+
+    await addDoc(docRef, {
+      author: auth.currentUser.uid,
+      content: message,
+      to: friendId,
+      createAt:time,
+      
+    });
+    console.log("家桁")
+    }
+
+
+  
   // 実行
   return (
     <div className="flex w-screen h-screen  justify-center ">
@@ -215,7 +260,12 @@ export default function BirthTree() {
                 >
                   <Box sx={{ ...style, width: 200 }}>
                     <h2 id="child-modal-title">{friend.name}さんへ</h2>
-                    <form action="#">
+                    <form action="#" onSubmit={(event)=>  {
+                      saveMessage(event,friend.id);
+                      handleClose();
+                      handleOpen2();
+                    }}
+                    >
                       <textarea
                         id={`message"-${friend.id}`}
                         name="message"
@@ -226,11 +276,23 @@ export default function BirthTree() {
                           border: "2px solid #000",
                         }}
                       ></textarea>
+                      <Button onClick={handleClose}>閉じる</Button>
+                      <Button type="submit" >提出</Button>
                     </form>
-                    <Button onClick={handleClose}>閉じる</Button>
-                    <Button>提出</Button>
                   </Box>
                 </Modal>
+                <Snackbar
+                  open={open}
+                  autoHideDuration={4000}
+                  message="送信が完了しました！"
+                  onClose ={handleClose2}
+                  ContentProps={{
+                    sx: {
+                      backgroundColor: "#FEB69F",
+                      color:"#644C44",
+                    }
+                  }}
+                />
               </>
             );
           })}
