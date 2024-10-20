@@ -1,6 +1,7 @@
 import { initializeApp, getApps } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { doc, getDoc, updateDoc, arrayUnion, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { useAuth } from '@/context/auth';
 import { getMessaging, getToken } from "firebase/messaging";
 import { getStorage } from "firebase/storage";
 
@@ -32,6 +33,19 @@ export function requestPermission() {
       }).then((currentToken) => {
         if (currentToken) {
           console.log("current token for client: ", currentToken);
+          const user = auth.currentUser;
+          if (user) {
+            const userDocRef = doc(db, "users", user.uid);
+            updateDoc(userDocRef, { token: currentToken })
+              .then(() => {
+                console.log("Token successfully saved to Firestore.");
+              })
+              .catch((error) => {
+                console.error("Error saving token to Firestore: ", error);
+              });
+          } else {
+            console.error("No user is logged in.");
+          }
         } else {
           console.error(
             "No registration token available. Request permission to generate one."
