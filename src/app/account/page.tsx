@@ -9,8 +9,6 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
-
-
 interface User {
   nickname: string;
   birthDay: number;
@@ -28,7 +26,7 @@ interface Card {
 const AccountPage = () => {
   const router = useRouter();
   const [userData, setUserData] = useState<User | undefined>(undefined);
-  const [cardData,setCardData] = useState<Card[]>([]);
+  const [cardData, setCardData] = useState<Card[]>([]);
 
   const getDocData = async (uid: string) => {
     const docRef = doc(db, "users", uid);
@@ -49,25 +47,18 @@ const AccountPage = () => {
     }
   };
 
-  const getDocCardData = async (uid:string)=> {
-    const q = query(
-      collection(db,"cards"),
-      where("to","==",uid)
-    );
+  const getDocCardData = async (uid: string) => {
+    const q = query(collection(db, "cards"), where("to", "==", uid));
 
     const cardSnapshot = await getDocs(q);
     console.log(cardSnapshot);
 
-    const cardList = cardSnapshot.docs.map(cardDoc => ({
-      author:cardDoc.data().author,
-      content:cardDoc.data().content,
+    const cardList = cardSnapshot.docs.map((cardDoc) => ({
+      author: cardDoc.data().author,
+      content: cardDoc.data().content,
     }));
     setCardData(cardList);
-  }
-
-
-  
-  
+  };
 
   useEffect(() => {
     // Firebase認証状態を監視
@@ -88,16 +79,17 @@ const AccountPage = () => {
     <div className="h-screen flex items-center justify-center pt-6">
       <CardContainer>
         <div className="flex justify-between items-center text-2xl text-textbrawnlight font-bold mb-0 font-serif border-b border-mainpinklight border-dashed pb-4 w-full">
-          <div className='w-2/5'></div>
-          <div className='flex justify-center w-full'>
-            PROFILE
-          </div>
-          <div className='w-2/5 flex justify-between items-center'>
-            <button onClick={() => router.push('/profile')} className="h-full rounded-lg text-base">
+          <div className="w-2/5"></div>
+          <div className="flex justify-center w-full">PROFILE</div>
+          <div className="w-2/5 flex justify-between items-center">
+            <button
+              onClick={() => router.push("/profile")}
+              className="h-full rounded-lg text-base"
+            >
               編集
             </button>
             <div className="bg-mainpink h-fullbg-mainpink h-7 flex items-center w-7 justify-center rounded-2xl">
-              <img src='/editicon.png' alt='edit icon' className='' />
+              <img src="/editicon.png" alt="edit icon" className="" />
             </div>
           </div>
         </div>
@@ -127,15 +119,15 @@ const AccountPage = () => {
           )}
         </div>
         <div>
-        {cardData.length > 0 ? ( // cardDataが空でないかチェック
-            cardData.map(card => (
+          {cardData.length > 0 ? ( // cardDataが空でないかチェック
+            cardData.map((card) => (
               <>
                 <div key={card.author}>{card.author}から</div>
                 <div> {card.content}</div>
               </>
             ))
           ) : (
-            <div>カードがありません</div> 
+            <div>カードがありません</div>
           )}
         </div>
       </CardContainer>
