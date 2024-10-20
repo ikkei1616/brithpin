@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import CardContainer from "../components/CardContainer";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { collection, query, where, getDocs } from "firebase/firestore";
+
+
 
 interface User {
   nickname: string;
@@ -17,9 +20,15 @@ interface User {
   photoURL: string;
 }
 
+interface Card {
+  author: string;
+  content: string;
+}
+
 const AccountPage = () => {
   const router = useRouter();
   const [userData, setUserData] = useState<User | undefined>(undefined);
+  const [cardData,setCardData] = useState<Card[]>([]);
 
   const getDocData = async (uid: string) => {
     const docRef = doc(db, "users", uid);
@@ -40,12 +49,33 @@ const AccountPage = () => {
     }
   };
 
+  const getDocCardData = async (uid:string)=> {
+    const q = query(
+      collection(db,"cards"),
+      where("to","==",uid)
+    );
+
+    const cardSnapshot = await getDocs(q);
+    console.log(cardSnapshot);
+
+    const cardList = cardSnapshot.docs.map(cardDoc => ({
+      author:cardDoc.data().author,
+      content:cardDoc.data().content,
+    }));
+    setCardData(cardList);
+  }
+
+
+  
+  
+
   useEffect(() => {
     // Firebase認証状態を監視
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         // ユーザーが認証されている場合にデータを取得
         getDocData(user.uid);
+        getDocCardData(user.uid);
       } else {
         console.log("あいあい居合: ユーザーが認証されていません");
       }
@@ -94,6 +124,18 @@ const AccountPage = () => {
             </div>
           ) : (
             <div className="w-36 h-36 bg-gray-200 rounded-lg mx-auto"></div>
+          )}
+        </div>
+        <div>
+        {cardData.length > 0 ? ( // cardDataが空でないかチェック
+            cardData.map(card => (
+              <>
+                <div key={card.author}>{card.author}から</div>
+                <div> {card.content}</div>
+              </>
+            ))
+          ) : (
+            <div>カードがありません</div> 
           )}
         </div>
       </CardContainer>
