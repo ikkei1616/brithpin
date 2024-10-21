@@ -5,6 +5,8 @@ import { db, auth } from '../lib/firebase';
 import CardContainer from '../../src/app/components/CardContainer';
 import { useRouter } from 'next/navigation';
 import FileUploader from './FileUploader';
+import { logout } from '@/lib/auth';
+import { useAuth } from '@/context/auth';
 import { z } from 'zod';
 
 const birthDateSchema = z
@@ -23,6 +25,7 @@ export const ProfileForm = () => {
   const [photoURL, setphotoURL] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const user = useAuth();
 
   const handleSetImage = (urls: string[]) => {
     setphotoURL(urls);
@@ -72,7 +75,18 @@ export const ProfileForm = () => {
     <CardContainer>
       <form onSubmit={DataUpdate}>
         <div className="flex justify-between items-center text-2xl text-textbrawnlight font-bold mb-0 font-serif border-b border-mainpinklight border-dashed pb-4 w-full">
-          <div className='w-2/5'></div>
+          <div className='w-2/5 flex justify-end'>
+            {user && (
+              <button
+                onClick={() => {
+                  logout();
+                }}
+                className="text-sm font-serif text-textbrawnlight"
+              >
+                ログアウト
+              </button>
+            )}
+          </div>
           <div className='flex justify-center w-full'>
             PROFILE
           </div>
