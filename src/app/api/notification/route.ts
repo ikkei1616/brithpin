@@ -46,8 +46,6 @@ export async function GET() {
     const hundredDaysLater = new Date();
     hundredDaysLater.setDate(today.getDate() + 364);
 
-    let registrationTokens: string[] = [];
-
     const usersSnapshot = await db.collection("users").get();
     let usersData: User[] = usersSnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -105,7 +103,7 @@ export async function GET() {
       }
     }
 
-    return NextResponse.json({ message: "Notifications sent", tokens: registrationTokens });
+    return NextResponse.json({ message: "Notifications sent" });
   } catch (error) {
     console.error("Error fetching user data:", error);
     return NextResponse.json({ error: "Error fetching user data" }, { status: 500 });
