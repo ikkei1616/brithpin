@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { initializeApp, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { getMessaging } from "firebase-admin/messaging";
+import { FirebaseError } from "firebase-admin";
 import { getApps } from "firebase-admin/app";
 require('dotenv').config();
 
@@ -92,11 +93,13 @@ export async function GET() {
           try {
             const response = await messaging.send(message);
             console.log(`Message sent successfully to ${user.nickname}:`, response);
-          } catch (error: any) {
-            if (error.code === 'messaging/registration-token-not-registered') {
+          } catch (error: unknown) {
+            const firebaseError = error as FirebaseError;
+            
+            if (firebaseError.code === 'messaging/registration-token-not-registered') {
               console.error(`Token for ${user.nickname} is invalid or unregistered. Skipping.`);
             } else {
-              console.error(`Failed to send message to ${user.nickname}:`, error);
+              console.error(`Failed to send message to ${user.nickname}:`, firebaseError);
             }
           }
         }
