@@ -1,7 +1,6 @@
 import { initializeApp, getApps } from "firebase/app";
-import { doc, getDoc, updateDoc, arrayUnion, getFirestore } from "firebase/firestore";
+import { doc, updateDoc, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { useAuth } from '@/context/auth';
 import { getMessaging, getToken } from "firebase/messaging";
 import { getStorage } from "firebase/storage";
 
