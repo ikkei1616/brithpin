@@ -23,21 +23,27 @@ const messaging = firebase.messaging();
 
 // 通知を受けとると push イベントが呼び出される。
 self.addEventListener('push', function (event) {
-  const notificationPromise = self.registration.showNotification(
-    event.messageTitle,
-    {
-      body: event.messageBody,
-      tag: event.messageTag
-    });
+  const data = event.data ? event.data.json() : {};
+
+  console.log('Push event data:', data);
+
+  const notificationTitle = data.data.title || 'デフォルトのタイトル';
+  const notificationOptions = {
+    body: data.data.body || 'デフォルトのメッセージ',
+    tag: data.data.tag || 'default-tag',
+    icon: data.data.icon || '/BirthHiyokoIcon-512.png',
+  };
+
+  const notificationPromise = self.registration.showNotification(notificationTitle, notificationOptions);
   event.waitUntil(notificationPromise);
-}, false)
+});
 
 // WEBアプリがバックグラウンドの場合にはsetBackGroundMessageHandlerが呼び出される。
 messaging.setBackgroundMessageHandler(function (event) {
   return self.registration.showNotification(
     event.messageTitle,
     {
-      body: event.messageBody,
-      tag: event.messageTag
+      body: event.messageBody || 'お知らせが届いています。',
+      tag: event.messageTag || 'これはタグです。',
     });
 });
