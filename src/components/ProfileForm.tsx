@@ -7,8 +7,6 @@ import { db, auth } from '../lib/firebase';
 import CardContainer from '../../src/app/components/CardContainer';
 import { useRouter } from 'next/navigation';
 import FileUploader from './FileUploader';
-import { logout } from '@/lib/auth';
-import { useAuth } from '@/context/auth';
 import { z } from 'zod';
 
 const birthDateSchema = z
