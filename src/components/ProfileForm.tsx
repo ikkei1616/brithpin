@@ -1,4 +1,6 @@
 'use client';
+import { useAuth } from "@/context/auth";
+import { logout } from "@/lib/auth";
 import React, { useState } from 'react';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db, auth } from '../lib/firebase';
