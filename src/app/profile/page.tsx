@@ -1,23 +1,25 @@
 'use client';
 import React from 'react'
 import { ProfileForm } from '../../components/ProfileForm';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from "@/context/auth";
 
 const ProfilePage = () => {
+  const router = useRouter();
+  const user = useAuth();
+  useEffect(() => {
+    if (user) {
+      router.push('/profile');
+    } else{
+      router.push('/');
+    }
+  }, [user, router]);
   return (
     <div className='h-screen flex items-center justify-center pt-6'>
       <div>
         <ProfileForm />
       </div>
-      {/* {user && (
-        <button
-          onClick={() => {
-            logout();
-          }}
-          className="px-8 py-3 bg-pin text-defaultBackGround rounded-lg transition-colors text-lg shadow-md font-serif"
-        >
-          ログアウト
-        </button>
-      )} */}
     </div>
   )
 }

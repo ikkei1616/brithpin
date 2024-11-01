@@ -7,6 +7,7 @@ import CardTitle from "./components/CardTitle";
 import Image from "next/image";
 import WideDecisionButton from "./components/WideDecisionButton";
 import { useRouter } from "next/navigation";
+import { requestPermission } from '../lib/firebase';
 
 export default function Home() {
   const router = useRouter();
@@ -27,6 +28,7 @@ export default function Home() {
 
   useEffect(() => {
     if (user) {
+      requestPermission();
       router.push('/birth-tree');
     } else{
       router.push('/');

@@ -7,27 +7,46 @@ import { db, auth } from '../lib/firebase';
 import CardContainer from '../../src/app/components/CardContainer';
 import { useRouter } from 'next/navigation';
 import FileUploader from './FileUploader';
+import { z } from 'zod';
+
+const birthDateSchema = z
+  .object({
+    birthYear: z.number().min(1900, "1900年以降の年を入力してください").max(new Date().getFullYear(), "未来の年は入力できません"),
+    birthMonth: z.number().min(1, "1〜12の間の月を入力してください").max(12, "1〜12の間の月を入力してください"),
+    birthDay: z.number().min(1, "1〜31の間の日付を入力してください").max(31, "1〜31の間の日付を入力してください"),
+  })
+  .refine((data) => {
+    const { birthYear, birthMonth, birthDay } = data;
+    const isValidDate = new Date(birthYear, birthMonth - 1, birthDay).getDate() === birthDay;
+    return isValidDate;
+  }, "実在する日付を入力してください");
 
 export const ProfileForm = () => {
-  const [photoURL, setphotoURL] = useState<string[]>([]); // 画像URLを保存するstate
+  const [photoURL, setphotoURL] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const user = useAuth();
 
-  // 画像URLを取得する関数
   const handleSetImage = (urls: string[]) => {
-    console.log("Saved URLs: ", urls);
-    setphotoURL(urls); // アップロードされた画像URLを保存
+    setphotoURL(urls);
   };
 
   const DataUpdate = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    const nickname = formData.get("nickname");
+    const nickname = formData.get("nickname")?.toString();
     const birthYear = Number(formData.get("birthYear"));
     const birthMonth = Number(formData.get("birthMonth"));
     const birthDay = Number(formData.get("birthDay"));
     const gender = Number(formData.get("gender"));
+
+    const validationResult = birthDateSchema.safeParse({ birthYear, birthMonth, birthDay });
+
+    if (!validationResult.success) {
+      setError(validationResult.error.errors[0].message);
+      return;
+    }
 
     try {
       if (auth.currentUser?.uid == null) {
@@ -35,19 +54,19 @@ export const ProfileForm = () => {
       }
       const docRef = doc(db, "users", auth.currentUser.uid);
 
-      // Firestoreにユーザー情報と画像URLを保存
       await updateDoc(docRef, {
         nickname: nickname,
         birthYear: birthYear,
         birthMonth: birthMonth,
         birthDay: birthDay,
         gender: gender,
-        photoURL: photoURL.length > 0 ? photoURL[0] : null, // 画像URLがある場合保存
+        photoURL: photoURL.length > 0 ? photoURL[0] : null,
       });
 
-      console.log("Data and Images saved successfully");
-      router.push('/qr'); // 保存後にページ遷移
+      setError(null);
+      router.push('/qr');
     } catch (error) {
+      setError("データの保存に失敗しました。もう一度お試しください。");
       console.log("エラーが発生しました", error);
     }
   };
@@ -56,23 +75,17 @@ export const ProfileForm = () => {
     <CardContainer>
       <form onSubmit={DataUpdate}>
         <div className="flex justify-between items-center text-2xl text-textbrawnlight font-bold mb-0 font-serif border-b border-mainpinklight border-dashed pb-4 w-full">
-          <div className='w-2/5 flex justify-around'>
-            
-              {user && (
-            <button
-            style={{height:40,width:60,fontSize:20}}
-              onClick={() => {
-                logout();
-                router.push("/")
-              }
-              
-            }
-
-              className="text-defaultBackGround rounded-lg transition-colors shadow-md font-serif"
-            >
-              戻る
-            </button>
-          )}
+          <div className='w-2/5 flex justify-end'>
+            {user && (
+              <button
+                onClick={() => {
+                  logout();
+                }}
+                className="text-sm font-serif text-textbrawnlight"
+              >
+                ログアウト
+              </button>
+            )}
           </div>
           <div className='flex justify-center w-full'>
             PROFILE
@@ -83,9 +96,7 @@ export const ProfileForm = () => {
               type='submit'
               className="h-full rounded-lg text-base"
             />
-            <div
-              className="transform bg-pin text-color rounded-full bg-mainpink h-6 w-6 flex items-center"
-            >
+            <div className="transform bg-pin text-color rounded-full bg-mainpink h-6 w-6 flex items-center">
               ✓
             </div>
           </div>
@@ -95,9 +106,8 @@ export const ProfileForm = () => {
             あなたの情報を入力してください
           </div>
 
-          {/* 画像アップロード機能 */}
           <div className="my-4">
-            <FileUploader setImage={handleSetImage} /> {/* 画像アップロードコンポーネント */}
+            <FileUploader setImage={handleSetImage} />
           </div>
 
           <div className="space-y-3">
@@ -139,6 +149,7 @@ export const ProfileForm = () => {
                 />
                 <div className='self-center text-xs font-serif text-textbrawnlight'>日</div>
               </div>
+              {error && <div className="text-red-500 text-xs mt-2">{error}</div>}
             </div>
             <div>
               <div className='flex'>
@@ -188,4 +199,4 @@ export const ProfileForm = () => {
       </form>
     </CardContainer>
   );
-}
+};
