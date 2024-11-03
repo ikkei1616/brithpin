@@ -50,11 +50,15 @@ const IdSearch = ({ params }: { params: { id: string } }) => {
     if (auth.currentUser === null) {
       return;
     }
-    const docRef = doc(db, "users", auth.currentUser.uid);
-    await updateDoc(docRef, {
+    const currentUserdocRef = doc(db, "users", auth.currentUser.uid);
+    const targetUserDocRef = doc(db, "users", userId);
+    await updateDoc(currentUserdocRef, {
       friends: arrayUnion(userId),
     });
-    router.push('/birth-tree');
+    await updateDoc(targetUserDocRef, {
+      friends: arrayUnion(auth.currentUser.uid),
+    });
+    router.push("/birth-tree");
   };
 
   return (
@@ -76,23 +80,26 @@ const IdSearch = ({ params }: { params: { id: string } }) => {
         <div className="flex justify-center items-center my-4">
           {userData?.photoURL && (
             <div className="flex flex-col items-center justify-center p-4 bg-white rounded-md">
-              <Image src={userData.photoURL} alt="Profile Image" width={120} height={120} className="rounded-full" />
+              <Image
+                src={userData.photoURL}
+                alt="Profile Image"
+                width={120}
+                height={120}
+                className="rounded-full"
+              />
             </div>
           )}
         </div>
         <div className="flex justify-center items-center bg-mainpink radius-lg rounded-lg p-2">
-          <button
-            className="text-color text-sm "
-            onClick={handleClickButton}
-          >
+          <button className="text-color text-sm " onClick={handleClickButton}>
             友達追加
           </button>
         </div>
       </CardContainer>
-      <div className="w-full absolute bottom-0" >
+      <div className="w-full absolute bottom-0">
         <Footer />
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 
