@@ -50,12 +50,12 @@ const IdSearch = ({ params }: { params: { id: string } }) => {
     if (auth.currentUser === null) {
       return;
     }
-    const docRef = doc(db, "users", auth.currentUser.uid);
-    const docRef2 = doc(db, "users", userId);
-    await updateDoc(docRef, {
+    const currentUserdocRef = doc(db, "users", auth.currentUser.uid);
+    const targetUserDocRef = doc(db, "users", userId);
+    await updateDoc(currentUserdocRef, {
       friends: arrayUnion(userId),
     });
-    await updateDoc(docRef2, {
+    await updateDoc(targetUserDocRef, {
       friends: arrayUnion(auth.currentUser.uid),
     });
     router.push("/birth-tree");
