@@ -8,6 +8,12 @@ import CardContainer from "../components/CardContainer";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+import Stac from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
+
+
+
+
 interface User {
   nickname: string;
   birthDay: number;
@@ -20,6 +26,7 @@ interface User {
 const AccountPage = () => {
   const router = useRouter();
   const [userData, setUserData] = useState<User | undefined>(undefined);
+  const [isLoading,setIsLoading] = useState(true);
 
   const getDocData = async (uid: string) => {
     const docRef = doc(db, "users", uid);
@@ -35,6 +42,8 @@ const AccountPage = () => {
         photoURL: docSnapData.photoURL,
       };
       setUserData(formatUserData);
+      setIsLoading(false);
+      
     } else {
       console.log("No such document!");
     }
@@ -48,14 +57,37 @@ const AccountPage = () => {
         getDocData(user.uid);
       } else {
         console.log("あいあい居合: ユーザーが認証されていません");
-      }
+      } 
     });
 
     return () => unsubscribe(); // クリーンアップのために監視を解除
   }, []);
 
-  return (
-    <div className="h-screen flex items-center justify-center pt-6">
+  if (isLoading) {
+    return (
+      <Stac
+        sx={{ 
+          justifyContent: 'center',
+          alignItems: 'center',        
+          height: '100vh',
+          width: '100vw' ,
+        }} 
+        spacing={2} 
+        direction="row"
+      >
+        <CircularProgress color="secondary" 
+          size = {200}
+          thickness = {1.2}
+          
+          sx={{ 
+            color: '#FEB69F',
+          }} 
+        />
+      </Stac>  
+    );
+  } else {
+    return (
+      <div className="h-screen flex items-center justify-center pt-6">
       <CardContainer>
         <div className="flex justify-between items-center text-2xl text-textbrawnlight font-bold mb-0 font-serif border-b border-mainpinklight border-dashed pb-4 w-full">
           <div className="w-2/5"></div>
@@ -102,7 +134,12 @@ const AccountPage = () => {
         <Footer />
       </div>
     </div>
-  );
+
+    )
+
+  }
+
+  
 };
 
 export default AccountPage;
