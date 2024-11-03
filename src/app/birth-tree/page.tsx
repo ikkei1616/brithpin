@@ -7,11 +7,10 @@ import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
-import { addDoc, collection, } from 'firebase/firestore';
-import { db,auth } from '../../lib/firebase';
+import { addDoc, collection } from "firebase/firestore";
+import { db, auth } from "../../lib/firebase";
 import { Timestamp } from "firebase/firestore";
-import Snackbar from '@mui/material/Snackbar';
-
+import Snackbar from "@mui/material/Snackbar";
 
 export type FriendSchema = {
   id: string;
@@ -38,14 +37,13 @@ export default function BirthTree() {
   const onClickRoute = () => {
     router.push("/account");
   };
-  const handleOpen2 = () =>{
+  const handleSnackBarOpen = () => {
     setOpen(true);
   };
 
-  const handleClose2 = () =>{
+  const handleSnackBarClose = () => {
     setOpen(false);
-  }
-
+  };
 
   const maxLeftValue = 100;
   const maxTopValue = 100;
@@ -74,9 +72,6 @@ export default function BirthTree() {
     px: 4,
     pb: 3,
   };
-
-  
-  
 
   useEffect(() => {
     (async () => {
@@ -134,9 +129,10 @@ export default function BirthTree() {
     };
   });
 
-
-
-  const saveMessage = async (event: React.FormEvent<HTMLFormElement>,friendId:string) => {
+  const saveMessage = async (
+    event: React.FormEvent<HTMLFormElement>,
+    friendId: string
+  ) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -147,20 +143,16 @@ export default function BirthTree() {
     if (auth.currentUser?.uid == null) {
       return;
     }
-    const docRef = collection(db,"cards")
+    const docRef = collection(db, "cards");
 
     await addDoc(docRef, {
       author: auth.currentUser.uid,
       content: message,
       to: friendId,
-      createAt:time,
-      
+      createAt: time,
     });
-    console.log("家桁")
-    }
-
-
-  
+    console.log("家桁");
+  };
   // 実行
   return (
     <div className="flex w-screen h-screen  justify-center ">
@@ -190,11 +182,17 @@ export default function BirthTree() {
                 <Button
                   key={friend.id}
                   onClick={() => handleOpen(friend.id)}
+                  disableRipple //ボタンをクリックした際に表示されるリップルエフェクト（波紋のようなアニメーション）を無効にします。
+                  disableElevation //ボタンの影や立体感を無効にします。Material UIのボタンにはデフォルトで影が付いている
                   sx={{
                     height: "100px",
                     position: "absolute",
                     left: `${(locate[index].left / maxLeftValue) * 100}%`,
                     top: `${(locate[index].top / maxTopValue) * 100}%`,
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                      border: 0,
+                    },
                   }}
                 >
                   <div>
@@ -259,38 +257,37 @@ export default function BirthTree() {
                   aria-describedby="child-modal-description"
                 >
                   <Box sx={{ ...style, width: 200 }}>
-                    <h2 id="child-modal-title">{friend.name}さんへ</h2>
-                    <form action="#" onSubmit={(event)=>  {
-                      saveMessage(event,friend.id);
-                      handleClose();
-                      handleOpen2();
-                    }}
+                    <h2>{friend.name}さんへ</h2>
+                    <form
+                      action="#"
+                      onSubmit={(event) => {
+                        saveMessage(event, friend.id);
+                        handleClose();
+                        handleSnackBarOpen();
+                      }}
                     >
                       <textarea
                         id={`message"-${friend.id}`}
                         name="message"
                         rows={5}
-                        title="aaa"
+                        title="modal-text-area"
                         cols={15}
                         style={{
                           border: "2px solid #000",
                         }}
                       ></textarea>
                       <Button onClick={handleClose}>閉じる</Button>
-                      <Button type="submit" >提出</Button>
+                      <Button type="submit">提出</Button>
                     </form>
                   </Box>
                 </Modal>
                 <Snackbar
                   open={open}
-                  autoHideDuration={4000}
+                  autoHideDuration={4000} //スナックバーが消えるのにかかる時間を指定
                   message="送信が完了しました！"
-                  onClose ={handleClose2}
+                  onClose={handleSnackBarClose}
                   ContentProps={{
-                    sx: {
-                      backgroundColor: "#FEB69F",
-                      color:"#644C44",
-                    }
+                    className: "bg-mainpink text-textbrawn",
                   }}
                 />
               </>
