@@ -39,6 +39,9 @@ const config: Config = {
       placeholderpink:"#FFF6F3",
       backgroundcolor:"#FFFEFA",
       shadowgray:"#F2F1ED",
+      summerbackground:"#FCFFF3",
+      autumnbackground:"#FBF1E7",
+      winterbackground:"#F9FFFF",
     },
 
     backgroundImage:{

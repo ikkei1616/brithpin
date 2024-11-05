@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { AuthProvider } from "@/context/auth";
+import { Layout } from "@/components/Layout";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,12 +32,12 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon.png"></link>
         <meta name="theme-color" content="#FFFEFA" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-backgroundcolor bg-custom-special bg-no-repeat`}
-      >
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+      <body>
+        <Layout>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </Layout>
       </body>
     </html>
   );
