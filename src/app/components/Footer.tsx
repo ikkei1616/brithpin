@@ -8,12 +8,12 @@ const Footer = () => {
   const pathname = usePathname();
 
   return (
-    <div className='flex justify-around py-4 border-t border-b border-mainpink mb-2'>
+    <div className='flex justify-around py-2 border-t border-mainpink'>
       <button
         onClick={() => router.push('/account')}
         className="flex flex-col items-center focus:outline-none"
       >
-        <div className="w-20 h-20 flex items-center justify-center">
+        <div className="w-20 h-16 flex items-center justify-center">
           <Image
             src={pathname === '/account' ? "/getuphiyoko.svg" : "/sleephiyoko.svg"}
             width={76}
@@ -28,7 +28,7 @@ const Footer = () => {
         onClick={() => router.push('/qr')}
         className="flex flex-col items-center focus:outline-none"
       >
-        <div className="w-20 h-20 flex items-center justify-center">
+        <div className="w-20 h-16 flex items-center justify-center">
           <Image
             src={pathname === '/qr' ? "/getuphiyoko.svg" : "/sleephiyoko.svg"}
             width={76}
@@ -43,7 +43,7 @@ const Footer = () => {
         onClick={() => router.push('/birth-tree')}
         className="flex flex-col items-center focus:outline-none"
       >
-        <div className="w-20 h-20 flex items-center justify-center">
+        <div className="w-20 h-16 flex items-center justify-center">
           <Image
             src={pathname === '/birth-tree' ? "/getuphiyoko.svg" : "/sleephiyoko.svg"}
             width={76}
