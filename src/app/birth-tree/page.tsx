@@ -274,7 +274,7 @@ export default function BirthTree() {
                     >
                       <div className="pl-[5%] pr-[5%] h-[15%]">
                         <div className="w-full flex items-center justify-between pt-[7px] border-b border-dashed border-mainpink">
-                          <Button className="p-0" onClick={handleClose}>
+                          <Button disableRipple className="p-0 bg-[transparent]" onClick={handleClose}>
                             <img
                               src="/CardModalBackButton.svg"
                               alt="backbutton"
@@ -286,7 +286,7 @@ export default function BirthTree() {
                           <p className="text-[24px] font-aboreto text-textbrawn">
                             MESSAGE
                           </p>
-                          <Button className="p-0" type="submit">
+                          <Button disableRipple className="p-0 bg-[transparent] " type="submit">
                             <p className="text-textbrawn text-[14px] pr-[7px]">
                               送信
                             </p>
