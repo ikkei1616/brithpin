@@ -256,88 +256,53 @@ export default function BirthTree() {
                   aria-labelledby="child-modal-title"
                   aria-describedby="child-modal-description"
                 >
-                  <Box 
-                    sx={{ 
-                      ...style, 
-                      width: "350px",
-                      maxWidth:"90%",
-                      height: "350px",
-                      maxHeight:"40%",
-                      padding: "0",
-                      borderRadius:"20px",
-                      outline:"none",
-                      borderColor:"#FEB69F",
-                      borderWidth:"2px",
-                    }}
+                  <Box
+                    sx={{...style,}}
+                    className="
+                      w-[350px] max-w-[90%] h-[350px]  max-h-[40%] 
+                      p-0 rounded-[20px] outline-none border-2
+                      border-mainpink sm:max-h-[50%]"
                   >
                     <form
-                          action="#"
-                          onSubmit={(event) => {
-                            saveMessage(event, friend.id);
-                            handleClose();
-                            handleSnackBarOpen();
-                          }}
-                          style = {{
-                            height:"100%",
-                          }}
-                    > 
-                      <div className="modal-header"
-                        style = {{
-                          paddingLeft:"5%",
-                          paddingRight: "5%",
-                          height:"15%",
-
-                        }}
-                      >
-                        <div className="modal-header-inner"
-                          style = {{
-                            width: "100%",
-                            display: "flex",
-                            alignItems:"center",
-                            justifyContent:"space-between",
-                            paddingTop:"7px",
-                            borderBottom:"1px dashed #FEB69F",
-                          }}
+                      action="#"
+                      onSubmit={(event) => {
+                        saveMessage(event, friend.id);
+                        handleClose();
+                        handleSnackBarOpen();
+                      }}
+                      className="h-[100%]"
+                    >
+                      <div className="pl-[5%] pr-[5%] h-[15%]">
+                        <div
+                          className="w-full flex items-center justify-between pt-[7px] border-b border-dashed border-mainpink"
                         >
-                          <Button 
-                            className="back-button" 
-                            onClick={handleClose}
-                            sx={{
-                              padding:"0",
-                            }}
-                          >
-                            <img src="/CardModalBackButton.svg" alt="backbutton" />
-                            <p style={{color:"#644C44",fontSize:"14px",paddingLeft:"7px"}}>
-                              戻る
-                            </p> 
+                          <Button className="p-0" onClick={handleClose}>
+                            <img src="/CardModalBackButton.svg" alt="backbutton"/>
+                            <p className="text-textbrawn text-[14px] pl-[7px]">戻る</p>
                           </Button>
-
-                          <p style={{fontSize:"24px",fontFamily:"Aboreto,serif",color:"#644C44"}}>MESSAGE</p>
-
-                          <Button sx={{padding:"0"}} type="submit">
-                            <p style={{color:"#644C44",fontSize:"14px",paddingRight:"7px"}}>送信</p> 
+                          <p className="text-[24px] font-aboreto text-textbrawn">MESSAGE</p>
+                          <Button className="p-0" type="submit">
+                            <p className="text-textbrawn text-[14px] pr-[7px]">送信</p>
                             <img src="/CardSendButton.svg" alt="SendButton" />
                           </Button>
                         </div>
                       </div>
-                      <div className="modal-main" style={{padding:"8% 11%",height:"85%"}}>
-                        <h2 style={{textAlign:"center",color:"#644c44",fontFamily:"Noto serif JP,serif"}}>お祝いメッセージを入力してね</h2>
-                        <p style={{marginTop:"3%",color:"#644C44",fontSize:"12px",fontFamily:"Noto serif JP,serif"}}>{friend.name}さんへ</p>
+                      <div className="p-[8%_11%] h-[85%]">
+                        <h2 className="text-center text-textbrawn font-serif">お祝いメッセージを入力してね</h2>
+                        <p className="mt-[3%] text-textbrawn text-[12px] font-serif">
+                          {friend.name}さんへ
+                        </p>
                         <textarea
-                            id={`message"-${friend.id}`}
-                            name="message"
-                            rows={6}
-                            title="modal-text-area"
-                            cols={15}
-                            style={{
-                              width: "100%",
-                              height:"70%",
-                              marginTop:"5px",
-                              border: "2px solid #FEB69F",
-                              borderRadius:"10px",
-                            }}
-                        >
-                        </textarea>
+                          id={`message"-${friend.id}`}
+                          name="message"
+                          rows={6}
+                          title="modal-text-area"
+                          cols={15}
+                          className="
+                            w-full h-[70%] mt-[5px] border-2 
+                            border-mainpink rounded-[10px]
+                          "
+                        ></textarea>
                       </div>
                     </form>
                   </Box>

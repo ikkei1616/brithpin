@@ -17,6 +17,9 @@ const config: Config = {
         customSpecial: "url('/birthpin.svg'), url('/textspecialday.svg')",
         customBackGround: "url('/tree.svg')",
       },
+      screens: {
+        'sm': '321px',
+      },
     },
     
     fontFamily: {
@@ -48,7 +51,7 @@ const config: Config = {
       sleephiyoko:"url('/sleephiyoko.svg')",
       textspecialday:"url('/textspecialday.svg')",
       usericonshadow:"url('/usericonshadow.svg')",     
-    }
+    },
 
   },
   plugins: [],
