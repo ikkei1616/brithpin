@@ -257,7 +257,7 @@ export default function BirthTree() {
                   aria-describedby="child-modal-description"
                 >
                   <Box
-                    sx={{...style,}}
+                    sx={{ ...style }}
                     className="
                       w-[350px] max-w-[90%] h-[350px]  max-h-[40%] 
                       p-0 rounded-[20px] outline-none border-2
@@ -273,22 +273,31 @@ export default function BirthTree() {
                       className="h-[100%]"
                     >
                       <div className="pl-[5%] pr-[5%] h-[15%]">
-                        <div
-                          className="w-full flex items-center justify-between pt-[7px] border-b border-dashed border-mainpink"
-                        >
+                        <div className="w-full flex items-center justify-between pt-[7px] border-b border-dashed border-mainpink">
                           <Button className="p-0" onClick={handleClose}>
-                            <img src="/CardModalBackButton.svg" alt="backbutton"/>
-                            <p className="text-textbrawn text-[14px] pl-[7px]">戻る</p>
+                            <img
+                              src="/CardModalBackButton.svg"
+                              alt="backbutton"
+                            />
+                            <p className="text-textbrawn text-[14px] pl-[7px]">
+                              戻る
+                            </p>
                           </Button>
-                          <p className="text-[24px] font-aboreto text-textbrawn">MESSAGE</p>
+                          <p className="text-[24px] font-aboreto text-textbrawn">
+                            MESSAGE
+                          </p>
                           <Button className="p-0" type="submit">
-                            <p className="text-textbrawn text-[14px] pr-[7px]">送信</p>
+                            <p className="text-textbrawn text-[14px] pr-[7px]">
+                              送信
+                            </p>
                             <img src="/CardSendButton.svg" alt="SendButton" />
                           </Button>
                         </div>
                       </div>
                       <div className="p-[8%_11%] h-[85%]">
-                        <h2 className="text-center text-textbrawn font-serif">お祝いメッセージを入力してね</h2>
+                        <h2 className="text-center text-textbrawn font-serif">
+                          お祝いメッセージを入力してね
+                        </h2>
                         <p className="mt-[3%] text-textbrawn text-[12px] font-serif">
                           {friend.name}さんへ
                         </p>
