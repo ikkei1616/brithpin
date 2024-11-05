@@ -276,7 +276,7 @@ export default function BirthTree() {
                         <div className="w-full flex items-center justify-between pt-[7px] border-b border-dashed border-mainpink">
                           <Button disableRipple className="p-0 bg-[transparent]" onClick={handleClose}>
                             <img
-                              src="/CardModalBackButton.svg"
+                              src="/card-modal-back-button.svg"
                               alt="backbutton"
                             />
                             <p className="text-textbrawn text-[14px] pl-[7px]">
