@@ -275,22 +275,24 @@ export default function BirthTree() {
                       <div className="pl-[5%] pr-[5%] h-[15%]">
                         <div className="w-full flex items-center justify-between pt-[7px] border-b border-dashed border-mainpink">
                           <Button disableRipple className="p-0 bg-[transparent]" onClick={handleClose}>
-                            <img
+                            <Image
                               src="/card-modal-back-button.svg"
                               alt="backbutton"
+                              width={30}
+                              height={30}
                             />
-                            <p className="text-textbrawn text-[14px] pl-[7px]">
+                            <p className="text-textbrawn text-sm pl-[7px]">
                               戻る
                             </p>
                           </Button>
-                          <p className="text-[24px] font-aboreto text-textbrawn">
+                          <p className="text-2xl font-aboreto text-textbrawn">
                             MESSAGE
                           </p>
                           <Button disableRipple className="p-0 bg-[transparent] " type="submit">
-                            <p className="text-textbrawn text-[14px] pr-[7px]">
+                            <p className="text-textbrawn text-[sm] pr-[7px]">
                               送信
                             </p>
-                            <img src="/CardSendButton.svg" alt="SendButton" />
+                            <Image src="/CardSendButton.svg" alt="SendButton" width={30} height={30}/>
                           </Button>
                         </div>
                       </div>
@@ -298,7 +300,7 @@ export default function BirthTree() {
                         <h2 className="text-center text-textbrawn font-serif">
                           お祝いメッセージを入力してね
                         </h2>
-                        <p className="mt-[3%] text-textbrawn text-[12px] font-serif">
+                        <p className="mt-[3%] text-textbrawn text-[xs] font-serif">
                           {friend.name}さんへ
                         </p>
                         <textarea
