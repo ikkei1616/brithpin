@@ -11,6 +11,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { db, auth } from "../../lib/firebase";
 import { Timestamp } from "firebase/firestore";
 import Snackbar from "@mui/material/Snackbar";
+import { useColorContext } from '@/context/ColorContext';
 
 export type FriendSchema = {
   id: string;
@@ -27,6 +28,7 @@ export default function BirthTree() {
   const [friends, setFriends] = useState<FriendSchema[]>([]);
   const [openModalId, setOpenModalId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const { colors } = useColorContext();
 
   const handleOpen = (id: string) => {
     setOpenModalId(id);
@@ -81,7 +83,6 @@ export default function BirthTree() {
 
       const friendList = await fetchFriends(friendIDList);
 
-      // フレンドリストのデータを保存
       setFriends(friendList);
     })();
   }, [authValue]);
@@ -134,10 +135,9 @@ export default function BirthTree() {
     friendId: string
   ) => {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget);
-
     const message = formData.get("message")?.toString();
-
     const time = Timestamp.now();
 
     if (auth.currentUser?.uid == null) {
@@ -151,7 +151,6 @@ export default function BirthTree() {
       to: friendId,
       createAt: time,
     });
-    console.log("家桁");
   };
   // 実行
   return (
@@ -160,7 +159,7 @@ export default function BirthTree() {
         <div className="background">
           <Button
             onClick={onClickRoute}
-            sx = {{
+            sx={{
               "&:hover": {
                 backgroundColor: "transparent",
                 border: 0,
@@ -172,12 +171,12 @@ export default function BirthTree() {
               minWidth: 70,
             }}
           >
-            <Image
-              src="/top-button.svg"
-              alt="Button Image"
-              width={100}
-              height={50}
-            />
+            <div className=" flex items-center justify-center rounded-2xl">
+              <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-7 w-7 flex items-center justify-center mr-2">
+                ◀︎
+              </div>
+              <div className="text-lg text-textbrawnlight font-serif">TOP</div>
+            </div>
           </Button>
 
           {sortedFriendsWithBirthDayFlag.map((friend, index) => {
