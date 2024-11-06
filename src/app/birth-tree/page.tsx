@@ -256,8 +256,13 @@ export default function BirthTree() {
                   aria-labelledby="child-modal-title"
                   aria-describedby="child-modal-description"
                 >
-                  <Box sx={{ ...style, width: 200 }}>
-                    <h2>{friend.name}さんへ</h2>
+                  <Box
+                    sx={{ ...style }}
+                    className="
+                      w-[350px] max-w-[90%] h-[350px]  max-h-[40%] 
+                      p-0 rounded-[20px] outline-none border-2
+                      border-mainpink sm:max-h-[50%]"
+                  >
                     <form
                       action="#"
                       onSubmit={(event) => {
@@ -265,19 +270,51 @@ export default function BirthTree() {
                         handleClose();
                         handleSnackBarOpen();
                       }}
+                      className="h-[100%]"
                     >
-                      <textarea
-                        id={`message"-${friend.id}`}
-                        name="message"
-                        rows={5}
-                        title="modal-text-area"
-                        cols={15}
-                        style={{
-                          border: "2px solid #000",
-                        }}
-                      ></textarea>
-                      <Button onClick={handleClose}>閉じる</Button>
-                      <Button type="submit">提出</Button>
+                      <div className="pl-[5%] pr-[5%] h-[15%]">
+                        <div className="w-full flex items-center justify-between pt-[7px] border-b border-dashed border-mainpink">
+                          <Button disableRipple className="p-0 bg-[transparent]" onClick={handleClose}>
+                            <Image
+                              src="/card-modal-back-button.svg"
+                              alt="backbutton"
+                              width={30}
+                              height={30}
+                            />
+                            <p className="text-textbrawn text-sm pl-[7px]">
+                              戻る
+                            </p>
+                          </Button>
+                          <p className="text-2xl font-aboreto text-textbrawn">
+                            MESSAGE
+                          </p>
+                          <Button disableRipple className="p-0 bg-[transparent] " type="submit">
+                            <p className="text-textbrawn text-[sm] pr-[7px]">
+                              送信
+                            </p>
+                            <Image src="/CardSendButton.svg" alt="SendButton" width={30} height={30}/>
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="p-[8%_11%] h-[85%]">
+                        <h2 className="text-center text-textbrawn font-serif">
+                          お祝いメッセージを入力してね
+                        </h2>
+                        <p className="mt-[3%] text-textbrawn text-[xs] font-serif">
+                          {friend.name}さんへ
+                        </p>
+                        <textarea
+                          id={`message"-${friend.id}`}
+                          name="message"
+                          rows={6}
+                          title="modal-text-area"
+                          cols={15}
+                          className="
+                            w-full h-[70%] mt-[5px] border-2 
+                            border-mainpink rounded-[10px]
+                          "
+                        ></textarea>
+                      </div>
                     </form>
                   </Box>
                 </Modal>
