@@ -160,6 +160,12 @@ export default function BirthTree() {
         <div className="background">
           <Button
             onClick={onClickRoute}
+            sx = {{
+              "&:hover": {
+                backgroundColor: "transparent",
+                border: 0,
+              },
+            }}
             style={{
               position: "absolute",
               left: 20,
@@ -182,8 +188,8 @@ export default function BirthTree() {
                 <Button
                   key={friend.id}
                   onClick={() => handleOpen(friend.id)}
-                  disableRipple //ボタンをクリックした際に表示されるリップルエフェクト（波紋のようなアニメーション）を無効にします。
-                  disableElevation //ボタンの影や立体感を無効にします。Material UIのボタンにはデフォルトで影が付いている
+                  disableRipple
+                  disableElevation
                   sx={{
                     height: "100px",
                     position: "absolute",
