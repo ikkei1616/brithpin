@@ -176,7 +176,7 @@ export default function BirthTree() {
           <Button
             style={{
               position:"absolute",
-              bottom:0,
+              bottom:7,
               right: 0,
               padding: 0
               
