@@ -28,7 +28,7 @@ export default function BirthTree() {
   const [friends, setFriends] = useState<FriendSchema[]>([]);
   const [openModalId, setOpenModalId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const { colors } = useColorContext();
+  const { colors, imageSrc } = useColorContext();
 
   const handleOpen = (id: string) => {
     setOpenModalId(id);
@@ -154,7 +154,7 @@ export default function BirthTree() {
   };
   // 実行
   return (
-    <div className="flex w-screen h-screen  justify-center ">
+    <div className="flex w-screen h-screen  justify-center">
       <div className="wapper">
         <div className="background">
           <Button
@@ -202,7 +202,7 @@ export default function BirthTree() {
                 >
                   <div>
                     <Image
-                      src="/fukidashi.png"
+                      src={imageSrc}
                       className="hidden-element"
                       alt="吹き出し"
                       style={{

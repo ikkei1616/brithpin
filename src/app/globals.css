@@ -31,7 +31,7 @@ body {
   }
 
   .background {
-    background-image: url('/tree.svg'); /* 外部画像のURL */
+    background-image: url('/birthtree-spring.svg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: bottom center;

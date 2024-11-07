@@ -49,7 +49,7 @@ const config: Config = {
 
     backgroundImage:{
       birthpin:"url('/birthpin.svg')",
-      birthtree:"url('/birthtree.svg')",
+      birthtree:"url('/birthtree-spring.svg')",
       getuphiyoko:"url('/getuphiyoko.svg')",
       sleephiyoko:"url('/sleephiyoko.svg')",
       textspecialday:"url('/textspecialday.svg')",
