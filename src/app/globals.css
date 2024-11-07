@@ -26,12 +26,16 @@ body {
 }
 
 @layer utilities {
+  :root {
+    --background-image: url('/birthtree-spring.svg');
+  }
+
   .text-balance {
     text-wrap: balance;
   }
 
   .background {
-    background-image: url('/birthtree-spring.svg');
+    background-image: var(--background-image);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: bottom center;

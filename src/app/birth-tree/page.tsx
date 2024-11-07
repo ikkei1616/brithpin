@@ -12,6 +12,7 @@ import { db, auth } from "../../lib/firebase";
 import { Timestamp } from "firebase/firestore";
 import Snackbar from "@mui/material/Snackbar";
 import { useColorContext } from '@/context/ColorContext';
+import { BackgroundWrapper } from "@/components/BackgoundWrapper";
 
 export type FriendSchema = {
   id: string;
@@ -156,7 +157,7 @@ export default function BirthTree() {
   return (
     <div className="flex w-screen h-screen  justify-center">
       <div className="wapper">
-        <div className="background">
+        <BackgroundWrapper>
           <Button
             onClick={onClickRoute}
             sx={{
@@ -298,7 +299,7 @@ export default function BirthTree() {
               </>
             );
           })}
-        </div>
+        </BackgroundWrapper>
       </div>
     </div>
   );
