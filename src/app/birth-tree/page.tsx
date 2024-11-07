@@ -173,6 +173,26 @@ export default function BirthTree() {
               height={50}
             />
           </Button>
+          <Button
+            style={{
+              position:"absolute",
+              bottom:0,
+              right: 0,
+              padding: 0
+              
+            }}
+          >
+            <Image
+              src="/mailbox.svg"
+              alt="mail box"
+              width={45}
+              height={45}
+              style={{
+                padding:0
+              }}
+            />
+          </Button>
+
 
           {sortedFriendsWithBirthDayFlag.map((friend, index) => {
             if (index >= locate.length) return null;
