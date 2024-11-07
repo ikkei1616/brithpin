@@ -84,7 +84,7 @@ const QrPage = () => {
               )}
             </div>
             <div className="flex justify-center items-center my-4">
-              <div className="flex flex-col items-center justify-center px-3 pb-3 bg-white rounded-md">
+              <div className="flex flex-col items-center justify-center px-3 pb-3rounded-md">
                 <QRCodeSVG value={`https://brithpin.vercel.app/add-friend/${uid || "default"}`} size={120} />
                 {uid && (
                   <div className="text-xs font-serif text-textbrawnlight mt-2">
@@ -102,7 +102,7 @@ const QrPage = () => {
               <input
                 style={{ borderColor: colors.bg }}
                 type="text"
-                className="p-2 pr-16 border rounded-lg w-full text-sm shadow-md"
+                className="p-2 pr-16 border rounded-lg w-full text-sm shadow-md bg-inherit"
                 onChange={handleInputChange}
                 value={userId}
               />
