@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
-import { addDoc, collection,query,where,getDocs, getDocsFromServer} from "firebase/firestore";
+import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { db, auth } from "../../lib/firebase";
 import { Timestamp } from "firebase/firestore";
 import Snackbar from "@mui/material/Snackbar";
@@ -22,11 +22,11 @@ export type FriendSchema = {
 };
 
 export type ReceiveCard = {
-  author:string;
-  content:string;
-  createAt:Timestamp;
-  to:string;
-}
+  author: string;
+  content: string;
+  createAt: Timestamp;
+  to: string;
+};
 
 export default function BirthTree() {
   const authValue = useContext(AuthContext);
@@ -34,12 +34,9 @@ export default function BirthTree() {
   const [friends, setFriends] = useState<FriendSchema[]>([]);
   const [openModalId, setOpenModalId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const [openReceiveModal,setOpenReceiveModal] = useState(false);
-  const [receiveCard,setReceiveCard] = useState<ReceiveCard[]>([]);
-  const [displayReceiveCardNum,setDisplayReceiveCardNum] = useState(0);
-
-
-
+  const [openReceiveModal, setOpenReceiveModal] = useState(false);
+  const [receiveCard, setReceiveCard] = useState<ReceiveCard[]>([]);
+  const [displayReceiveCardNum, setDisplayReceiveCardNum] = useState(0);
 
   const handleOpen = (id: string) => {
     setOpenModalId(id);
@@ -60,19 +57,19 @@ export default function BirthTree() {
 
   const receiveCardModalOpen = () => {
     setOpenReceiveModal(true);
-  }
+  };
 
   const receiveCardModalClose = () => {
     setOpenReceiveModal(false);
-  }
+  };
 
-  const cardForwardChange = () =>{
-    if (displayReceiveCardNum+1 === receiveCard.length) {
+  const cardForwardChange = () => {
+    if (displayReceiveCardNum + 1 === receiveCard.length) {
       setDisplayReceiveCardNum(0);
     } else {
-      setDisplayReceiveCardNum(displayReceiveCardNum+1)
+      setDisplayReceiveCardNum(displayReceiveCardNum + 1);
     }
-  }
+  };
 
   const maxLeftValue = 100;
   const maxTopValue = 100;
@@ -184,19 +181,19 @@ export default function BirthTree() {
   };
 
   //送られてきたカードの情報と枚数の取得
-  const getDocCardData = async (uid:string) => {                           
-    const cardQuery = query(collection(db,"cards"),where("to","==",uid));
+  const getDocCardData = async (uid: string) => {
+    const cardQuery = query(collection(db, "cards"), where("to", "==", uid));
     const cardSnapShot = await getDocs(cardQuery);
 
     const cardList = cardSnapShot.docs.map((cardDoc) => ({
       author: cardDoc.data().author,
       content: cardDoc.data().content,
-      createAt:cardDoc.data().createAt,
+      createAt: cardDoc.data().createAt,
       to: cardDoc.data().to,
     }));
     setReceiveCard(cardList);
-    console.log("これがカードリストの長さ"+cardList.length);
-  }
+    console.log("これがカードリストの長さ" + cardList.length);
+  };
 
   useEffect(() => {
     // Firebase認証状態を監視
@@ -209,15 +206,14 @@ export default function BirthTree() {
       }
     });
     return () => unsubscribe(); // クリーンアップのために監視を解除
-
-  },[]);
+  }, []);
 
   useEffect(() => {
     if (receiveCard.length > 0 && displayReceiveCardNum > receiveCard.length) {
       setDisplayReceiveCardNum(0);
     }
   }, [receiveCard, displayReceiveCardNum]);
-  
+
   // 実行
   return (
     <div className="flex w-screen h-screen  justify-center ">
@@ -239,12 +235,12 @@ export default function BirthTree() {
             />
           </Button>
           <Button
-            onClick= {receiveCardModalOpen}
+            onClick={receiveCardModalOpen}
             style={{
-              position:"absolute",
-              bottom:7,
+              position: "absolute",
+              bottom: 7,
               right: 0,
-              padding: 0
+              padding: 0,
             }}
           >
             <Image
@@ -253,12 +249,10 @@ export default function BirthTree() {
               width={45}
               height={45}
               style={{
-                padding:0
+                padding: 0,
               }}
             />
           </Button>
-
-
           {sortedFriendsWithBirthDayFlag.map((friend, index) => {
             if (index >= locate.length) return null;
 
@@ -359,7 +353,11 @@ export default function BirthTree() {
                     >
                       <div className="pl-[5%] pr-[5%] h-[15%]">
                         <div className="w-full flex items-center justify-between pt-[7px] border-b border-dashed border-mainpink">
-                          <Button disableRipple className="p-0 bg-[transparent]" onClick={handleClose}>
+                          <Button
+                            disableRipple
+                            className="p-0 bg-[transparent]"
+                            onClick={handleClose}
+                          >
                             <Image
                               src="/card-modal-back-button.svg"
                               alt="backbutton"
@@ -373,11 +371,20 @@ export default function BirthTree() {
                           <p className="text-2xl font-aboreto text-textbrawn">
                             MESSAGE
                           </p>
-                          <Button disableRipple className="p-0 bg-[transparent] " type="submit">
+                          <Button
+                            disableRipple
+                            className="p-0 bg-[transparent] "
+                            type="submit"
+                          >
                             <p className="text-textbrawn text-[sm] pr-[7px]">
                               送信
                             </p>
-                            <Image src="/CardSendButton.svg" alt="SendButton" width={30} height={30}/>
+                            <Image
+                              src="/CardSendButton.svg"
+                              alt="SendButton"
+                              width={30}
+                              height={30}
+                            />
                           </Button>
                         </div>
                       </div>
@@ -425,52 +432,32 @@ export default function BirthTree() {
                       p-0 rounded-[20px] outline-none border-2
                       border-mainpink sm:max-h-[50%]"
                   >
-                      <div className="pl-[5%] pr-[5%] h-[15%]">
-                        <div className="w-full flex items-center justify-center pt-[7px] border-b border-dashed border-mainpink">
-                          <p className="text-2xl font-aboreto text-textbrawn">
-                            HappyBirthday
-                          </p>
-                        </div>
+                    <div className="pl-[5%] pr-[5%] h-[15%]">
+                      <div className="w-full flex items-center justify-center pt-[7px] border-b border-dashed border-mainpink">
+                        <p className="text-2xl font-aboreto text-textbrawn">
+                          HappyBirthday
+                        </p>
                       </div>
-                      <Button onClick={cardForwardChange}>
-                        ボタンだお
-                      </Button>
-                      <div className="p-[8%_11%] h-[85%]">
-                        {/* {
-                          receiveCard.length > 0 ? (
-                            displayReceiveCardNum > receiveCard.length ? (
-                              <>
-                                <div>{receiveCard[displayReceiveCardNum].author}から</div>
-                                <div>{receiveCard[displayReceiveCardNum].content}</div>
-                                console.log(receiveCard.length);
-                                console.log(displayReceiveCardNum);
-                              </>
-                            ) : (
-                              <>
-                                <div>{receiveCard[displayReceiveCardNum].author}から</div>
-                                <div>{receiveCard[displayReceiveCardNum].content}</div>
-                              </>
-                            )
-                          ) : (
-                            <div>カードがありません</div>
-                          )
-                        } */}
-                        {
-                          receiveCard.length > 0 ? (
-                              <>
-                                <div>{receiveCard[displayReceiveCardNum].author}から</div>
-                                <div>{receiveCard[displayReceiveCardNum].content}</div>
-                                console.log(receiveCard.length);
-                                console.log(displayReceiveCardNum);
-                              </>
-                          ) : (
-                            <div>カードがありません</div>
-                          )
-                        }
-                      </div>
+                    </div>
+                    <Button onClick={cardForwardChange}>ボタンだお</Button>
+                    <div className="p-[8%_11%] h-[85%]">
+                      {receiveCard.length > 0 ? (
+                        <>
+                          <div>
+                            {receiveCard[displayReceiveCardNum].author}から
+                          </div>
+                          <div>
+                            {receiveCard[displayReceiveCardNum].content}
+                          </div>
+                          console.log(receiveCard.length);
+                          console.log(displayReceiveCardNum);
+                        </>
+                      ) : (
+                        <div>カードがありません</div>
+                      )}
+                    </div>
                   </Box>
                 </Modal>
-                
               </>
             );
           })}
