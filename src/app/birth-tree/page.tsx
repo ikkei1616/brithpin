@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
-import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { addDoc, collection, query, where, getDocs, } from "firebase/firestore";
 import { db, auth } from "../../lib/firebase";
 import { Timestamp } from "firebase/firestore";
 import Snackbar from "@mui/material/Snackbar";
@@ -68,6 +68,14 @@ export default function BirthTree() {
       setDisplayReceiveCardNum(0);
     } else {
       setDisplayReceiveCardNum(displayReceiveCardNum + 1);
+    }
+  };
+
+  const cardBackChange = () => {
+    if (displayReceiveCardNum === 0) {
+      setDisplayReceiveCardNum(receiveCard.length - 1);
+    } else {
+      setDisplayReceiveCardNum(displayReceiveCardNum - 1);
     }
   };
 
@@ -439,7 +447,8 @@ export default function BirthTree() {
                         </p>
                       </div>
                     </div>
-                    <Button onClick={cardForwardChange}>ボタンだお</Button>
+                    <Button onClick={cardForwardChange}>進むボタン</Button>
+                    <Button onClick={cardBackChange}>戻るボタン</Button>
                     <div className="p-[8%_11%] h-[85%]">
                       {receiveCard.length > 0 ? (
                         <>
