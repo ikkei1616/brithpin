@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection,query,where,getDocs, getDocsFromServer} from "firebase/firestore";
 import { db, auth } from "../../lib/firebase";
 import { Timestamp } from "firebase/firestore";
 import Snackbar from "@mui/material/Snackbar";
@@ -21,12 +21,25 @@ export type FriendSchema = {
   photoURL: string;
 };
 
+export type ReceiveCard = {
+  author:string;
+  content:string;
+  createAt:Timestamp;
+  to:string;
+}
+
 export default function BirthTree() {
   const authValue = useContext(AuthContext);
   const router = useRouter();
   const [friends, setFriends] = useState<FriendSchema[]>([]);
   const [openModalId, setOpenModalId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [openReceiveModal,setOpenReceiveModal] = useState(false);
+  const [receiveCard,setReceiveCard] = useState<ReceiveCard[]>([]);
+  const [displayReceiveCardNum,setDisplayReceiveCardNum] = useState(0);
+
+
+
 
   const handleOpen = (id: string) => {
     setOpenModalId(id);
@@ -44,6 +57,22 @@ export default function BirthTree() {
   const handleSnackBarClose = () => {
     setOpen(false);
   };
+
+  const receiveCardModalOpen = () => {
+    setOpenReceiveModal(true);
+  }
+
+  const receiveCardModalClose = () => {
+    setOpenReceiveModal(false);
+  }
+
+  const cardForwardChange = () =>{
+    if (displayReceiveCardNum+1 === receiveCard.length) {
+      setDisplayReceiveCardNum(0);
+    } else {
+      setDisplayReceiveCardNum(displayReceiveCardNum+1)
+    }
+  }
 
   const maxLeftValue = 100;
   const maxTopValue = 100;
@@ -153,6 +182,42 @@ export default function BirthTree() {
     });
     console.log("家桁");
   };
+
+  //送られてきたカードの情報と枚数の取得
+  const getDocCardData = async (uid:string) => {                           
+    const cardQuery = query(collection(db,"cards"),where("to","==",uid));
+    const cardSnapShot = await getDocs(cardQuery);
+
+    const cardList = cardSnapShot.docs.map((cardDoc) => ({
+      author: cardDoc.data().author,
+      content: cardDoc.data().content,
+      createAt:cardDoc.data().createAt,
+      to: cardDoc.data().to,
+    }));
+    setReceiveCard(cardList);
+    console.log("これがカードリストの長さ"+cardList.length);
+  }
+
+  useEffect(() => {
+    // Firebase認証状態を監視
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // ユーザーが認証されている場合にデータを取得
+        getDocCardData(user.uid);
+      } else {
+        console.log("あいあい居合: ユーザーが認証されていません");
+      }
+    });
+    return () => unsubscribe(); // クリーンアップのために監視を解除
+
+  },[]);
+
+  useEffect(() => {
+    if (receiveCard.length > 0 && displayReceiveCardNum > receiveCard.length) {
+      setDisplayReceiveCardNum(0);
+    }
+  }, [receiveCard, displayReceiveCardNum]);
+  
   // 実行
   return (
     <div className="flex w-screen h-screen  justify-center ">
@@ -174,12 +239,12 @@ export default function BirthTree() {
             />
           </Button>
           <Button
+            onClick= {receiveCardModalOpen}
             style={{
               position:"absolute",
               bottom:7,
               right: 0,
               padding: 0
-              
             }}
           >
             <Image
@@ -347,6 +412,65 @@ export default function BirthTree() {
                     className: "bg-mainpink text-textbrawn",
                   }}
                 />
+                <Modal
+                  open={openReceiveModal}
+                  onClose={receiveCardModalClose}
+                  aria-labelledby="child-modal-title"
+                  aria-describedby="child-modal-description"
+                >
+                  <Box
+                    sx={{ ...style }}
+                    className="
+                      w-[350px] max-w-[90%] 
+                      p-0 rounded-[20px] outline-none border-2
+                      border-mainpink sm:max-h-[50%]"
+                  >
+                      <div className="pl-[5%] pr-[5%] h-[15%]">
+                        <div className="w-full flex items-center justify-center pt-[7px] border-b border-dashed border-mainpink">
+                          <p className="text-2xl font-aboreto text-textbrawn">
+                            HappyBirthday
+                          </p>
+                        </div>
+                      </div>
+                      <Button onClick={cardForwardChange}>
+                        ボタンだお
+                      </Button>
+                      <div className="p-[8%_11%] h-[85%]">
+                        {/* {
+                          receiveCard.length > 0 ? (
+                            displayReceiveCardNum > receiveCard.length ? (
+                              <>
+                                <div>{receiveCard[displayReceiveCardNum].author}から</div>
+                                <div>{receiveCard[displayReceiveCardNum].content}</div>
+                                console.log(receiveCard.length);
+                                console.log(displayReceiveCardNum);
+                              </>
+                            ) : (
+                              <>
+                                <div>{receiveCard[displayReceiveCardNum].author}から</div>
+                                <div>{receiveCard[displayReceiveCardNum].content}</div>
+                              </>
+                            )
+                          ) : (
+                            <div>カードがありません</div>
+                          )
+                        } */}
+                        {
+                          receiveCard.length > 0 ? (
+                              <>
+                                <div>{receiveCard[displayReceiveCardNum].author}から</div>
+                                <div>{receiveCard[displayReceiveCardNum].content}</div>
+                                console.log(receiveCard.length);
+                                console.log(displayReceiveCardNum);
+                              </>
+                          ) : (
+                            <div>カードがありません</div>
+                          )
+                        }
+                      </div>
+                  </Box>
+                </Modal>
+                
               </>
             );
           })}
