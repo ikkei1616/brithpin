@@ -449,8 +449,6 @@ export default function BirthTree() {
                           <div>
                             {receiveCard[displayReceiveCardNum].content}
                           </div>
-                          console.log(receiveCard.length);
-                          console.log(displayReceiveCardNum);
                         </>
                       ) : (
                         <div>カードがありません</div>
