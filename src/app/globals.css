@@ -28,10 +28,20 @@ body {
 @layer utilities {
   :root {
     --background-image: url('/birthtree-spring.svg');
+    --footer-background-getup: url('/getuphiyoko.svg');
+    --footer-background-sleep: url('/sleephiyoko.svg');
   }
 
   .text-balance {
     text-wrap: balance;
+  }
+
+  .footer-bg-getup {
+    background-image: var(--footer-background-getup);
+  }
+
+  .footer-bg-sleep {
+    background-image: var(--footer-background-sleep);
   }
 
   .background {

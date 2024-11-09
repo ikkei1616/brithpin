@@ -8,16 +8,16 @@ interface ColorContextType {
   colors: { bg: string };
   imageSrc: string;
   backgroundImage: string;
+  season: string;
 }
 
 const ColorContext = createContext<ColorContextType | undefined>(undefined);
 
 export const ColorProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [colors, setColors] = useState({
-    bg: '#FEB69F',
-  });
+  const [colors, setColors] = useState({ bg: '#FEB69F' });
   const [imageSrc, setImageSrc] = useState('/fukidashi.png');
   const [backgroundImage, setBackgroundImage] = useState('/birthtree-spring.svg');
+  const [season, setSeason] = useState('spring');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -30,21 +30,25 @@ export const ColorProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             const data = docSnap.data();
             switch (data.season) {
               case 'summer':
+                setSeason('summer');
                 setColors({ bg: '#369675' });
                 setImageSrc('/fukidashi-summer.png');
                 setBackgroundImage('/birthtree-summer.svg');
                 break;
               case 'autumn':
+                setSeason('autumn');
                 setColors({ bg: '#E58368' });
                 setImageSrc('/fukidashi-autumn.png');
                 setBackgroundImage('/birthtree-autumn.svg');
                 break;
               case 'winter':
+                setSeason('winter');
                 setColors({ bg: '#85CBCD' });
                 setImageSrc('/fukidashi-winter.png');
                 setBackgroundImage('/birthtree-winter.svg');
                 break;
               default:
+                setSeason('spring');
                 setColors({ bg: '#FEB69F' });
                 setImageSrc('/fukidashi.png');
                 setBackgroundImage('/birthtree-spring.svg');
@@ -62,7 +66,7 @@ export const ColorProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, []);
 
   return (
-    <ColorContext.Provider value={{ colors, imageSrc, backgroundImage }}>
+    <ColorContext.Provider value={{ colors, imageSrc, backgroundImage, season }}>
       {children}
     </ColorContext.Provider>
   );
