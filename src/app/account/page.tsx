@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import CardContainer from "../components/CardContainer";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { SeasonSetting } from '@/components/SeasonSetting';
 
 interface User {
   nickname: string;
@@ -61,23 +62,7 @@ const AccountPage = () => {
       <CardContainer>
         <div style={{ borderColor: colors.bg }} className="flex justify-between items-center text-2xl text-textbrawnlight font-bold mb-0 font-serif border-b border-dashed pb-4 w-full">
           <div className="w-2/5">
-            <button
-              onClick={() => router.push("/profile")}
-              className="flex h-full rounded-lg text-base w-full justify-between items-center"
-            >
-              <div className="h-7 flex items-center w-7 justify-center rounded-2xl">
-                <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full bg-mainpink h-full w-full flex items-center justify-center">
-                  <Image
-                    src='/setting.png'
-                    alt="setting Image"
-                    width={16}
-                    height={16}
-                    className="rounded-lg object-cover bg-gray-100"
-                  />
-                </div>
-              </div>
-              設定
-            </button>
+            <SeasonSetting />
           </div>
           <div className="flex justify-center w-full">PROFILE</div>
           <div className="w-2/5 flex justify-between items-center">
@@ -87,7 +72,7 @@ const AccountPage = () => {
             >
               編集
               <div className="h-7 flex items-center w-7 justify-center rounded-2xl">
-                <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full bg-mainpink h-full w-full flex items-center justify-center">
+                <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-full w-full flex items-center justify-center">
                   ✓
                 </div>
               </div>
