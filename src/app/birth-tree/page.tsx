@@ -270,7 +270,7 @@ export default function BirthTree() {
             }}
           >
             <Image
-              src="/mailbox.svg"
+              src="/mailBox.svg"
               alt="mail box"
               width={45}
               height={45}
