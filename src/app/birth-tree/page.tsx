@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
-import { addDoc, collection, query, where, getDocs, } from "firebase/firestore";
+import {addDoc, collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import { db, auth } from "../../lib/firebase";
 import { Timestamp } from "firebase/firestore";
 import Snackbar from "@mui/material/Snackbar";
@@ -37,6 +37,7 @@ export default function BirthTree() {
   const [openReceiveModal, setOpenReceiveModal] = useState(false);
   const [receiveCard, setReceiveCard] = useState<ReceiveCard[]>([]);
   const [displayReceiveCardNum, setDisplayReceiveCardNum] = useState(0);
+  const [nickName, setNickName] = useState<string[]>([]);
 
   const handleOpen = (id: string) => {
     setOpenModalId(id);
@@ -200,7 +201,26 @@ export default function BirthTree() {
       to: cardDoc.data().to,
     }));
     setReceiveCard(cardList);
+
     console.log("これがカードリストの長さ" + cardList.length);
+  };
+
+  const getDocNickName = async () => {
+    const newNickNames = [];
+    for (const card of receiveCard) {
+      const author = card.author;
+      console.log(author);
+      const authorRef = doc(db, "users", author);
+      const authorDocument = await getDoc(authorRef);
+      if (authorDocument.exists()) {
+        const data = authorDocument.data().nickname;
+        setNickName([...nickName, data]);
+        newNickNames.push(data);
+      } else {
+        console.log("指定されたユーザーのデータが存在しません");
+      }
+    }
+    setNickName([...newNickNames]);
   };
 
   useEffect(() => {
@@ -217,10 +237,8 @@ export default function BirthTree() {
   }, []);
 
   useEffect(() => {
-    if (receiveCard.length > 0 && displayReceiveCardNum > receiveCard.length) {
-      setDisplayReceiveCardNum(0);
-    }
-  }, [receiveCard, displayReceiveCardNum]);
+    getDocNickName();
+  }, [receiveCard]);
 
   // 実行
   return (
@@ -452,9 +470,7 @@ export default function BirthTree() {
                     <div className="p-[8%_11%] h-[85%]">
                       {receiveCard.length > 0 ? (
                         <>
-                          <div>
-                            {receiveCard[displayReceiveCardNum].author}から
-                          </div>
+                          <div>{nickName[displayReceiveCardNum]}から</div>
                           <div>
                             {receiveCard[displayReceiveCardNum].content}
                           </div>
