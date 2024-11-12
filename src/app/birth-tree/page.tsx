@@ -38,6 +38,7 @@ export default function BirthTree() {
   const [receiveCard, setReceiveCard] = useState<ReceiveCard[]>([]);
   const [displayReceiveCardNum, setDisplayReceiveCardNum] = useState(0);
   const [nickName, setNickName] = useState<string[]>([]);
+  const [photoData,setPhotoData] = useState<string[]>([]);
 
   const handleOpen = (id: string) => {
     setOpenModalId(id);
@@ -205,22 +206,25 @@ export default function BirthTree() {
     console.log("これがカードリストの長さ" + cardList.length);
   };
 
-  const getDocNickName = async () => {
+  const getDocAuthorData = async () => {
     const newNickNames = [];
+    const newPhotoData = [];
     for (const card of receiveCard) {
       const author = card.author;
       console.log(author);
       const authorRef = doc(db, "users", author);
       const authorDocument = await getDoc(authorRef);
       if (authorDocument.exists()) {
-        const data = authorDocument.data().nickname;
-        setNickName([...nickName, data]);
-        newNickNames.push(data);
+        const nameData = authorDocument.data().nickname;
+        const photoData = authorDocument.data().photoURL;
+        newNickNames.push(nameData);
+        newPhotoData.push(photoData);
       } else {
         console.log("指定されたユーザーのデータが存在しません");
       }
     }
     setNickName([...newNickNames]);
+    setPhotoData([...newPhotoData]);
   };
 
   useEffect(() => {
@@ -237,7 +241,7 @@ export default function BirthTree() {
   }, []);
 
   useEffect(() => {
-    getDocNickName();
+    getDocAuthorData();
   }, [receiveCard]);
 
   // 実行
@@ -466,19 +470,20 @@ export default function BirthTree() {
                       </div>
                     </div>
                     <Button onClick={cardForwardChange}>進むボタン</Button>
-                    <Button onClick={cardBackChange}>戻るボタン</Button>
                     <div className="p-[8%_11%] h-[85%]">
                       {receiveCard.length > 0 ? (
-                        <>
+                        <div>
+                          <Image src={photoData[displayReceiveCardNum]} width={100} height={100} alt="icon"></Image>
                           <div>{nickName[displayReceiveCardNum]}から</div>
                           <div>
                             {receiveCard[displayReceiveCardNum].content}
                           </div>
-                        </>
+                        </div>
                       ) : (
                         <div>カードがありません</div>
                       )}
                     </div>
+                    <Button onClick={cardBackChange}>戻るボタン</Button>
                   </Box>
                 </Modal>
               </>
