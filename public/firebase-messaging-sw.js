@@ -1,5 +1,5 @@
-importScripts("https://www.gstatic.com/firebasejs/7.3.0/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/7.3.0/firebase-messaging.js");
+importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js');
 
 const firebaseConfig = {
   apiKey: `AIzaSyAfWbDntObUe3B5-nzsWmqYvFncIVc-rhI`,
@@ -38,12 +38,15 @@ self.addEventListener('push', function (event) {
   event.waitUntil(notificationPromise);
 });
 
-// WEBアプリがバックグラウンドの場合にはsetBackGroundMessageHandlerが呼び出される。
-messaging.setBackgroundMessageHandler(function (event) {
-  return self.registration.showNotification(
-    event.messageTitle,
-    {
-      body: event.messageBody || 'お知らせが届いています。',
-      tag: event.messageTag || 'これはタグです。',
-    });
+// WEBアプリがバックグラウンドの場合にはonBackgroundMessageが呼び出される。
+messaging.onBackgroundMessage((payload) => {
+  console.log('Received background message: ', payload);
+
+  const notificationTitle = payload.notification?.title || 'デフォルトのタイトル';
+  const notificationOptions = {
+    body: payload.notification?.body || 'デフォルトのメッセージ',
+    icon: payload.notification?.icon || '/fukidashi.png',
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });
