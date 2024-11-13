@@ -458,32 +458,71 @@ export default function BirthTree() {
                   <Box
                     sx={{ ...style }}
                     className="
-                      w-[350px] max-w-[90%] 
+                      w-[350px] max-w-[90%] h-[350px] max-h-[40%]
                       p-0 rounded-[20px] outline-none border-2
                       border-mainpink sm:max-h-[50%]"
                   >
-                    <div className="pl-[5%] pr-[5%] h-[15%]">
-                      <div className="w-full flex items-center justify-center pt-[7px] border-b border-dashed border-mainpink">
-                        <p className="text-2xl font-aboreto text-textbrawn">
-                          HappyBirthday
-                        </p>
+                    <div style={{height: "100%"}}>
+                      <div className="pl-[5%] pr-[5%] h-[15%] ">
+                        <div className="w-full h-[100%] flex items-center justify-center pt-[7px] border-b border-dashed border-mainpink">
+                          <p className="text-2xl font-aboreto text-textbrawn">
+                            HappyBirthday
+                          </p>
+                        </div>
+                      </div>
+                      <div 
+                        style={{
+                          height:"80%",
+                          display: "flex",
+                          paddingTop:"7%",
+                          alignItems:"center",
+                          justifyContent:"space-between",
+                        }}
+                      >
+                        <Button onClick={cardForwardChange} sx={{width:"50px",maxWidth:"15%",flexShrink:"0",padding:"0",minWidth:"0",}}  >
+                          <Image src="/receiveCardBackButton.svg" width={30} height={30} alt="button" />
+                        </Button>
+                        {receiveCard.length > 0 ? (
+                          <div
+                            style={{
+                              width:"80%",
+                              height:"100%",
+                              paddingLeft:"4%",
+                              paddingRight:"4%",
+                              backgroundColor:"#FFF6F3",
+                              borderRadius:"10px",
+                              border:"0.4px solid #8D6A5F"
+                            }}
+                          >
+                            <div 
+                              style={{
+                                width:"100%",
+                                height:"30%",
+                                display:"flex",
+                                alignItems:"center",
+                                borderBottom:"0.4px dashed #8D6A5F"
+                              }}
+                            >
+                              <Image src={photoData[displayReceiveCardNum]} width={50} height={50} style={{maxWidth:"25%"}} alt="icon" />
+                              <div style={{paddingLeft:"5%"}}>
+                                <p style={{fontFamily:"Noto Serif JP",fontSize:"20px",color:"#8D6A5F",}}>{nickName[displayReceiveCardNum]}</p>
+                                <p style={{fontFamily:"Noto Serif JP",fontSize:"8px",color:"#8D6A5F",}}>さんからメッセージが届いています</p>
+                              </div>
+                            </div>
+                            <div style={{paddingTop:"6%",paddingBottom:"6%"}}>
+                              <p style={{color:"#8D6A5F",fontSize:"10px",lineHeight:"20px",fontFamily:"Noto serif JP"}}>
+                              {receiveCard[displayReceiveCardNum].content}
+                              </p>
+                            </div>
+                          </div>
+                          ) : (
+                            <div>カードがありません</div>
+                          )}   
+                        <Button onClick={cardBackChange} sx={{width:"50px",maxWidth:"15%",flexShrink:"0",padding:"0",minWidth:"0",}} >
+                          <Image src="/forwardButton.svg" width={30} height={30} alt="button" />
+                        </Button>
                       </div>
                     </div>
-                    <Button onClick={cardForwardChange}>進むボタン</Button>
-                    <div className="p-[8%_11%] h-[85%]">
-                      {receiveCard.length > 0 ? (
-                        <div>
-                          <Image src={photoData[displayReceiveCardNum]} width={100} height={100} alt="icon"></Image>
-                          <div>{nickName[displayReceiveCardNum]}から</div>
-                          <div>
-                            {receiveCard[displayReceiveCardNum].content}
-                          </div>
-                        </div>
-                      ) : (
-                        <div>カードがありません</div>
-                      )}
-                    </div>
-                    <Button onClick={cardBackChange}>戻るボタン</Button>
                   </Box>
                 </Modal>
               </>
