@@ -21,40 +21,40 @@ if (!firebaseApp) {
   firebaseApp = initializeApp(firebaseConfig, 'default');
 }
 
-export function requestPermission() {
-  Notification.requestPermission().then((permission) => {
+export async function requestPermission() {
+  try {
+    const permission = await Notification.requestPermission();
     if (permission === "granted") {
-      const app = initializeApp(firebaseConfig);
+      const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+      console.log("Service Worker registered with scope:", registration.scope);
 
-      const messaging = getMessaging(app);
-      getToken(messaging, {
+      const readyRegistration = await navigator.serviceWorker.ready;
+
+      const messaging = getMessaging(firebaseApp);
+      const currentToken = await getToken(messaging, {
         vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
-      }).then((currentToken) => {
-        if (currentToken) {
-          console.log("current token for client: ", currentToken);
-          const user = auth.currentUser;
-          if (user) {
-            const userDocRef = doc(db, "users", user.uid);
-            updateDoc(userDocRef, { token: currentToken })
-              .then(() => {
-                console.log("Token successfully saved to Firestore.");
-              })
-              .catch((error) => {
-                console.error("Error saving token to Firestore: ", error);
-              });
-          } else {
-            console.error("No user is logged in.");
-          }
-        } else {
-          console.error(
-            "No registration token available. Request permission to generate one."
-          );
-        }
+        serviceWorkerRegistration: readyRegistration,
       });
+
+      if (currentToken) {
+        console.log("current token for client: ", currentToken);
+        const user = auth.currentUser;
+        if (user) {
+          const userDocRef = doc(db, "users", user.uid);
+          await updateDoc(userDocRef, { token: currentToken });
+          console.log("Token successfully saved to Firestore.");
+        } else {
+          console.error("No user is logged in.");
+        }
+      } else {
+        console.error("No registration token available. Request permission to generate one.");
+      }
     } else {
       console.error("Unable to get permission to notify.");
     }
-  });
+  } catch (error) {
+    console.error("Error in requestPermission:", error);
+  }
 }
 
 export const auth = getAuth(firebaseApp);
