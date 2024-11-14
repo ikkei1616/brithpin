@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { useColorContext } from '@/context/ColorContext';
 import Image from "next/image";
-import { MenuItem } from '@mui/material';
+import { Button, MenuItem, Typography } from '@mui/material';
 import { db, auth } from '@/lib/firebase';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
@@ -14,9 +14,23 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  border: '2px solid #8D6A5F',
+  borderRadius: 8,
+  textAlign: 'center',
   boxShadow: 24,
   p: 4,
+};
+
+const lineStyle = {
+  borderBottom: '1px solid #cfc7be',
+  margin: '10px 0',
+  textAlign: 'center',
+};
+
+const itemStyle = {
+  color: '#8b6f63',
+  cursor: 'pointer',
+  padding: '10px 0',
 };
 
 const SeasonSetting = () => {
@@ -82,10 +96,25 @@ const SeasonSetting = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <MenuItem onClick={() => handleSeasonClick('春')}>春</MenuItem>
-          <MenuItem onClick={() => handleSeasonClick('夏')}>夏</MenuItem>
-          <MenuItem onClick={() => handleSeasonClick('秋')}>秋</MenuItem>
-          <MenuItem onClick={() => handleSeasonClick('冬')}>冬</MenuItem>
+          <Typography variant="h6" sx={{ color: '#8b6f63', marginBottom: '20px' }}>
+            四季を選択する
+          </Typography>
+          <Box sx={lineStyle}></Box>
+          <Box onClick={() => handleSeasonClick('春')} sx={itemStyle}>
+            春
+          </Box>
+          <Box sx={lineStyle}></Box>
+          <Box onClick={() => handleSeasonClick('夏')} sx={itemStyle}>
+            夏
+          </Box>
+          <Box sx={lineStyle}></Box>
+          <Box onClick={() => handleSeasonClick('秋')} sx={itemStyle}>
+            秋
+          </Box>
+          <Box sx={lineStyle}></Box>
+          <Box onClick={() => handleSeasonClick('冬')} sx={itemStyle}>
+            冬
+          </Box>
         </Box>
       </Modal>
     </div>
