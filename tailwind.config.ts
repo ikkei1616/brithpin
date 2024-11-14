@@ -6,7 +6,7 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  
+
   theme: {
     extend: {
       colors: {
@@ -20,8 +20,11 @@ const config: Config = {
         customSpecialAutumn: "url('/birthpinautumn.svg'), url('/textspecialday.svg')",
         customSpecialWinter: "url('/birthpinwinter.svg'), url('/textspecialday.svg')",
       },
+      screens: {
+        sm: "321px",
+      },
     },
-    
+
     fontFamily: {
       sans: ["Noto Sans JP", "sans-serif"],
       serif: ["Noto Serif JP", "serif"],
@@ -54,8 +57,7 @@ const config: Config = {
       sleephiyoko:"url('/sleephiyoko.svg')",
       textspecialday:"url('/textspecialday.svg')",
       usericonshadow:"url('/usericonshadow.svg')",     
-    }
-
+    },
   },
   plugins: [],
 };
