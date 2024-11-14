@@ -7,7 +7,16 @@ import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
-import {addDoc, collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
+import Backdrop from "@mui/material/Backdrop";
+import {
+  addDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { db, auth } from "../../lib/firebase";
 import { Timestamp } from "firebase/firestore";
 import Snackbar from "@mui/material/Snackbar";
@@ -38,7 +47,7 @@ export default function BirthTree() {
   const [receiveCard, setReceiveCard] = useState<ReceiveCard[]>([]);
   const [displayReceiveCardNum, setDisplayReceiveCardNum] = useState(0);
   const [nickName, setNickName] = useState<string[]>([]);
-  const [photoData,setPhotoData] = useState<string[]>([]);
+  const [photoData, setPhotoData] = useState<string[]>([]);
 
   const handleOpen = (id: string) => {
     setOpenModalId(id);
@@ -266,6 +275,7 @@ export default function BirthTree() {
           </Button>
           <Button
             onClick={receiveCardModalOpen}
+            disableRipple
             style={{
               position: "absolute",
               bottom: 7,
@@ -454,6 +464,12 @@ export default function BirthTree() {
                   onClose={receiveCardModalClose}
                   aria-labelledby="child-modal-title"
                   aria-describedby="child-modal-description"
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                    sx: {
+                      backgroundColor: "rgba(0, 0, 0, 0)",
+                    },
+                  }}
                 >
                   <Box
                     sx={{ ...style }}
@@ -462,7 +478,7 @@ export default function BirthTree() {
                       p-0 rounded-[20px] outline-none border-2
                       border-mainpink sm:max-h-[50%]"
                   >
-                    <div style={{height: "100%"}}>
+                    <div style={{ height: "100%" }}>
                       <div className="pl-[5%] pr-[5%] h-[15%] ">
                         <div className="w-full h-[100%] flex items-center justify-center pt-[7px] border-b border-dashed border-mainpink">
                           <p className="text-2xl font-aboreto text-textbrawn">
@@ -470,56 +486,70 @@ export default function BirthTree() {
                           </p>
                         </div>
                       </div>
-                      <div 
-                        style={{
-                          height:"80%",
-                          display: "flex",
-                          paddingTop:"7%",
-                          alignItems:"center",
-                          justifyContent:"space-between",
-                        }}
-                      >
-                        <Button onClick={cardForwardChange} sx={{width:"50px",maxWidth:"15%",flexShrink:"0",padding:"0",minWidth:"0",}}  >
-                          <Image src="/receiveCardBackButton.svg" width={30} height={30} alt="button" />
+                      <div className="h-[80%] flex pt-[7%] items-center justify-between">
+                        <Button
+                          onClick={cardForwardChange}
+                          className="w-[50px] max-w-[15%] flex-shrink-0 p-0 bg-transparent min-w-[0] hover:bg-transparent border-none"
+                          disableRipple
+                        >
+                          <Image
+                            src="/receiveCardBackButton.svg"
+                            width={30}
+                            height={30}
+                            alt="button"
+                          />
                         </Button>
                         {receiveCard.length > 0 ? (
                           <div
-                            style={{
-                              width:"80%",
-                              height:"100%",
-                              paddingLeft:"4%",
-                              paddingRight:"4%",
-                              backgroundColor:"#FFF6F3",
-                              borderRadius:"10px",
-                              border:"0.4px solid #8D6A5F"
-                            }}
+                            className="
+                              w-[80%] h-full px-[4%] bg-placeholderpink rounded-[10px] 
+                              border-[0.4px] border-textbrawnlight
+                            "
                           >
-                            <div 
-                              style={{
-                                width:"100%",
-                                height:"30%",
-                                display:"flex",
-                                alignItems:"center",
-                                borderBottom:"0.4px dashed #8D6A5F"
-                              }}
+                            <div
+                              className="
+                                w-full h-[30%] flex items-center
+                                border-b-[0.4px] border-dashed border-textbrawnlight
+                              "
                             >
-                              <Image src={photoData[displayReceiveCardNum]} width={50} height={50} style={{maxWidth:"25%"}} alt="icon" />
-                              <div style={{paddingLeft:"5%"}}>
-                                <p style={{fontFamily:"Noto Serif JP",fontSize:"20px",color:"#8D6A5F",}}>{nickName[displayReceiveCardNum]}</p>
-                                <p style={{fontFamily:"Noto Serif JP",fontSize:"8px",color:"#8D6A5F",}}>さんからメッセージが届いています</p>
+                              <Image
+                                src={photoData[displayReceiveCardNum]}
+                                width={50}
+                                height={50}
+                                style={{ maxWidth: "25%" }}
+                                alt="icon"
+                              />
+                              <div className="pl-[5%]">
+                                <p className="font-serif text-xl text-textbrawnlight">
+                                  {nickName[displayReceiveCardNum]}
+                                </p>
+                                <p className="font-serif text-[8px] text-textbrawnlight">
+                                  さんからメッセージが届いています
+                                </p>
                               </div>
                             </div>
-                            <div style={{paddingTop:"6%",paddingBottom:"6%"}}>
-                              <p style={{color:"#8D6A5F",fontSize:"10px",lineHeight:"20px",fontFamily:"Noto serif JP"}}>
-                              {receiveCard[displayReceiveCardNum].content}
+                            <div className="py-[6%]">
+                              <p className="text-textbrawnlight text-[10px] leading-5 font-serif">
+                                {receiveCard[displayReceiveCardNum].content}
                               </p>
                             </div>
                           </div>
-                          ) : (
-                            <div>カードがありません</div>
-                          )}   
-                        <Button onClick={cardBackChange} sx={{width:"50px",maxWidth:"15%",flexShrink:"0",padding:"0",minWidth:"0",}} >
-                          <Image src="/forwardButton.svg" width={30} height={30} alt="button" />
+                        ) : (
+                          <div>カードがありません</div>
+                        )}
+                        <Button
+                          onClick={cardBackChange}
+                          className="
+                            w-[50px] max-w-[15%] flex-shrink-0 p-0 min-w-0 bg-transparent
+                          "
+                          disableRipple
+                        >
+                          <Image
+                            src="/forwardButton.svg"
+                            width={30}
+                            height={30}
+                            alt="button"
+                          />
                         </Button>
                       </div>
                     </div>
