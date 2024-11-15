@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { useColorContext } from '@/context/ColorContext';
 import Image from "next/image";
-import { Button, MenuItem, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { db, auth } from '@/lib/firebase';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
