@@ -374,10 +374,11 @@ export default function BirthTree() {
                 >
                   <Box
                     sx={{ ...style }}
+                    style={{ borderColor: colors.bg }}
                     className="
                       w-[350px] max-w-[90%] h-[350px]  max-h-[40%] 
                       p-0 rounded-[20px] outline-none border-2
-                      border-mainpink sm:max-h-[50%]"
+                      sm:max-h-[50%]"
                   >
                     <form
                       action="#"
@@ -389,7 +390,7 @@ export default function BirthTree() {
                       className="h-[100%]"
                     >
                       <div className="pl-[5%] pr-[5%] h-[15%]">
-                        <div className="w-full flex items-center justify-between pt-[7px] border-b border-dashed border-mainpink">
+                        <div style={{ borderColor: colors.bg }} className="w-full flex items-center justify-between pt-[7px] border-b border-dashed">
                           <Button
                             disableRipple
                             className="p-0 bg-[transparent]"
@@ -433,6 +434,7 @@ export default function BirthTree() {
                           {friend.name}さんへ
                         </p>
                         <textarea
+                          style={{ borderColor: colors.bg }} 
                           id={`message"-${friend.id}`}
                           name="message"
                           rows={6}
@@ -440,7 +442,7 @@ export default function BirthTree() {
                           cols={15}
                           className="
                             w-full h-[70%] mt-[5px] border-2 
-                            border-mainpink rounded-[10px]
+                            rounded-[10px]
                           "
                         ></textarea>
                       </div>
