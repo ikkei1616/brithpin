@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
-import {addDoc, collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import { db, auth } from "../../lib/firebase";
 import { Timestamp } from "firebase/firestore";
 import Snackbar from "@mui/material/Snackbar";
@@ -37,12 +37,12 @@ export default function BirthTree() {
   const [openModalId, setOpenModalId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const { colors, imageSrc, imageMailSrc } = useColorContext();
-  
+
   const [openReceiveModal, setOpenReceiveModal] = useState(false);
   const [receiveCard, setReceiveCard] = useState<ReceiveCard[]>([]);
   const [displayReceiveCardNum, setDisplayReceiveCardNum] = useState(0);
   const [nickName, setNickName] = useState<string[]>([]);
-  const [photoData,setPhotoData] = useState<string[]>([]);
+  const [photoData, setPhotoData] = useState<string[]>([]);
 
   const handleOpen = (id: string) => {
     setOpenModalId(id);
@@ -396,12 +396,11 @@ export default function BirthTree() {
                             className="p-0 bg-[transparent]"
                             onClick={handleClose}
                           >
-                            <Image
-                              src="/card-modal-back-button.svg"
-                              alt="backbutton"
-                              width={30}
-                              height={30}
-                            />
+                            <div className="h-7 flex items-center w-7 justify-center rounded-2xl">
+                              <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-full w-full flex items-center justify-center">
+                                ◀︎
+                              </div>
+                            </div>
                             <p className="text-textbrawn text-sm pl-[7px]">
                               戻る
                             </p>
@@ -417,12 +416,11 @@ export default function BirthTree() {
                             <p className="text-textbrawn text-[sm] pr-[7px]">
                               送信
                             </p>
-                            <Image
-                              src="/CardSendButton.svg"
-                              alt="SendButton"
-                              width={30}
-                              height={30}
-                            />
+                            <div className="h-7 flex items-center w-7 justify-center rounded-2xl">
+                              <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-full w-full flex items-center justify-center">
+                                ✓
+                              </div>
+                            </div>
                           </Button>
                         </div>
                       </div>
@@ -434,7 +432,7 @@ export default function BirthTree() {
                           {friend.name}さんへ
                         </p>
                         <textarea
-                          style={{ borderColor: colors.bg }} 
+                          style={{ borderColor: colors.bg }}
                           id={`message"-${friend.id}`}
                           name="message"
                           rows={6}
