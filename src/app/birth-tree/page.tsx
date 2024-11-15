@@ -51,7 +51,6 @@ export default function BirthTree() {
   const [userBirthDay, setUserBirthDay] = useState<Date>();
   const today = new Date();
 
-
   const handleOpen = (id: string) => {
     setOpenModalId(id);
   };
@@ -211,21 +210,27 @@ export default function BirthTree() {
       const oneMonthLimit = new Date(userBirthDay);
       oneMonthLimit.setFullYear(today.getFullYear());
       birthLimit.setFullYear(today.getFullYear());
-      oneMonthLimit.setMonth(userBirthDay.getMonth()+1);
-      oneMonthLimit.setDate(userBirthDay.getDate()+1)
+      oneMonthLimit.setMonth(userBirthDay.getMonth() + 1);
+      oneMonthLimit.setDate(userBirthDay.getDate() + 1);
       const cardList = cardSnapShot.docs
-        .filter((cardDoc) => cardDoc.data().createAt.toDate().getFullYear() === today?.getFullYear() && oneMonthLimit >= today  && today >= birthLimit)
-        .map((cardDoc) =>  ({
+        .filter(
+          (cardDoc) =>
+            cardDoc.data().createAt.toDate().getFullYear() ===
+              today?.getFullYear() &&
+            oneMonthLimit >= today &&
+            today >= birthLimit
+        )
+        .map((cardDoc) => ({
           author: cardDoc.data().author,
           content: cardDoc.data().content,
           createAt: cardDoc.data().createAt,
           to: cardDoc.data().to,
-      }));
+        }));
       setReceiveCard(cardList);
       console.log("これがカードリストの長さ" + cardList.length);
     }
   };
-  
+
   const getDocAuthorData = async () => {
     const newNickNames = [];
     const newPhotoData = [];
@@ -247,30 +252,28 @@ export default function BirthTree() {
     setPhotoData([...newPhotoData]);
   };
 
-  const getDocUserDate = async ()=> {
+  const getDocUserDate = async () => {
     if (auth.currentUser) {
-      const docUserRef = doc(db,"users",auth.currentUser.uid)
-      const docUserSnap =await getDoc(docUserRef);
+      const docUserRef = doc(db, "users", auth.currentUser.uid);
+      const docUserSnap = await getDoc(docUserRef);
 
       if (docUserSnap.exists()) {
         const birthDay = docUserSnap.data().birthDay;
         const birthMonth = docUserSnap.data().birthMonth;
         const birthYear = docUserSnap.data().birthYear;
-        const birthDate = new Date(birthYear,birthMonth -1 ,birthDay);
+        const birthDate = new Date(birthYear, birthMonth - 1, birthDay);
 
         setUserBirthDay(birthDate);
       }
     }
-  }
+  };
 
   useEffect(() => {
-    console.log("無印useeffecgt")
     // Firebase認証状態を監視
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         // ユーザーが認証されている場合にデータを取得
         await getDocUserDate();
-
       } else {
         console.log("あいあい居合: ユーザーが認証されていません");
       }
@@ -283,17 +286,16 @@ export default function BirthTree() {
   }, [receiveCard]);
 
   useEffect(() => {
-    console.log("authvalue")
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
-        await getDocCardData(user.uid); 
+        await getDocCardData(user.uid);
       } else {
         console.log("ユーザーが認証されていません");
       }
     });
-  
-    return () => unsubscribe(); 
-  }, [authValue]); 
+
+    return () => unsubscribe();
+  }, [authValue]);
 
   // 実行
   return (
@@ -514,13 +516,13 @@ export default function BirthTree() {
                   }}
                 >
                   <Box
-                    sx={{ ...style}}
+                    sx={{ ...style }}
                     className="
                       w-[350px] max-w-[90%] h-[350px] max-h-[40%]
                       p-0 rounded-[20px] outline-none border-2
                       border-mainpink sm:max-h-[50%]"
                   >
-                    <div style={{ height: "100%" ,}}>
+                    <div style={{ height: "100%" }}>
                       <div className="pl-[5%] pr-[5%] h-[15%] ">
                         <div className="w-full h-[100%] flex items-center justify-center pt-[7px] border-b border-dashed border-mainpink">
                           <p className="text-2xl font-aboreto text-textbrawn">
