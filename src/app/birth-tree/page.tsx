@@ -7,7 +7,16 @@ import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
-import {addDoc, collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
+import Backdrop from "@mui/material/Backdrop";
+import {
+  addDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { db, auth } from "../../lib/firebase";
 import { Timestamp } from "firebase/firestore";
 import Snackbar from "@mui/material/Snackbar";
@@ -38,7 +47,7 @@ export default function BirthTree() {
   const [receiveCard, setReceiveCard] = useState<ReceiveCard[]>([]);
   const [displayReceiveCardNum, setDisplayReceiveCardNum] = useState(0);
   const [nickName, setNickName] = useState<string[]>([]);
-  const [photoData,setPhotoData] = useState<string[]>([]);
+  const [photoData, setPhotoData] = useState<string[]>([]);
 
   const handleOpen = (id: string) => {
     setOpenModalId(id);
@@ -266,6 +275,7 @@ export default function BirthTree() {
           </Button>
           <Button
             onClick={receiveCardModalOpen}
+            disableRipple
             style={{
               position: "absolute",
               bottom: 7,
@@ -454,36 +464,95 @@ export default function BirthTree() {
                   onClose={receiveCardModalClose}
                   aria-labelledby="child-modal-title"
                   aria-describedby="child-modal-description"
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                    sx: {
+                      backgroundColor: "rgba(0, 0, 0, 0)",
+                    },
+                  }}
                 >
                   <Box
                     sx={{ ...style }}
                     className="
-                      w-[350px] max-w-[90%] 
+                      w-[350px] max-w-[90%] h-[350px] max-h-[40%]
                       p-0 rounded-[20px] outline-none border-2
                       border-mainpink sm:max-h-[50%]"
                   >
-                    <div className="pl-[5%] pr-[5%] h-[15%]">
-                      <div className="w-full flex items-center justify-center pt-[7px] border-b border-dashed border-mainpink">
-                        <p className="text-2xl font-aboreto text-textbrawn">
-                          HappyBirthday
-                        </p>
+                    <div style={{ height: "100%" }}>
+                      <div className="pl-[5%] pr-[5%] h-[15%] ">
+                        <div className="w-full h-[100%] flex items-center justify-center pt-[7px] border-b border-dashed border-mainpink">
+                          <p className="text-2xl font-aboreto text-textbrawn">
+                            HappyBirthday
+                          </p>
+                        </div>
+                      </div>
+                      <div className="h-[80%] flex pt-[7%] items-center justify-between">
+                        <Button
+                          onClick={cardForwardChange}
+                          className="w-[50px] max-w-[15%] flex-shrink-0 p-0 bg-transparent min-w-[0] hover:bg-transparent border-none"
+                          disableRipple
+                        >
+                          <Image
+                            src="/receiveCardBackButton.svg"
+                            width={30}
+                            height={30}
+                            alt="button"
+                          />
+                        </Button>
+                        {receiveCard.length > 0 ? (
+                          <div
+                            className="
+                              w-[80%] h-full px-[4%] bg-placeholderpink rounded-[10px] 
+                              border-[0.4px] border-textbrawnlight
+                            "
+                          >
+                            <div
+                              className="
+                                w-full h-[30%] flex items-center
+                                border-b-[0.4px] border-dashed border-textbrawnlight
+                              "
+                            >
+                              <Image
+                                src={photoData[displayReceiveCardNum]}
+                                width={50}
+                                height={50}
+                                style={{ maxWidth: "25%" }}
+                                alt="icon"
+                              />
+                              <div className="pl-[5%]">
+                                <p className="font-serif text-xl text-textbrawnlight">
+                                  {nickName[displayReceiveCardNum]}
+                                </p>
+                                <p className="font-serif text-[8px] text-textbrawnlight">
+                                  さんからメッセージが届いています
+                                </p>
+                              </div>
+                            </div>
+                            <div className="py-[6%]">
+                              <p className="text-textbrawnlight text-[10px] leading-5 font-serif">
+                                {receiveCard[displayReceiveCardNum].content}
+                              </p>
+                            </div>
+                          </div>
+                        ) : (
+                          <div>カードがありません</div>
+                        )}
+                        <Button
+                          onClick={cardBackChange}
+                          className="
+                            w-[50px] max-w-[15%] flex-shrink-0 p-0 min-w-0 bg-transparent
+                          "
+                          disableRipple
+                        >
+                          <Image
+                            src="/forwardButton.svg"
+                            width={30}
+                            height={30}
+                            alt="button"
+                          />
+                        </Button>
                       </div>
                     </div>
-                    <Button onClick={cardForwardChange}>進むボタン</Button>
-                    <div className="p-[8%_11%] h-[85%]">
-                      {receiveCard.length > 0 ? (
-                        <div>
-                          <Image src={photoData[displayReceiveCardNum]} width={100} height={100} alt="icon"></Image>
-                          <div>{nickName[displayReceiveCardNum]}から</div>
-                          <div>
-                            {receiveCard[displayReceiveCardNum].content}
-                          </div>
-                        </div>
-                      ) : (
-                        <div>カードがありません</div>
-                      )}
-                    </div>
-                    <Button onClick={cardBackChange}>戻るボタン</Button>
                   </Box>
                 </Modal>
               </>
