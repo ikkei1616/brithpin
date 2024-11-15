@@ -36,7 +36,7 @@ export default function BirthTree() {
   const [friends, setFriends] = useState<FriendSchema[]>([]);
   const [openModalId, setOpenModalId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const { colors, imageSrc } = useColorContext();
+  const { colors, imageSrc, imageMailSrc } = useColorContext();
   
   const [openReceiveModal, setOpenReceiveModal] = useState(false);
   const [receiveCard, setReceiveCard] = useState<ReceiveCard[]>([]);
@@ -281,7 +281,7 @@ export default function BirthTree() {
             }}
           >
             <Image
-              src="/mailBox.svg"
+              src={imageMailSrc}
               alt="mail box"
               width={45}
               height={45}
