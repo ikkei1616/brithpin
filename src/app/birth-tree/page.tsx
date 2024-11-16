@@ -20,6 +20,8 @@ import {
 import { db, auth } from "../../lib/firebase";
 import { Timestamp } from "firebase/firestore";
 import Snackbar from "@mui/material/Snackbar";
+import { useColorContext } from '@/context/ColorContext';
+import { BackgroundWrapper } from "@/components/BackgoundWrapper";
 
 export type FriendSchema = {
   id: string;
@@ -43,6 +45,8 @@ export default function BirthTree() {
   const [friends, setFriends] = useState<FriendSchema[]>([]);
   const [openModalId, setOpenModalId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const { colors, imageSrc, imageMailSrc } = useColorContext();
+
   const [openReceiveModal, setOpenReceiveModal] = useState(false);
   const [receiveCard, setReceiveCard] = useState<ReceiveCard[]>([]);
   const [displayReceiveCardNum, setDisplayReceiveCardNum] = useState(0);
@@ -126,7 +130,6 @@ export default function BirthTree() {
 
       const friendList = await fetchFriends(friendIDList);
 
-      // フレンドリストのデータを保存
       setFriends(friendList);
     })();
   }, [authValue]);
@@ -179,10 +182,9 @@ export default function BirthTree() {
     friendId: string
   ) => {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget);
-
     const message = formData.get("message")?.toString();
-
     const time = Timestamp.now();
 
     if (auth.currentUser?.uid == null) {
@@ -196,7 +198,6 @@ export default function BirthTree() {
       to: friendId,
       createAt: time,
     });
-    console.log("家桁");
   };
 
   //送られてきたカードの情報と枚数の取得
@@ -255,23 +256,29 @@ export default function BirthTree() {
 
   // 実行
   return (
-    <div className="flex w-screen h-screen  justify-center ">
+    <div className="flex w-screen h-screen  justify-center">
       <div className="wapper">
-        <div className="background">
+        <BackgroundWrapper>
           <Button
             onClick={onClickRoute}
+            sx={{
+              "&:hover": {
+                backgroundColor: "transparent",
+                border: 0,
+              },
+            }}
             style={{
               position: "absolute",
               left: 20,
               minWidth: 70,
             }}
           >
-            <Image
-              src="/top-button.svg"
-              alt="Button Image"
-              width={100}
-              height={50}
-            />
+            <div className=" flex items-center justify-center rounded-2xl">
+              <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-7 w-7 flex items-center justify-center mr-2">
+                ◀︎
+              </div>
+              <div className="text-lg text-textbrawnlight font-serif">TOP</div>
+            </div>
           </Button>
           <Button
             onClick={receiveCardModalOpen}
@@ -284,7 +291,7 @@ export default function BirthTree() {
             }}
           >
             <Image
-              src="/mailBox.svg"
+              src={imageMailSrc}
               alt="mail box"
               width={45}
               height={45}
@@ -301,8 +308,8 @@ export default function BirthTree() {
                 <Button
                   key={friend.id}
                   onClick={() => handleOpen(friend.id)}
-                  disableRipple //ボタンをクリックした際に表示されるリップルエフェクト（波紋のようなアニメーション）を無効にします。
-                  disableElevation //ボタンの影や立体感を無効にします。Material UIのボタンにはデフォルトで影が付いている
+                  disableRipple
+                  disableElevation
                   sx={{
                     height: "100px",
                     position: "absolute",
@@ -316,7 +323,7 @@ export default function BirthTree() {
                 >
                   <div>
                     <Image
-                      src="/fukidashi.png"
+                      src={imageSrc}
                       className="hidden-element"
                       alt="吹き出し"
                       style={{
@@ -377,10 +384,11 @@ export default function BirthTree() {
                 >
                   <Box
                     sx={{ ...style }}
+                    style={{ borderColor: colors.bg }}
                     className="
                       w-[350px] max-w-[90%] h-[350px]  max-h-[40%] 
                       p-0 rounded-[20px] outline-none border-2
-                      border-mainpink sm:max-h-[50%]"
+                      sm:max-h-[50%]"
                   >
                     <form
                       action="#"
@@ -392,18 +400,17 @@ export default function BirthTree() {
                       className="h-[100%]"
                     >
                       <div className="pl-[5%] pr-[5%] h-[15%]">
-                        <div className="w-full flex items-center justify-between pt-[7px] border-b border-dashed border-mainpink">
+                        <div style={{ borderColor: colors.bg }} className="w-full flex items-center justify-between pt-[7px] border-b border-dashed">
                           <Button
                             disableRipple
                             className="p-0 bg-[transparent]"
                             onClick={handleClose}
                           >
-                            <Image
-                              src="/card-modal-back-button.svg"
-                              alt="backbutton"
-                              width={30}
-                              height={30}
-                            />
+                            <div className="h-7 flex items-center w-7 justify-center rounded-2xl">
+                              <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-full w-full flex items-center justify-center">
+                                ◀︎
+                              </div>
+                            </div>
                             <p className="text-textbrawn text-sm pl-[7px]">
                               戻る
                             </p>
@@ -419,12 +426,11 @@ export default function BirthTree() {
                             <p className="text-textbrawn text-[sm] pr-[7px]">
                               送信
                             </p>
-                            <Image
-                              src="/CardSendButton.svg"
-                              alt="SendButton"
-                              width={30}
-                              height={30}
-                            />
+                            <div className="h-7 flex items-center w-7 justify-center rounded-2xl">
+                              <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-full w-full flex items-center justify-center">
+                                ✓
+                              </div>
+                            </div>
                           </Button>
                         </div>
                       </div>
@@ -436,6 +442,7 @@ export default function BirthTree() {
                           {friend.name}さんへ
                         </p>
                         <textarea
+                          style={{ borderColor: colors.bg }}
                           id={`message"-${friend.id}`}
                           name="message"
                           rows={6}
@@ -443,7 +450,7 @@ export default function BirthTree() {
                           cols={15}
                           className="
                             w-full h-[70%] mt-[5px] border-2 
-                            border-mainpink rounded-[10px]
+                            rounded-[10px]
                           "
                         ></textarea>
                       </div>
@@ -558,7 +565,7 @@ export default function BirthTree() {
               </>
             );
           })}
-        </div>
+        </BackgroundWrapper>
       </div>
     </div>
   );
