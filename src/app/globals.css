@@ -49,8 +49,8 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: bottom center;
-    max-width: 393px;
-    max-height: 600px;
+    max-width: 100%;
+    max-height: 60vh;
     position: relative;
     bottom: 0;
     width: 100vw;
@@ -58,12 +58,13 @@ body {
   }
   
   .wapper {
-    width: 393px;
-    height: 600px;
     margin: 0 auto;
     position: absolute;
     position: bottom center;
     bottom: 0;
+    @screen lg {
+      width: 40%;
+    }
   }
 
   .friendIcon {
@@ -79,24 +80,90 @@ body {
     @apply bg-customSpecialSpring;
     background-position: left top, right top;
     background-repeat: no-repeat;
-    background-size: auto;
+    background-size: 70vw, 30vw;
+    @screen lg {
+      background-size: 60vw, 20vw;
+    }
+    @screen xl {
+      background-size: 30vw, 10vw;
+    }
   }
   .bg-custom-special-summer {
     @apply bg-customSpecialSummer;
+    background-size: 70vw, 30vw;
     background-position: left top, right top;
     background-repeat: no-repeat;
-    background-size: auto;
+    @screen lg {
+      background-size: 60vw, 20vw;
+    }
+    @screen xl {
+      background-size: 30vw, 10vw;
+    }
   }
   .bg-custom-special-autumn {
     @apply bg-customSpecialAutumn;
     background-position: left top, right top;
     background-repeat: no-repeat;
-    background-size: auto;
+    background-size: 70vw, 30vw;
+    @screen lg {
+      background-size: 60vw, 20vw;
+    }
+    @screen xl {
+      background-size: 30vw, 10vw;
+    }
   }
   .bg-custom-special-winter {
     @apply bg-customSpecialWinter;
     background-position: left top, right top;
     background-repeat: no-repeat;
-    background-size: auto;
+    background-size: 70vw, 30vw;
+    @screen lg {
+      background-size: 60vw, 20vw;
+    }
+    @screen xl {
+      background-size: 30vw, 10vw;
+    }
+  }
+
+  .fukidashi-responsive {
+    position: absolute;
+    top: -10px;
+    pointer-events: none;
+    object-fit: contain;
+    display: block;
+    width: 46px; /* デフォルトの幅 */
+    height: auto;
+    @screen md {
+      width: 50px;
+    }
+  }
+  .text-overlay {
+    @apply font-serif text-textbrawnlight;
+    position: absolute;
+    top: -8px;
+    left: 3px;
+    width: 100%;
+    font-size: 7px;
+  }
+
+  @screen md {
+    .text-overlay {
+      font-size: 8px;
+    }
+  }
+  .profile-image {
+    @apply rounded-lg object-cover;
+
+    width: 120px;
+    height: 120px;
+
+    @screen md {
+      width: 150px;
+      height: 150px;
+    }
+    @screen lg {
+      width: 180px;
+      height: 180px;
+    }
   }
 }

@@ -10,7 +10,7 @@ const CardContainer: React.FC<CardContainerProps> = ({ children }) => {
   const { colors } = useColorContext();
 
   return (
-    <div style={{ borderColor: colors.bg }} className="p-8 max-w-md rounded-3xl border-2 shadow-lg m-5">
+    <div style={{ borderColor: colors.bg }} className="p-6 max-w-md rounded-3xl border-2 shadow-lg m-5">
       {children}
     </div>
   );

@@ -25,50 +25,50 @@ const Footer = () => {
   };
 
   return (
-    <div style={{ borderColor: colors.bg }} className='flex justify-around py-2 border-t border-mainpink'>
+    <div style={{ borderColor: colors.bg }} className='flex justify-around py-4 border-t border-mainpink'>
       <button
         onClick={() => router.push('/account')}
         className="flex flex-col items-center focus:outline-none"
       >
-        <div className="w-20 h-16 flex items-center justify-center">
+        <div className="w-20 h-6 flex items-center justify-center">
           <Image
             src={pathname === '/account' ? getImageSrc("/getuphiyoko") : getImageSrc("/sleephiyoko")}
-            width={76}
-            height={70}
+            width={50}
+            height={46}
             alt="user_img"
           />
         </div>
-        <p className='text-sm font-serif mt-2 text-textbrawnlight'>プロフィール</p>
+        <p className='text-xs font-serif mt-2 text-textbrawnlight'>プロフィール</p>
       </button>
 
       <button
         onClick={() => router.push('/qr')}
         className="flex flex-col items-center focus:outline-none"
       >
-        <div className="w-20 h-16 flex items-center justify-center">
+        <div className="w-20 h-6 flex items-center justify-center">
           <Image
             src={pathname === '/qr' ? getImageSrc("/getuphiyoko") : getImageSrc("/sleephiyoko")}
-            width={76}
-            height={70}
+            width={50}
+            height={46}
             alt="user_img"
           />
         </div>
-        <p className='text-sm font-serif mt-2 text-textbrawnlight'>フレンド追加</p>
+        <p className='text-xs font-serif mt-2 text-textbrawnlight'>フレンド追加</p>
       </button>
 
       <button
         onClick={() => router.push('/birth-tree')}
         className="flex flex-col items-center focus:outline-none"
       >
-        <div className="w-20 h-16 flex items-center justify-center">
+        <div className="w-20 h-6 flex items-center justify-center">
           <Image
             src={pathname === '/birth-tree' ? getImageSrc("/getuphiyoko") : getImageSrc("/sleephiyoko")}
-            width={76}
-            height={70}
+            width={50}
+            height={46}
             alt="user_img"
           />
         </div>
-        <p className='text-sm font-serif mt-2 text-textbrawnlight'>誕生日ツリー</p>
+        <p className='text-xs font-serif mt-2 text-textbrawnlight'>誕生日ツリー</p>
       </button>
     </div>
   );

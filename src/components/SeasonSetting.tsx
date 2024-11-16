@@ -7,20 +7,6 @@ import { Typography } from '@mui/material';
 import { db, auth } from '@/lib/firebase';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #8D6A5F',
-  borderRadius: 8,
-  textAlign: 'center',
-  boxShadow: 24,
-  p: 4,
-};
-
 const lineStyle = {
   borderBottom: '1px solid #cfc7be',
   margin: '10px 0',
@@ -31,6 +17,19 @@ const itemStyle = {
   color: '#8b6f63',
   cursor: 'pointer',
   padding: '10px 0',
+};
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 300,
+  bgcolor: 'background.paper',
+  border: '2px solid #8D6A5F',
+  borderRadius: 8,
+  textAlign: 'center',
+  boxShadow: 24,
+  p: 3,
 };
 
 const SeasonSetting = () => {

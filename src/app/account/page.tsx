@@ -96,8 +96,8 @@ const AccountPage = () => {
                 src={userData.photoURL}
                 alt="Profile Image"
                 width={180}
-                height={180}
-                className="rounded-lg object-cover bg-gray-100"
+                height={100}
+                className="profile-image"
               />
             </div>
           ) : (
