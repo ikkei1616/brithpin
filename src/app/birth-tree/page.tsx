@@ -466,14 +466,15 @@ export default function BirthTree() {
                 >
                   <Box
                     sx={{ ...style }}
+                    style={{ borderColor: colors.bg }}
                     className="
                       w-[350px] max-w-[90%] h-[350px] max-h-[40%]
                       p-0 rounded-[20px] outline-none border-2
-                      border-mainpink sm:max-h-[50%]"
+                      sm:max-h-[50%]"
                   >
                     <div style={{ height: "100%" }}>
                       <div className="pl-[5%] pr-[5%] h-[15%] ">
-                        <div className="w-full h-[100%] flex items-center justify-center pt-[7px] border-b border-dashed border-mainpink">
+                        <div style={{ borderColor: colors.bg }} className="w-full h-[100%] flex items-center justify-center pt-[7px] border-b border-dashed">
                           <p className="text-2xl font-aboreto text-textbrawn">
                             HappyBirthday
                           </p>
@@ -485,12 +486,11 @@ export default function BirthTree() {
                           className="w-[50px] max-w-[15%] flex-shrink-0 p-0 bg-transparent min-w-[0] hover:bg-transparent border-none"
                           disableRipple
                         >
-                          <Image
-                            src="/receiveCardBackButton.svg"
-                            width={30}
-                            height={30}
-                            alt="button"
-                          />
+                          <div className="h-7 flex items-center w-7 justify-center rounded-2xl">
+                            <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-full w-full flex items-center justify-center">
+                              ◀︎
+                            </div>
+                          </div>
                         </Button>
                         {receiveCard.length > 0 ? (
                           <div
@@ -537,12 +537,11 @@ export default function BirthTree() {
                           "
                           disableRipple
                         >
-                          <Image
-                            src="/forwardButton.svg"
-                            width={30}
-                            height={30}
-                            alt="button"
-                          />
+                          <div className="h-7 flex items-center w-7 justify-center rounded-2xl">
+                            <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-full w-full flex items-center justify-center">
+                              ▶︎
+                            </div>
+                          </div>
                         </Button>
                       </div>
                     </div>
