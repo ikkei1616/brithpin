@@ -82,7 +82,7 @@ body {
     background-repeat: no-repeat;
     background-size: 70vw, 30vw;
     @screen md {
-      background-size: 50vw, 20vw;
+      background-size: 70vw, 30vw;
     }
     @screen lg {
       background-size: 25vw, 10vw;
@@ -94,7 +94,7 @@ body {
     background-position: left top, right top;
     background-repeat: no-repeat;
     @screen md {
-      background-size: 50vw, 20vw;
+      background-size: 70vw, 30vw;
     }
     @screen lg {
       background-size: 25vw, 10vw;
@@ -106,7 +106,7 @@ body {
     background-repeat: no-repeat;
     background-size: auto;
     @screen md {
-      background-size: 50vw, 20vw;
+      background-size: 70vw, 30vw;
     }
     @screen lg {
       background-size: 25vw, 10vw;
@@ -118,7 +118,7 @@ body {
     background-repeat: no-repeat;
     background-size: auto;
     @screen md {
-      background-size: 50vw, 20vw;
+      background-size: 70vw, 30vw;
     }
     @screen lg {
       background-size: 25vw, 10vw;
@@ -149,6 +149,21 @@ body {
   @screen md {
     .text-overlay {
       font-size: 8px;
+    }
+  }
+  .profile-image {
+    @apply rounded-lg object-cover;
+
+    width: 120px;
+    height: 120px;
+
+    @screen sm {
+      width: 150px;
+      height: 150px;
+    }
+    @screen md {
+      width: 180px;
+      height: 180px;
     }
   }
 }

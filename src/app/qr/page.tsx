@@ -1,103 +1,101 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import Footer from '../components/Footer';
-import { useRouter } from 'next/navigation';
-import { QRCodeSVG } from 'qrcode.react';
-import { db, auth } from '../../lib/firebase';
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from 'firebase/firestore';
 import { useColorContext } from '@/context/ColorContext';
+import { doc, getDoc } from "firebase/firestore";
+import { db, auth } from "../../lib/firebase";
+import React from "react";
+import Footer from "../components/Footer";
+import { useEffect, useState } from "react";
+import CardContainer from "../components/CardContainer";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { SeasonSetting } from '@/components/SeasonSetting';
+import { QRCodeSVG } from 'qrcode.react';
+import { onAuthStateChanged } from 'firebase/auth';
 
-const QrPage = () => {
-  const [userId, setUserId] = useState<string>("");
-  const [uid, setUid] = useState<string | null>(null);
-  const [nickname, setNickname] = useState<string | null>(null);
-  const [birthYear, setBirthYear] = useState<number | null>(null);
-  const [birthMonth, setBirthMonth] = useState<number | null>(null);
-  const [birthDay, setBirthDay] = useState<number | null>(null);
-  const router = useRouter();
+interface User {
+  nickname: string;
+  birthDay: number;
+  birthMonth: number;
+  birthYear: number;
+  gender: number;
+  photoURL: string;
+}
+const AccountPage = () => {
+  const [userData, setUserData] = useState<User | undefined>(undefined);
   const { colors } = useColorContext();
+  const [uid, setUid] = useState<string | null>(null);
 
+  const getDocData = async (uid: string) => {
+    const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const docSnapData = docSnap.data();
+      const formatUserData: User = {
+        nickname: docSnapData.nickname,
+        birthDay: docSnapData.birthDay,
+        birthMonth: docSnapData.birthMonth,
+        birthYear: docSnapData.birthYear,
+        gender: docSnapData.gender,
+        photoURL: docSnapData.photoURL,
+      };
+      setUserData(formatUserData);
+    } else {
+      console.log("No such document!");
+    }
+  };
+  
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    // Firebase認証状態を監視
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
+        // ユーザーが認証されている場合にデータを取得
         setUid(user.uid);
-        await fetchUserData(user.uid);
+        getDocData(user.uid);
       } else {
-        setUid(null);
+        console.log("あいあい居合: ユーザーが認証されていません");
       }
     });
 
-    return () => unsubscribe();
+    return () => unsubscribe(); // クリーンアップのために監視を解除
   }, []);
 
-  const fetchUserData = async (uid: string) => {
-    try {
-      const docRef = doc(db, "users", uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setNickname(data.nickname);
-        setBirthYear(data.birthYear);
-        setBirthMonth(data.birthMonth);
-        setBirthDay(data.birthDay);
-      } else {
-        console.log("ユーザーデータが存在しません");
-      }
-    } catch (error) {
-      console.log("データ取得エラー:", error);
-    }
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newId = event.currentTarget.value;
-    setUserId(newId);
-  };
-
-  const getSearch = () => {
-    if (userId.trim() !== "") {
-      router.push(`add-friend/${userId}`);
-    } else {
-      console.log('Please enter a valid user ID.');
-    }
-  };
-
   return (
-    <div className='h-screen flex relative flex-col items-center'>
-      <div className='h-screen w-11/12 flex justify-center'>
-        <div className="flex flex-col items-center justify-center h-[85%] mt-28">
-          <div style={{ borderColor: colors.bg }} className='max-w-md rounded-3xl border-2 shadow-lg px-16 py-3'>
-            <div style={{ borderColor: colors.bg }} className='text-center text-2xl text-textbrawn font-aboreto border-b border-dashed py-2'>
-              <span>PROFILE</span>
-            </div>
-            <div className="mt-3">
-              {nickname && (
-                <div className="text-base font-serif text-textbrawnlight text-center mb-3">
-                  {nickname}
-                </div>
-              )}
-              {birthYear && birthMonth && birthDay && (
-                <div className="text-base font-serif text-textbrawnlight text-center mb-3">
-                  {birthYear}/{birthMonth}/{birthDay}
-                </div>
-              )}
-            </div>
-            <div className="flex justify-center items-center my-4">
-              <div className="flex flex-col items-center justify-center px-3 pb-3rounded-md">
+    <div className="h-screen flex items-center justify-center pt-6">
+      <CardContainer>
+        <div style={{ borderColor: colors.bg }} className="flex justify-between items-center text-2xl text-textbrawnlight font-bold mb-0 font-serif border-b border-dashed pb-4 w-full">
+          <div className="w-2/5">
+          </div>
+          <div className="flex justify-center w-full">PROFILE</div>
+          <div className="w-2/5 flex justify-between items-center">
+          </div>
+        </div>
+        <div className="text-center">
+          {userData?.nickname && (
+            <p className="text-lg font-serif text-textbrawnlight mb-1 w-72">
+              {userData.nickname}
+            </p>
+          )}
+          {userData?.birthYear && userData.birthMonth && userData.birthDay && (
+            <p className="text-md font-serif text-textbrawnlight mb-4">
+              {userData.birthYear}/{userData.birthMonth}/{userData.birthDay}
+            </p>
+          )}
+          {userData?.photoURL ? (
+            <div className="flex justify-center">
+              <div className="profile-image">
                 <QRCodeSVG value={`https://brithpin.vercel.app/add-friend/${uid || "default"}`} size={120} />
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="w-36 h-36 bg-gray-200 rounded-lg mx-auto"></div>
+          )}
         </div>
-      </div>
-      {/* フッター部分を固定して浮かせる */}
-      <div className="w-full absolute bottom-0">
+      </CardContainer>
+      <div className="fixed bottom-0 w-full">
         <Footer />
       </div>
     </div>
-
   );
-}
+};
 
-export default QrPage;
+export default AccountPage;
