@@ -82,7 +82,7 @@ const AccountPage = () => {
           )}
           {userData?.photoURL ? (
             <div className="flex justify-center">
-              <div className="profile-image">
+              <div className="profile-image flex justify-center items-center">
                 <QRCodeSVG value={`https://brithpin.vercel.app/add-friend/${uid || "default"}`} size={120} />
               </div>
             </div>

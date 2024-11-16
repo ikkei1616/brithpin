@@ -157,11 +157,11 @@ body {
     width: 120px;
     height: 120px;
 
-    @screen sm {
+    @screen md {
       width: 150px;
       height: 150px;
     }
-    @screen md {
+    @screen lg {
       width: 180px;
       height: 180px;
     }
