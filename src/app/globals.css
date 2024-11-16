@@ -81,9 +81,6 @@ body {
     background-position: left top, right top;
     background-repeat: no-repeat;
     background-size: 70vw, 30vw;
-    @screen md {
-      background-size: 70vw, 30vw;
-    }
     @screen lg {
       background-size: 25vw, 10vw;
     }
@@ -93,9 +90,6 @@ body {
     background-size: 70vw, 30vw;
     background-position: left top, right top;
     background-repeat: no-repeat;
-    @screen md {
-      background-size: 70vw, 30vw;
-    }
     @screen lg {
       background-size: 25vw, 10vw;
     }
@@ -104,10 +98,7 @@ body {
     @apply bg-customSpecialAutumn;
     background-position: left top, right top;
     background-repeat: no-repeat;
-    background-size: auto;
-    @screen md {
-      background-size: 70vw, 30vw;
-    }
+    background-size: 70vw, 30vw;
     @screen lg {
       background-size: 25vw, 10vw;
     }
@@ -116,10 +107,7 @@ body {
     @apply bg-customSpecialWinter;
     background-position: left top, right top;
     background-repeat: no-repeat;
-    background-size: auto;
-    @screen md {
-      background-size: 70vw, 30vw;
-    }
+    background-size: 70vw, 30vw;
     @screen lg {
       background-size: 25vw, 10vw;
     }
