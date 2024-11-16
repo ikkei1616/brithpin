@@ -323,7 +323,7 @@ export default function BirthTree() {
                 >
                   <div>
                     <Image
-                      src="/fukidashi.png"
+                      src={imageSrc}
                       className="fukidashi-responsive hidden-element"
                       alt="吹き出し"
                       width={100}

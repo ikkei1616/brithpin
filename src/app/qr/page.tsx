@@ -6,11 +6,7 @@ import React from "react";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import CardContainer from "../components/CardContainer";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { SeasonSetting } from '@/components/SeasonSetting';
 import { QRCodeSVG } from 'qrcode.react';
-import { onAuthStateChanged } from 'firebase/auth';
 
 interface User {
   nickname: string;

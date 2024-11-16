@@ -4,7 +4,6 @@ import { db, auth } from "../../../lib/firebase";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import CardContainer from "@/app/components/CardContainer";
 import CardTitle from "@/app/components/CardTitle";
 import { useColorContext } from "@/context/ColorContext";
 
