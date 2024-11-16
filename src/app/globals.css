@@ -81,6 +81,12 @@ body {
     background-position: left top, right top;
     background-repeat: no-repeat;
     background-size: auto;
+    @screen md {
+      background-size: 50vw, 20vw;
+    }
+    @screen lg {
+      background-size: 25vw, 10vw;
+    }
   }
   .bg-custom-special-summer {
     @apply bg-customSpecialSummer;
@@ -99,11 +105,50 @@ body {
     background-position: left top, right top;
     background-repeat: no-repeat;
     background-size: auto;
+    @screen md {
+      background-size: 50vw, 20vw;
+    }
+    @screen lg {
+      background-size: 25vw, 10vw;
+    }
   }
   .bg-custom-special-winter {
     @apply bg-customSpecialWinter;
     background-position: left top, right top;
     background-repeat: no-repeat;
     background-size: auto;
+    @screen md {
+      background-size: 50vw, 20vw;
+    }
+    @screen lg {
+      background-size: 25vw, 10vw;
+    }
+  }
+
+  .fukidashi-responsive {
+    position: absolute;
+    top: -10px;
+    pointer-events: none;
+    object-fit: contain;
+    display: block;
+    width: 46px; /* デフォルトの幅 */
+    height: auto;
+    @screen md {
+      width: 50px;
+    }
+  }
+  .text-overlay {
+    @apply font-serif text-textbrawnlight;
+    position: absolute;
+    top: -8px;
+    left: 3px;
+    width: 100%;
+    font-size: 7px;
+  }
+
+  @screen md {
+    .text-overlay {
+      font-size: 8px;
+    }
   }
 }

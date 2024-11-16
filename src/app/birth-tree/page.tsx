@@ -323,17 +323,11 @@ export default function BirthTree() {
                 >
                   <div>
                     <Image
-                      src={imageSrc}
-                      className="hidden-element"
+                      src="/fukidashi.png"
+                      className="fukidashi-responsive hidden-element"
                       alt="吹き出し"
-                      style={{
-                        position: "absolute",
-                        top: -50,
-                        minWidth: 70,
-                        pointerEvents: "none",
-                      }}
-                      height={100}
                       width={100}
+                      height={100}
                     />
                     {/* 誕生日の場合にだけ hiyoko.svg を表示 */}
                     {friend.isBirthDayToday && (
@@ -349,15 +343,7 @@ export default function BirthTree() {
                       />
                     )}
                     <div
-                      className="font-serif text-textbrawnlight"
-                      style={{
-                        position: "absolute",
-                        top: -43,
-                        left: 9,
-                        width: "100%",
-                        textAlign: "center",
-                        fontSize: "10px",
-                      }}
+                      className="font-serif text-overlay"
                     >
                       {`${friend.birthMonth} / ${friend.birthDay}`}
                       <br />
@@ -366,8 +352,8 @@ export default function BirthTree() {
                     <Image
                       src={friend.photoURL}
                       alt={`${friend.name}のアイコン`}
-                      width={50}
-                      height={50}
+                      width={40}
+                      height={40}
                       className="styles.friendIcon hiyoko-active"
                       style={{
                         clipPath: `circle(50% at 50% 50%)`,
