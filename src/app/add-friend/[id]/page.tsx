@@ -105,7 +105,7 @@ const IdSearch = ({ params }: { params: { id: string } }) => {
           <button
             style={{ borderColor: colors.bg, color: colors.bg }}
             className="flex justify-center items-center radius-lg rounded-lg p-2 border w-full text-color text-sm"
-            onClick={handleClickButton}
+            onClick={backToTree}
           >
             キャンセル
           </button>
