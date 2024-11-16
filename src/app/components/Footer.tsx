@@ -25,7 +25,7 @@ const Footer = () => {
   };
 
   return (
-    <div style={{ borderColor: colors.bg }} className='flex justify-around py-2 border-t border-mainpink'>
+    <div style={{ borderColor: colors.bg }} className='flex justify-around py-4 border-t border-mainpink'>
       <button
         onClick={() => router.push('/account')}
         className="flex flex-col items-center focus:outline-none"
