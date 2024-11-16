@@ -66,7 +66,7 @@ export const ProfileForm = () => {
       });
 
       setError(null);
-      router.push('/qr');
+      router.push('/birth-tree');
     } catch (error) {
       setError("データの保存に失敗しました。もう一度お試しください。");
       console.log("エラーが発生しました", error);
