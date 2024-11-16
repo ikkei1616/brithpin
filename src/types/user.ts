@@ -1,5 +1,6 @@
 export type User = {
   id: string;
   name: string;
-  photoURL: string;
+  photoURL?: string;
+  birthMonth?: number;
 };

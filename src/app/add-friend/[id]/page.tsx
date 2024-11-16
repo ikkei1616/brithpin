@@ -1,12 +1,13 @@
 "use client";
 import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
-import { db, auth } from "../../../lib/firebase";
+import { db } from "../../../lib/firebase";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Footer from "@/app/components/Footer";
 import CardContainer from "@/app/components/CardContainer";
 import CardTitle from "@/app/components/CardTitle";
+import { useAuth } from "@/context/auth";
 
 interface User {
   nickname: string;
@@ -18,47 +19,56 @@ interface User {
 }
 
 const IdSearch = ({ params }: { params: { id: string } }) => {
-  const [userId] = useState<string>(params.id);
-  const [userData, setUserData] = useState<User | undefined>(undefined);
+  const [friendData, setFriendData] = useState<User | undefined>(undefined);
   const router = useRouter();
-
-  const getDocData = async (id: string) => {
-    const docRef = doc(db, "users", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      const docSnapData = docSnap.data();
-      const formatUserData: User = {
-        nickname: docSnapData.nickname,
-        birthDay: docSnapData.birthDay,
-        birthMonth: docSnapData.birthMonth,
-        birthYear: docSnapData.birthYear,
-        gender: docSnapData.gender,
-        photoURL: docSnapData.photoURL,
-      };
-      setUserData(formatUserData);
-    } else {
-      console.log("No such document!");
-    }
-  };
+  const auth = useAuth();
+  const friendId = params.id;
 
   useEffect(() => {
-    getDocData(userId);
-  }, [userId]);
-
-  const handleClickButton = async () => {
-    if (auth.currentUser === null) {
-      return;
+    if (auth === undefined) return;
+    if (auth === null) {
+      alert("ログインしてからもう一度お試しください");
+      router.push("/");
     }
-    const currentUserdocRef = doc(db, "users", auth.currentUser.uid);
-    const targetUserDocRef = doc(db, "users", userId);
-    await updateDoc(currentUserdocRef, {
-      friends: arrayUnion(userId),
-    });
-    await updateDoc(targetUserDocRef, {
-      friends: arrayUnion(auth.currentUser.uid),
-    });
-    router.push("/birth-tree");
+  }, [auth, router]);
+
+  useEffect(() => {
+    const fetchFriendData = async (id: string) => {
+      try {
+        const friendRef = doc(db, "users", id);
+        const friendDoc = await getDoc(friendRef);
+        if (friendDoc.exists()) {
+          setFriendData(friendDoc.data() as User);
+        } else {
+          console.error("Friend data not found.");
+        }
+      } catch (error) {
+        console.error("Error fetching friend data:", error);
+      }
+    };
+
+    if (friendId) fetchFriendData(friendId);
+  }, [friendId]);
+
+  const handleAddFriend = async () => {
+    if (!auth) return;
+
+    try {
+      const authRef = doc(db, "users", auth.id);
+      const friendRef = doc(db, "users", friendId);
+
+      await updateDoc(authRef, {
+        friends: arrayUnion(friendId),
+      });
+
+      await updateDoc(friendRef, {
+        friends: arrayUnion(auth.id),
+      });
+
+      router.push("/birth-tree");
+    } catch (error) {
+      console.error("Error adding friend:", error);
+    }
   };
 
   return (
@@ -66,22 +76,24 @@ const IdSearch = ({ params }: { params: { id: string } }) => {
       <CardContainer>
         <CardTitle title="FRIEND" />
         <div className="mt-3">
-          {userData?.nickname && (
+          {friendData?.nickname && (
             <div className="text-base font-serif text-textbrawnlight text-center mb-3">
-              {userData.nickname}
+              {friendData.nickname}
             </div>
           )}
-          {userData?.birthYear && userData.birthMonth && userData.birthDay && (
-            <div className="text-base font-serif text-textbrawnlight text-center mb-3">
-              {userData.birthYear}/{userData.birthMonth}/{userData.birthDay}
-            </div>
-          )}
+          {friendData?.birthYear &&
+            friendData.birthMonth &&
+            friendData.birthDay && (
+              <div className="text-base font-serif text-textbrawnlight text-center mb-3">
+                {friendData.birthYear}/{friendData.birthMonth}/{friendData.birthDay}
+              </div>
+            )}
         </div>
         <div className="flex justify-center items-center my-4">
-          {userData?.photoURL && (
+          {friendData?.photoURL && (
             <div className="flex flex-col items-center justify-center p-4 bg-white rounded-md">
               <Image
-                src={userData.photoURL}
+                src={friendData.photoURL}
                 alt="Profile Image"
                 width={120}
                 height={120}
@@ -91,7 +103,7 @@ const IdSearch = ({ params }: { params: { id: string } }) => {
           )}
         </div>
         <div className="flex justify-center items-center bg-mainpink radius-lg rounded-lg p-2">
-          <button className="text-color text-sm " onClick={handleClickButton}>
+          <button className="text-color text-sm" onClick={handleAddFriend}>
             友達追加
           </button>
         </div>
