@@ -4,9 +4,9 @@ import { db, auth } from "../../../lib/firebase";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Footer from "@/app/components/Footer";
 import CardContainer from "@/app/components/CardContainer";
 import CardTitle from "@/app/components/CardTitle";
+import { useColorContext } from "@/context/ColorContext";
 
 interface User {
   nickname: string;
@@ -21,6 +21,7 @@ const IdSearch = ({ params }: { params: { id: string } }) => {
   const [userId] = useState<string>(params.id);
   const [userData, setUserData] = useState<User | undefined>(undefined);
   const router = useRouter();
+  const { colors } = useColorContext();
 
   const getDocData = async (id: string) => {
     const docRef = doc(db, "users", id);
@@ -42,6 +43,10 @@ const IdSearch = ({ params }: { params: { id: string } }) => {
     }
   };
 
+  const backToTree = () => {
+    router.push("/birth-tree");
+  }
+
   useEffect(() => {
     getDocData(userId);
   }, [userId]);
@@ -62,17 +67,17 @@ const IdSearch = ({ params }: { params: { id: string } }) => {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-around pt-4">
-      <CardContainer>
+    <div className="h-screen flex items-center justify-center pt-40">
+      <div style={{ borderColor: colors.bg }} className="p-6 max-w-md rounded-3xl border-2 shadow-lg m-5 w-full mx-auto">
         <CardTitle title="FRIEND" />
-        <div className="mt-3">
+        <div className="mt-3 text-center">
           {userData?.nickname && (
-            <div className="text-base font-serif text-textbrawnlight text-center mb-3">
+            <div className="text-base font-serif text-textbrawnlight mb-3">
               {userData.nickname}
             </div>
           )}
           {userData?.birthYear && userData.birthMonth && userData.birthDay && (
-            <div className="text-base font-serif text-textbrawnlight text-center mb-3">
+            <div className="text-base font-serif text-textbrawnlight mb-3">
               {userData.birthYear}/{userData.birthMonth}/{userData.birthDay}
             </div>
           )}
@@ -90,16 +95,25 @@ const IdSearch = ({ params }: { params: { id: string } }) => {
             </div>
           )}
         </div>
-        <div className="flex justify-center items-center bg-mainpink radius-lg rounded-lg p-2">
-          <button className="text-color text-sm " onClick={handleClickButton}>
+        <div className="space-y-4">
+          <button
+            style={{ background: colors.bg }}
+            className="flex justify-center items-center radius-lg rounded-lg p-2 w-full text-color text-sm"
+            onClick={handleClickButton}
+          >
             友達追加
           </button>
+          <button
+            style={{ borderColor: colors.bg, color: colors.bg }}
+            className="flex justify-center items-center radius-lg rounded-lg p-2 border w-full text-color text-sm"
+            onClick={handleClickButton}
+          >
+            キャンセル
+          </button>
         </div>
-      </CardContainer>
-      <div className="w-full absolute bottom-0">
-        <Footer />
       </div>
     </div>
+
   );
 };
 
