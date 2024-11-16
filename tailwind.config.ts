@@ -21,7 +21,10 @@ const config: Config = {
         customSpecialWinter: "url('/birthpinwinter.svg'), url('/textspecialday.svg')",
       },
       screens: {
-        sm: "321px",
+        'xs': '375px',
+        'md': '431px',
+        'lg': '767px',
+        'xl': '1023px',
       },
     },
 

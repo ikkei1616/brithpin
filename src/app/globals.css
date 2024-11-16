@@ -49,8 +49,8 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: bottom center;
-    max-width: 393px;
-    max-height: 600px;
+    max-width: 100%;
+    max-height: 60vh;
     position: relative;
     bottom: 0;
     width: 100vw;
@@ -58,12 +58,13 @@ body {
   }
   
   .wapper {
-    width: 393px;
-    height: 600px;
     margin: 0 auto;
     position: absolute;
     position: bottom center;
     bottom: 0;
+    @screen lg {
+      width: 40%;
+    }
   }
 
   .friendIcon {
@@ -83,9 +84,15 @@ body {
   }
   .bg-custom-special-summer {
     @apply bg-customSpecialSummer;
+    background-size: 70vw, 30vw;
     background-position: left top, right top;
     background-repeat: no-repeat;
-    background-size: auto;
+    @screen md {
+      background-size: 50vw, 20vw;
+    }
+    @screen lg {
+      background-size: 25vw, 10vw;
+    }
   }
   .bg-custom-special-autumn {
     @apply bg-customSpecialAutumn;
