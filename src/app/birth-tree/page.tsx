@@ -466,7 +466,7 @@ export default function BirthTree() {
                       </div>
                       <div className="p-[8%_11%] h-[85%]">
                         <h2 className="text-center text-textbrawn font-serif">
-                          お祝いメッセージを入力してね
+                          お祝いメッセージを入力
                         </h2>
                         <p className="mt-[3%] text-textbrawn text-[xs] font-serif">
                           {friend.name}さんへ
