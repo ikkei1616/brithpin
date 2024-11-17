@@ -45,7 +45,7 @@ export async function GET() {
   try {
     const today = new Date();
     const hundredDaysLater = new Date();
-    hundredDaysLater.setDate(today.getDate() + 364);
+    hundredDaysLater.setDate(today.getDate() + 10);
 
     const usersSnapshot = await db.collection("users").get();
     let usersData: User[] = usersSnapshot.docs.map((doc) => ({
