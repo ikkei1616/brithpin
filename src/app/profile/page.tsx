@@ -16,7 +16,7 @@ const ProfilePage = () => {
     }
   }, [user, router]);
   return (
-    <div className='h-screen flex items-center justify-center pt-6'>
+    <div className='h-screen flex items-center justify-center pt-28'>
       <div>
         <ProfileForm />
       </div>

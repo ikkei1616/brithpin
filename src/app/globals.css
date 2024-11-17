@@ -80,7 +80,7 @@ body {
     @apply bg-customSpecialSpring;
     background-position: left top, right top;
     background-repeat: no-repeat;
-    background-size: 70vw, 30vw;
+    background-size: 60vw, 25vw;
     @screen lg {
       background-size: 60vw, 20vw;
     }
