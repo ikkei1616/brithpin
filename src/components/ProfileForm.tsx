@@ -8,6 +8,7 @@ import CardContainer from '../../src/app/components/CardContainer';
 import { useRouter } from 'next/navigation';
 import FileUploader from './FileUploader';
 import { z } from 'zod';
+import { useColorContext } from '@/context/ColorContext';
 
 const birthDateSchema = z
   .object({
@@ -22,6 +23,7 @@ const birthDateSchema = z
   }, "実在する日付を入力してください");
 
 export const ProfileForm = () => {
+  const { colors } = useColorContext();
   const [photoURL, setphotoURL] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -64,7 +66,7 @@ export const ProfileForm = () => {
       });
 
       setError(null);
-      router.push('/qr');
+      router.push('/birth-tree');
     } catch (error) {
       setError("データの保存に失敗しました。もう一度お試しください。");
       console.log("エラーが発生しました", error);
@@ -96,7 +98,7 @@ export const ProfileForm = () => {
               type='submit'
               className="h-full rounded-lg text-base"
             />
-            <div className="transform bg-pin text-color rounded-full bg-mainpink h-6 w-6 flex items-center">
+            <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-6 w-6 flex items-center">
               ✓
             </div>
           </div>
@@ -116,7 +118,8 @@ export const ProfileForm = () => {
                 <label className="block text-xs font-serif text-textbrawnlight">あだ名</label>
               </div>
               <input
-                className="border-2 border-mainpinklight rounded-lg p-2 w-full text-textbrawnlight"
+                style={{ borderColor: colors.bg }}
+                className="border-2 rounded-lg p-2 w-full text-textbrawnlight"
                 aria-label="nickname"
                 name="nickname"
                 type="text"
@@ -128,21 +131,24 @@ export const ProfileForm = () => {
               </div>
               <div className="flex space-x-2">
                 <input
-                  className="border-2 border-mainpinklight rounded-lg p-2 w-1/3 text-textbrawnlight"
+                  style={{ borderColor: colors.bg }}
+                  className="border-2  rounded-lg p-2 w-1/3 text-textbrawnlight"
                   aria-label="birthYear"
                   name="birthYear"
                   type="number"
                 />
                 <div className='self-center text-xs font-serif text-textbrawnlight'>年</div>
                 <input
-                  className="border-2 border-mainpinklight rounded-lg p-2 w-1/5 text-textbrawnlight"
+                  style={{ borderColor: colors.bg }}
+                  className="border-2 rounded-lg p-2 w-1/5 text-textbrawnlight"
                   aria-label="birthMonth"
                   name="birthMonth"
                   type="number"
                 />
                 <div className='self-center text-xs font-serif text-textbrawnlight'>月</div>
                 <input
-                  className="border-2 border-mainpinklight rounded-lg p-2 w-1/5 text-textbrawnlight"
+                  style={{ borderColor: colors.bg }}
+                  className="border-2 rounded-lg p-2 w-1/5 text-textbrawnlight"
                   aria-label="birthDay"
                   name="birthDay"
                   type="number"
@@ -164,7 +170,7 @@ export const ProfileForm = () => {
                     name="gender"
                     type="radio"
                   />
-                  <div className="w-5/6 h-10 border-2 border-mainpinklight rounded-lg flex items-center justify-center peer-checked:bg-orange-500 peer-checked:text-white peer-checked:border-mainpink">
+                  <div style={{ borderColor: colors.bg }} className="w-5/6 h-10 border-2 rounded-lg flex items-center justify-center peer-checked:bg-orange-500 peer-checked:text-white peer-checked:border-mainpink">
                     <span className="text-center font-serif text-xs text-textbrawnlight">男性</span>
                   </div>
                 </label>
@@ -176,7 +182,7 @@ export const ProfileForm = () => {
                     name="gender"
                     type="radio"
                   />
-                  <div className="w-5/6 h-10 border-2 border-mainpinklight rounded-lg flex items-center justify-center peer-checked:bg-orange-500 peer-checked:text-white peer-checked:border-mainpink">
+                  <div style={{ borderColor: colors.bg }} className="w-5/6 h-10 border-2 rounded-lg flex items-center justify-center peer-checked:bg-orange-500 peer-checked:text-white peer-checked:border-mainpink">
                     <span className="text-center font-serif text-xs text-textbrawnlight">女性</span>
                   </div>
                 </label>
@@ -188,7 +194,7 @@ export const ProfileForm = () => {
                     name="gender"
                     type="radio"
                   />
-                  <div className="w-5/6 h-10 border-2 border-mainpinklight rounded-lg flex items-center justify-center peer-checked:bg-orange-500 peer-checked:text-white peer-checked:border-mainpink">
+                  <div style={{ borderColor: colors.bg }} className="w-5/6 h-10 border-2 rounded-lg flex items-center justify-center peer-checked:bg-orange-500 peer-checked:text-white peer-checked:border-mainpink">
                     <span className="text-center font-serif text-xs text-textbrawnlight">その他</span>
                   </div>
                 </label>

@@ -7,10 +7,21 @@ import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
-import {addDoc, collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
+import Backdrop from "@mui/material/Backdrop";
+import {
+  addDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { db, auth } from "../../lib/firebase";
 import { Timestamp } from "firebase/firestore";
 import Snackbar from "@mui/material/Snackbar";
+import { useColorContext } from '@/context/ColorContext';
+import { BackgroundWrapper } from "@/components/BackgoundWrapper";
 
 export type FriendSchema = {
   id: string;
@@ -34,11 +45,15 @@ export default function BirthTree() {
   const [friends, setFriends] = useState<FriendSchema[]>([]);
   const [openModalId, setOpenModalId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const { colors, imageSrc, imageMailSrc } = useColorContext();
+
   const [openReceiveModal, setOpenReceiveModal] = useState(false);
   const [receiveCard, setReceiveCard] = useState<ReceiveCard[]>([]);
   const [displayReceiveCardNum, setDisplayReceiveCardNum] = useState(0);
   const [nickName, setNickName] = useState<string[]>([]);
-  const [photoData,setPhotoData] = useState<string[]>([]);
+  const [photoData, setPhotoData] = useState<string[]>([]);
+  const [userBirthDay, setUserBirthDay] = useState<Date>();
+  const today = new Date();
 
   const handleOpen = (id: string) => {
     setOpenModalId(id);
@@ -117,7 +132,6 @@ export default function BirthTree() {
 
       const friendList = await fetchFriends(friendIDList);
 
-      // フレンドリストのデータを保存
       setFriends(friendList);
     })();
   }, [authValue]);
@@ -170,10 +184,9 @@ export default function BirthTree() {
     friendId: string
   ) => {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget);
-
     const message = formData.get("message")?.toString();
-
     const time = Timestamp.now();
 
     if (auth.currentUser?.uid == null) {
@@ -187,23 +200,36 @@ export default function BirthTree() {
       to: friendId,
       createAt: time,
     });
-    console.log("家桁");
   };
 
   //送られてきたカードの情報と枚数の取得
   const getDocCardData = async (uid: string) => {
-    const cardQuery = query(collection(db, "cards"), where("to", "==", uid));
-    const cardSnapShot = await getDocs(cardQuery);
-
-    const cardList = cardSnapShot.docs.map((cardDoc) => ({
-      author: cardDoc.data().author,
-      content: cardDoc.data().content,
-      createAt: cardDoc.data().createAt,
-      to: cardDoc.data().to,
-    }));
-    setReceiveCard(cardList);
-
-    console.log("これがカードリストの長さ" + cardList.length);
+    if (userBirthDay) {
+      const cardQuery = query(collection(db, "cards"), where("to", "==", uid));
+      const cardSnapShot = await getDocs(cardQuery);
+      const birthLimit = new Date(userBirthDay);
+      const oneMonthLimit = new Date(userBirthDay);
+      oneMonthLimit.setFullYear(today.getFullYear());
+      birthLimit.setFullYear(today.getFullYear());
+      oneMonthLimit.setMonth(userBirthDay.getMonth() + 1);
+      oneMonthLimit.setDate(userBirthDay.getDate() + 1);
+      const cardList = cardSnapShot.docs
+        .filter(
+          (cardDoc) =>
+            cardDoc.data().createAt.toDate().getFullYear() ===
+              today?.getFullYear() &&
+            oneMonthLimit >= today &&
+            today >= birthLimit
+        )
+        .map((cardDoc) => ({
+          author: cardDoc.data().author,
+          content: cardDoc.data().content,
+          createAt: cardDoc.data().createAt,
+          to: cardDoc.data().to,
+        }));
+      setReceiveCard(cardList);
+      console.log("これがカードリストの長さ" + cardList.length);
+    }
   };
 
   const getDocAuthorData = async () => {
@@ -227,12 +253,28 @@ export default function BirthTree() {
     setPhotoData([...newPhotoData]);
   };
 
+  const getDocUserDate = async () => {
+    if (auth.currentUser) {
+      const docUserRef = doc(db, "users", auth.currentUser.uid);
+      const docUserSnap = await getDoc(docUserRef);
+
+      if (docUserSnap.exists()) {
+        const birthDay = docUserSnap.data().birthDay;
+        const birthMonth = docUserSnap.data().birthMonth;
+        const birthYear = docUserSnap.data().birthYear;
+        const birthDate = new Date(birthYear, birthMonth - 1, birthDay);
+
+        setUserBirthDay(birthDate);
+      }
+    }
+  };
+
   useEffect(() => {
     // Firebase認証状態を監視
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         // ユーザーが認証されている場合にデータを取得
-        getDocCardData(user.uid);
+        await getDocUserDate();
       } else {
         console.log("あいあい居合: ユーザーが認証されていません");
       }
@@ -244,28 +286,47 @@ export default function BirthTree() {
     getDocAuthorData();
   }, [receiveCard]);
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        await getDocCardData(user.uid);
+      } else {
+        console.log("ユーザーが認証されていません");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [authValue]);
+
   // 実行
   return (
-    <div className="flex w-screen h-screen  justify-center ">
+    <div className="flex w-screen h-screen  justify-center">
       <div className="wapper">
-        <div className="background">
+        <BackgroundWrapper>
           <Button
             onClick={onClickRoute}
+            sx={{
+              "&:hover": {
+                backgroundColor: "transparent",
+                border: 0,
+              },
+            }}
             style={{
               position: "absolute",
               left: 20,
               minWidth: 70,
             }}
           >
-            <Image
-              src="/top-button.svg"
-              alt="Button Image"
-              width={100}
-              height={50}
-            />
+            <div className=" flex items-center justify-center rounded-2xl">
+              <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-7 w-7 flex items-center justify-center mr-2">
+                ◀︎
+              </div>
+              <div className="text-lg text-textbrawnlight font-serif">TOP</div>
+            </div>
           </Button>
           <Button
             onClick={receiveCardModalOpen}
+            disableRipple
             style={{
               position: "absolute",
               bottom: 7,
@@ -274,7 +335,7 @@ export default function BirthTree() {
             }}
           >
             <Image
-              src="/mailBox.svg"
+              src={imageMailSrc}
               alt="mail box"
               width={45}
               height={45}
@@ -291,8 +352,8 @@ export default function BirthTree() {
                 <Button
                   key={friend.id}
                   onClick={() => handleOpen(friend.id)}
-                  disableRipple //ボタンをクリックした際に表示されるリップルエフェクト（波紋のようなアニメーション）を無効にします。
-                  disableElevation //ボタンの影や立体感を無効にします。Material UIのボタンにはデフォルトで影が付いている
+                  disableRipple
+                  disableElevation
                   sx={{
                     height: "100px",
                     position: "absolute",
@@ -306,17 +367,11 @@ export default function BirthTree() {
                 >
                   <div>
                     <Image
-                      src="/fukidashi.png"
-                      className="hidden-element"
+                      src={imageSrc}
+                      className="fukidashi-responsive hidden-element"
                       alt="吹き出し"
-                      style={{
-                        position: "absolute",
-                        top: -50,
-                        minWidth: 70,
-                        pointerEvents: "none",
-                      }}
-                      height={100}
                       width={100}
+                      height={100}
                     />
                     {/* 誕生日の場合にだけ hiyoko.svg を表示 */}
                     {friend.isBirthDayToday && (
@@ -332,15 +387,7 @@ export default function BirthTree() {
                       />
                     )}
                     <div
-                      className="font-serif text-textbrawnlight"
-                      style={{
-                        position: "absolute",
-                        top: -43,
-                        left: 9,
-                        width: "100%",
-                        textAlign: "center",
-                        fontSize: "10px",
-                      }}
+                      className="font-serif text-overlay"
                     >
                       {`${friend.birthMonth} / ${friend.birthDay}`}
                       <br />
@@ -349,8 +396,8 @@ export default function BirthTree() {
                     <Image
                       src={friend.photoURL}
                       alt={`${friend.name}のアイコン`}
-                      width={50}
-                      height={50}
+                      width={40}
+                      height={40}
                       className="styles.friendIcon hiyoko-active"
                       style={{
                         clipPath: `circle(50% at 50% 50%)`,
@@ -367,10 +414,11 @@ export default function BirthTree() {
                 >
                   <Box
                     sx={{ ...style }}
+                    style={{ borderColor: colors.bg }}
                     className="
                       w-[350px] max-w-[90%] h-[350px]  max-h-[40%] 
                       p-0 rounded-[20px] outline-none border-2
-                      border-mainpink sm:max-h-[50%]"
+                      sm:max-h-[50%]"
                   >
                     <form
                       action="#"
@@ -382,18 +430,17 @@ export default function BirthTree() {
                       className="h-[100%]"
                     >
                       <div className="pl-[5%] pr-[5%] h-[15%]">
-                        <div className="w-full flex items-center justify-between pt-[7px] border-b border-dashed border-mainpink">
+                        <div style={{ borderColor: colors.bg }} className="w-full flex items-center justify-between pt-[7px] border-b border-dashed">
                           <Button
                             disableRipple
                             className="p-0 bg-[transparent]"
                             onClick={handleClose}
                           >
-                            <Image
-                              src="/card-modal-back-button.svg"
-                              alt="backbutton"
-                              width={30}
-                              height={30}
-                            />
+                            <div className="h-7 flex items-center w-7 justify-center rounded-2xl">
+                              <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-full w-full flex items-center justify-center">
+                                ◀︎
+                              </div>
+                            </div>
                             <p className="text-textbrawn text-sm pl-[7px]">
                               戻る
                             </p>
@@ -409,12 +456,11 @@ export default function BirthTree() {
                             <p className="text-textbrawn text-[sm] pr-[7px]">
                               送信
                             </p>
-                            <Image
-                              src="/CardSendButton.svg"
-                              alt="SendButton"
-                              width={30}
-                              height={30}
-                            />
+                            <div className="h-7 flex items-center w-7 justify-center rounded-2xl">
+                              <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-full w-full flex items-center justify-center">
+                                ✓
+                              </div>
+                            </div>
                           </Button>
                         </div>
                       </div>
@@ -426,6 +472,7 @@ export default function BirthTree() {
                           {friend.name}さんへ
                         </p>
                         <textarea
+                          style={{ borderColor: colors.bg }}
                           id={`message"-${friend.id}`}
                           name="message"
                           rows={6}
@@ -433,7 +480,7 @@ export default function BirthTree() {
                           cols={15}
                           className="
                             w-full h-[70%] mt-[5px] border-2 
-                            border-mainpink rounded-[10px]
+                            rounded-[10px]
                           "
                         ></textarea>
                       </div>
@@ -454,42 +501,100 @@ export default function BirthTree() {
                   onClose={receiveCardModalClose}
                   aria-labelledby="child-modal-title"
                   aria-describedby="child-modal-description"
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                    sx: {
+                      backgroundColor: "rgba(0, 0, 0, 0)",
+                    },
+                  }}
                 >
                   <Box
                     sx={{ ...style }}
+                    style={{ borderColor: colors.bg }}
                     className="
-                      w-[350px] max-w-[90%] 
+                      w-[350px] max-w-[90%] h-[350px] max-h-[40%]
                       p-0 rounded-[20px] outline-none border-2
-                      border-mainpink sm:max-h-[50%]"
+                      sm:max-h-[50%]"
                   >
-                    <div className="pl-[5%] pr-[5%] h-[15%]">
-                      <div className="w-full flex items-center justify-center pt-[7px] border-b border-dashed border-mainpink">
-                        <p className="text-2xl font-aboreto text-textbrawn">
-                          HappyBirthday
-                        </p>
+                    <div style={{ height: "100%" }}>
+                      <div className="pl-[5%] pr-[5%] h-[15%] ">
+                        <div style={{ borderColor: colors.bg }} className="w-full h-[100%] flex items-center justify-center pt-[7px] border-b border-dashed">
+                          <p className="text-2xl font-aboreto text-textbrawn">
+                            HappyBirthday
+                          </p>
+                        </div>
+                      </div>
+                      <div className="h-[80%] flex pt-[7%] items-center justify-between">
+                        <Button
+                          onClick={cardForwardChange}
+                          className="w-[50px] max-w-[15%] flex-shrink-0 p-0 bg-transparent min-w-[0] hover:bg-transparent border-none"
+                          disableRipple
+                        >
+                          <div className="h-7 flex items-center w-7 justify-center rounded-2xl">
+                            <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-full w-full flex items-center justify-center">
+                              ◀︎
+                            </div>
+                          </div>
+                        </Button>
+                        {receiveCard.length > 0 ? (
+                          <div
+                            className="
+                              w-[80%] h-full px-[4%] bg-placeholderpink rounded-[10px] 
+                              border-[0.4px] border-textbrawnlight
+                            "
+                          >
+                            <div
+                              className="
+                                w-full h-[30%] flex items-center
+                                border-b-[0.4px] border-dashed border-textbrawnlight
+                              "
+                            >
+                              <Image
+                                src={photoData[displayReceiveCardNum]}
+                                width={50}
+                                height={50}
+                                style={{ maxWidth: "25%" }}
+                                alt="icon"
+                              />
+                              <div className="pl-[5%]">
+                                <p className="font-serif text-xl text-textbrawnlight">
+                                  {nickName[displayReceiveCardNum]}
+                                </p>
+                                <p className="font-serif text-[8px] text-textbrawnlight">
+                                  さんからメッセージが届いています
+                                </p>
+                              </div>
+                            </div>
+                            <div className="py-[6%]">
+                              <p className="text-textbrawnlight text-[10px] leading-5 font-serif">
+                                {receiveCard[displayReceiveCardNum].content}
+                              </p>
+                            </div>
+                          </div>
+                        ) : (
+                          <div>カードがありません</div>
+                        )}
+                        <Button
+                          onClick={cardBackChange}
+                          className="
+                            w-[50px] max-w-[15%] flex-shrink-0 p-0 min-w-0 bg-transparent
+                          "
+                          disableRipple
+                        >
+                          <div className="h-7 flex items-center w-7 justify-center rounded-2xl">
+                            <div style={{ background: colors.bg }} className="transform bg-pin text-color rounded-full h-full w-full flex items-center justify-center">
+                              ▶︎
+                            </div>
+                          </div>
+                        </Button>
                       </div>
                     </div>
-                    <Button onClick={cardForwardChange}>進むボタン</Button>
-                    <div className="p-[8%_11%] h-[85%]">
-                      {receiveCard.length > 0 ? (
-                        <div>
-                          <Image src={photoData[displayReceiveCardNum]} width={100} height={100} alt="icon"></Image>
-                          <div>{nickName[displayReceiveCardNum]}から</div>
-                          <div>
-                            {receiveCard[displayReceiveCardNum].content}
-                          </div>
-                        </div>
-                      ) : (
-                        <div>カードがありません</div>
-                      )}
-                    </div>
-                    <Button onClick={cardBackChange}>戻るボタン</Button>
                   </Box>
                 </Modal>
               </>
             );
           })}
-        </div>
+        </BackgroundWrapper>
       </div>
     </div>
   );

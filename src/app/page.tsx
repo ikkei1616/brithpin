@@ -1,51 +1,55 @@
 "use client";
+import { useEffect } from "react";
 import { useAuth } from "@/context/auth";
-import { login, logout } from "@/lib/auth";
-import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import CardContainer from "./components/CardContainer";
 import CardTitle from "./components/CardTitle";
 import Image from "next/image";
 import WideDecisionButton from "./components/WideDecisionButton";
-import { useRouter } from "next/navigation";
-import { requestPermission } from '../lib/firebase';
+import { login, logout } from "@/lib/auth";
 
 export default function Home() {
+  const user = useAuth(); // useAuthで現在のユーザー情報を取得
   const router = useRouter();
-  const user = useAuth();
-  const [waiting, setWaiting] = useState<boolean>(false);
-
-  const signIn = () => {
-    setWaiting(true);
-
-    login()
-      .catch((error) => {
-        console.error(error?.code);
-      })
-      .finally(() => {
-        setWaiting(false);
-      });
-  };
 
   useEffect(() => {
-    if (user) {
-      requestPermission();
-      router.push('/birth-tree');
-    } else{
-      router.push('/');
+    if (user === undefined) {
+      // ロード中の場合は何もしない
+      return;
+    }
+
+    if (user === null) {
+      // ユーザーがログインしていない場合
+      return;
+    }
+
+    // birthMonth と birthDay の存在でリダイレクト先を決定
+    if (user.birthMonth) {
+      router.push("/birth-tree");
+    } else {
+      router.push("/profile");
     }
   }, [user, router]);
 
   return (
     <div className="h-screen flex items-center justify-center pt-6">
-      {user === null && !waiting && (
+      {user === null && (
         <CardContainer>
           <CardTitle title="LOGIN" />
           <div className="text-center">
-            <div className="text-xl my-4 text-textbrawnlight font-serif">BirthPINでお誕生日を祝おう</div>
-            <div className="mb-6">
-              <Image src="/usericonshadow.svg" width={140} height={140} alt="user_img" className="mx-auto" />
+            <div className="text-xl my-4 text-textbrawnlight font-serif">
+              BirthPINでお誕生日を祝おう
             </div>
-            <WideDecisionButton onClick={signIn} />
+            <div className="mb-6">
+              <Image
+                src="/usericonshadow.svg"
+                width={140}
+                height={140}
+                alt="user_img"
+                className="mx-auto"
+              />
+            </div>
+            <WideDecisionButton onClick={login} />
           </div>
         </CardContainer>
       )}
