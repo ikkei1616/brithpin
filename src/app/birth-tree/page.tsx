@@ -52,6 +52,8 @@ export default function BirthTree() {
   const [displayReceiveCardNum, setDisplayReceiveCardNum] = useState(0);
   const [nickName, setNickName] = useState<string[]>([]);
   const [photoData, setPhotoData] = useState<string[]>([]);
+  const [userBirthDay, setUserBirthDay] = useState<Date>();
+  const today = new Date();
 
   const handleOpen = (id: string) => {
     setOpenModalId(id);
@@ -202,18 +204,32 @@ export default function BirthTree() {
 
   //送られてきたカードの情報と枚数の取得
   const getDocCardData = async (uid: string) => {
-    const cardQuery = query(collection(db, "cards"), where("to", "==", uid));
-    const cardSnapShot = await getDocs(cardQuery);
-
-    const cardList = cardSnapShot.docs.map((cardDoc) => ({
-      author: cardDoc.data().author,
-      content: cardDoc.data().content,
-      createAt: cardDoc.data().createAt,
-      to: cardDoc.data().to,
-    }));
-    setReceiveCard(cardList);
-
-    console.log("これがカードリストの長さ" + cardList.length);
+    if (userBirthDay) {
+      const cardQuery = query(collection(db, "cards"), where("to", "==", uid));
+      const cardSnapShot = await getDocs(cardQuery);
+      const birthLimit = new Date(userBirthDay);
+      const oneMonthLimit = new Date(userBirthDay);
+      oneMonthLimit.setFullYear(today.getFullYear());
+      birthLimit.setFullYear(today.getFullYear());
+      oneMonthLimit.setMonth(userBirthDay.getMonth() + 1);
+      oneMonthLimit.setDate(userBirthDay.getDate() + 1);
+      const cardList = cardSnapShot.docs
+        .filter(
+          (cardDoc) =>
+            cardDoc.data().createAt.toDate().getFullYear() ===
+              today?.getFullYear() &&
+            oneMonthLimit >= today &&
+            today >= birthLimit
+        )
+        .map((cardDoc) => ({
+          author: cardDoc.data().author,
+          content: cardDoc.data().content,
+          createAt: cardDoc.data().createAt,
+          to: cardDoc.data().to,
+        }));
+      setReceiveCard(cardList);
+      console.log("これがカードリストの長さ" + cardList.length);
+    }
   };
 
   const getDocAuthorData = async () => {
@@ -237,12 +253,28 @@ export default function BirthTree() {
     setPhotoData([...newPhotoData]);
   };
 
+  const getDocUserDate = async () => {
+    if (auth.currentUser) {
+      const docUserRef = doc(db, "users", auth.currentUser.uid);
+      const docUserSnap = await getDoc(docUserRef);
+
+      if (docUserSnap.exists()) {
+        const birthDay = docUserSnap.data().birthDay;
+        const birthMonth = docUserSnap.data().birthMonth;
+        const birthYear = docUserSnap.data().birthYear;
+        const birthDate = new Date(birthYear, birthMonth - 1, birthDay);
+
+        setUserBirthDay(birthDate);
+      }
+    }
+  };
+
   useEffect(() => {
     // Firebase認証状態を監視
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         // ユーザーが認証されている場合にデータを取得
-        getDocCardData(user.uid);
+        await getDocUserDate();
       } else {
         console.log("あいあい居合: ユーザーが認証されていません");
       }
@@ -253,6 +285,18 @@ export default function BirthTree() {
   useEffect(() => {
     getDocAuthorData();
   }, [receiveCard]);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        await getDocCardData(user.uid);
+      } else {
+        console.log("ユーザーが認証されていません");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [authValue]);
 
   // 実行
   return (
